@@ -260,7 +260,7 @@
 
         .status-bar { margin-top: 12px; font-size: 12px; color: #00ff88; font-weight: bold; }
 
-        /* Modální okno pro výběr tabu */
+        /* Modal window for script tab selection */
         #modalOverlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.85); z-index: 100; display: none;
@@ -284,12 +284,12 @@
 
     <div class="bg-space"></div>
 
-    <!-- Výběrové okno pro skripty -->
+    <!-- Script Target Selection Modal -->
     <div id="modalOverlay">
         <div class="modal-box">
-            <div class="modal-title">// VYBER CÍLOVÝ TAB PRO SKRIPT //</div>
+            <div class="modal-title">// SELECT TARGET TAB FOR SCRIPT //</div>
             <div class="modal-list" id="modalTabList"></div>
-            <button class="modal-cancel" onclick="closeModal()">ZRUŠIT</button>
+            <button class="modal-cancel" onclick="closeModal()">CANCEL</button>
         </div>
     </div>
 
@@ -365,12 +365,12 @@
                 nameSpan.onclick = () => switchTab(index);
                 btn.appendChild(nameSpan);
 
-                // Tlačítko pro smazání záložky (křížek)
+                // Close button to delete individual tabs
                 if (tabs.length > 1) {
                     let closeBtn = document.createElement('span');
                     closeBtn.className = 'tab-close';
                     closeBtn.innerHTML = '×';
-                    closeBtn.title = 'Smazat tab';
+                    closeBtn.title = 'Delete tab';
                     closeBtn.onclick = (e) => {
                         e.stopPropagation();
                         deleteTab(index);
@@ -403,9 +403,9 @@
         }
 
         function addNewTab() {
-            let name = prompt("Zadej název nové záložky:", "Bookmarklet / Web");
+            let name = prompt("Enter new tab name:", "Bookmark / Web");
             if (!name) return;
-            let url = prompt("Zadej URL adresu nebo javascript: skript:", "https://");
+            let url = prompt("Enter URL address or javascript: script:", "https://");
             if (!url) return;
 
             tabs.push({ name, url });
@@ -415,7 +415,7 @@
 
         function deleteTab(index) {
             if (tabs.length <= 1) {
-                alert("Musíš tu mít alespoň jednu záložku!");
+                alert("You must keep at least one tab!");
                 return;
             }
             tabs.splice(index, 1);
@@ -488,7 +488,7 @@
                 const domain = new URL(url).hostname;
                 document.getElementById('targetFavicon').src = `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
             } catch(e) {
-                document.getElementById('targetFaviconસર').src = `https://www.google.com/s2/favicons?domain=youtube.com&sz=128`;
+                document.getElementById('targetFavicon').src = `https://www.google.com/s2/favicons?domain=youtube.com&sz=128`;
             }
         }
 
@@ -526,10 +526,10 @@
             let currentUrl = tabs[activeTabIdx].url;
 
             if (currentUrl.startsWith('javascript:')) {
-                // Pokud je v aktivním tabu skript, zobrazíme modální okno pro výběr cíle
+                // If it's a script, show the modal to pick an active tab destination
                 openTabSelectorModal(currentUrl);
             } else {
-                // Normální URL otevře klasicky a okno se zavře
+                // Standard URL opens normally and closes launcher
                 if (window.opener && !window.opener.closed) {
                     window.opener.location.href = currentUrl;
                 } else {
@@ -565,7 +565,6 @@
         function executeScriptOnChosenTab(jsUrl, targetUrl) {
             let jsCode = decodeURIComponent(jsUrl.replace(/^javascript:/i, ''));
             
-            // Určíme, co se otevře: pokud je vybraný tab webová adresa, otevře se ta adresa, jinak prázdná stránka
             let winTarget = targetUrl.startsWith('javascript:') ? 'about:blank' : targetUrl;
             let newWindow = window.open(winTarget, '_blank');
 
@@ -574,12 +573,11 @@
                     try {
                         newWindow.eval(jsCode);
                     } catch(e) {
-                        alert("Prohlížeč zablokoval spuštění skriptu na této doméně. Zkus to spustit jako bookmarklet.");
+                        alert("Browser blocked script execution on this domain due to security restrictions.");
                     }
                 }, 600);
             }
 
-            // Launcher okno se zavře
             window.close();
         }
     </script>
