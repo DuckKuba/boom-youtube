@@ -10,6 +10,7 @@
         body {
             background-color: #030308;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
@@ -38,13 +39,70 @@
             100% { transform: scale(1.05) translate(2%, 2%) rotate(-1.5deg); }
         }
 
+        /* Mini Browser Tab Bar (Bookmarklets style) */
+        .browser-tabs {
+            position: relative;
+            z-index: 10;
+            width: 520px;
+            max-width: 90vw;
+            display: flex;
+            gap: 6px;
+            margin-bottom: 8px;
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+
+        .tab-item {
+            background: rgba(18, 18, 28, 0.85);
+            border: 1px solid rgba(255, 0, 85, 0.4);
+            border-bottom: none;
+            padding: 6px 12px;
+            border-radius: 8px 8px 0 0;
+            font-size: 11px;
+            cursor: pointer;
+            color: #aaa;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .tab-item.active {
+            background: rgba(12, 12, 20, 0.92);
+            border-color: #ff0055;
+            color: #00ff88;
+            font-weight: bold;
+            box-shadow: 0 -2px 10px rgba(255, 0, 85, 0.3);
+        }
+
+        .tab-item:hover {
+            color: #fff;
+        }
+
+        .add-tab-btn {
+            background: rgba(255, 0, 85, 0.2);
+            border: 1px dashed #ff0055;
+            color: #ff0055;
+            padding: 6px 10px;
+            border-radius: 8px 8px 0 0;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: bold;
+        }
+
+        .add-tab-btn:hover {
+            background: rgba(255, 0, 85, 0.4);
+            color: #fff;
+        }
+
         /* Adaptive Cyber Card */
         .cyber-card {
             position: relative;
             z-index: 10;
             background: rgba(12, 12, 20, 0.88);
             border: 3px solid #ff0055;
-            border-radius: 20px;
+            border-radius: 0 20px 20px 20px;
             padding: 30px;
             display: flex;
             flex-direction: column;
@@ -185,7 +243,8 @@
             font-size: 10px;
             color: #aaa;
             margin-bottom: 5px;
-            display: block;
+            display: flex;
+            justify-content: space-between;
         }
 
         .url-box {
@@ -222,14 +281,15 @@
             font-weight: bold;
         }
 
-        /* --- STYLY PRO MALÉ OKNO (BOOKMARKLET) --- */
+        /* --- STYLY PRO MALÉ OKNO --- */
         @media (max-width: 450px), (max-height: 450px) {
             .cyber-card {
                 width: 230px;
                 padding: 10px;
-                border-radius: 10px;
+                border-radius: 0 10px 10px 10px;
                 border-width: 2px;
             }
+            .browser-tabs { width: 230px; }
             .header-title {
                 font-size: 9px;
                 margin-bottom: 10px;
@@ -264,13 +324,19 @@
 
     <div class="bg-space"></div>
 
+    <!-- Lišta záložek (Mini Browser Tabs) -->
+    <div class="browser-tabs" id="tabsContainer">
+        <!-- Zde se dynamicky generují taby -->
+        <button class="add-tab-btn" onclick="addNewTab()">+ Tab</button>
+    </div>
+
     <div class="cyber-card">
         <div class="audio-controls">
             <button class="mute-btn" id="muteBtn" onclick="toggleMute()">🔊</button>
             <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.01" value="0.8" oninput="changeVolume(this.value)">
         </div>
 
-        <!-- Nápis přesunut nad tlačítko -->
+        <!-- Nápis přesně nad tlačítkem -->
         <div class="header-title">// BOOM CONTROL //</div>
 
         <div class="stage-area">
@@ -286,9 +352,12 @@
         </div>
 
         <div class="url-section">
-            <span class="url-label">TARGET URL / SCRIPT:</span>
+            <span class="url-label">
+                <span id="activeTabName">TARGET URL / SCRIPT:</span>
+                <span style="cursor:pointer; color:#ff0055;" onclick="deleteActiveTab()">[delete tab]</span>
+            </span>
             <div class="url-box">
-                <input type="text" id="targetInput" class="url-input" placeholder="https://youtube.com">
+                <input type="text" id="targetInput" class="url-input" placeholder="https://youtube.com or javascript:...">
                 <button class="url-btn" onclick="saveUrl()">SAVE</button>
             </div>
         </div>
@@ -303,14 +372,78 @@
 
         if (isMuted) currentVol = 0;
 
-        let currentUrl = localStorage.getItem('boom_url') || 'https://www.youtube.com';
-        document.getElementById('targetInput').value = currentUrl;
-        updateFavicon(currentUrl);
+        // Správa záložek (Tabs)
+        let tabs = JSON.parse(localStorage.getItem('boom_tabs')) || [
+            { name: 'YouTube', url: 'https://www.youtube.com' },
+            { name: 'Google', url: 'https://www.google.com' }
+        ];
+        let activeTabIdx = parseInt(localStorage.getItem('boom_active_tab') || '0');
+
+        if (activeTabIdx >= tabs.length) activeTabIdx = 0;
 
         const slider = document.getElementById('volumeSlider');
         const muteBtn = document.getElementById('muteBtn');
         slider.value = isMuted ? 0 : currentVol;
         muteBtn.innerText = (isMuted || currentVol === 0) ? '🔇' : '🔊';
+
+        renderTabs();
+        loadActiveTab();
+
+        function renderTabs() {
+            const container = document.getElementById('tabsContainer');
+            container.innerHTML = '';
+            
+            tabs.forEach((tab, index) => {
+                let btn = document.createElement('div');
+                btn.className = `tab-item ${index === activeTabIdx ? 'active' : ''}`;
+                btn.innerHTML = `<span>${tab.name}</span>`;
+                btn.onclick = () => switchTab(index);
+                container.appendChild(btn);
+            });
+
+            let addBtn = document.createElement('button');
+            addBtn.className = 'add-tab-btn';
+            addBtn.innerHTML = '+ Tab';
+            addBtn.onclick = addNewTab;
+            container.appendChild(addBtn);
+        }
+
+        function switchTab(index) {
+            activeTabIdx = index;
+            localStorage.setItem('boom_active_tab', activeTabIdx);
+            renderTabs();
+            loadActiveTab();
+        }
+
+        function loadActiveTab() {
+            let tab = tabs[activeTabIdx];
+            document.getElementById('targetInput').value = tab.url;
+            document.getElementById('activeTabName').innerText = `TAB: ${tab.name.toUpperCase()}`;
+            updateFavicon(tab.url);
+        }
+
+        function addNewTab() {
+            let name = prompt("Zadej název nové záložky:", "Bookmarklet / Web");
+            if (!name) return;
+            let url = prompt("Zadej URL adresu nebo javascript: skript:", "https://");
+            if (!url) return;
+
+            tabs.push({ name, url });
+            localStorage.setItem('boom_tabs', JSON.stringify(tabs));
+            switchTab(tabs.length - 1);
+        }
+
+        function deleteActiveTab() {
+            if (tabs.length <= 1) {
+                alert("Musíš tu mít alespoň jednu záložku!");
+                return;
+            }
+            tabs.splice(activeTabIdx, 1);
+            localStorage.setItem('boom_tabs', JSON.stringify(tabs));
+            activeTabIdx = Math.max(0, activeTabIdx - 1);
+            renderTabs();
+            loadActiveTab();
+        }
 
         function initAudio() {
             if (!audioCtx) {
@@ -400,10 +533,11 @@
             if (input && !input.startsWith('http://') && !input.startsWith('https://') && !input.startsWith('javascript:')) {
                 input = 'https://' + input;
             }
-            currentUrl = input || 'https://www.youtube.com';
-            localStorage.setItem('boom_url', currentUrl);
-            document.getElementById('targetInput').value = currentUrl;
-            updateFavicon(currentUrl);
+            
+            tabs[activeTabIdx].url = input || 'https://www.youtube.com';
+            localStorage.setItem('boom_tabs', JSON.stringify(tabs));
+            document.getElementById('targetInput').value = tabs[activeTabIdx].url;
+            updateFavicon(tabs[activeTabIdx].url);
 
             document.getElementById('statusText').innerText = 'SAVED!';
             setTimeout(() => { document.getElementById('statusText').innerText = 'SYSTEM READY'; }, 1500);
@@ -426,10 +560,12 @@
             badge.classList.add('parachute-drop');
             await new Promise(r => setTimeout(r, 1200));
 
+            let currentUrl = tabs[activeTabIdx].url;
+
             if (currentUrl.startsWith('javascript:')) {
                 let jsCode = decodeURIComponent(currentUrl.replace(/^javascript:/i, ''));
                 
-                // Pokud existuje rodičovské okno, spustíme to v něm, jinak zkusíme provést eval nebo otevřít jako odkaz
+                // Pokud má okno opener, zkusíme spustit v něm
                 if (window.opener && !window.opener.closed) {
                     try {
                         window.opener.eval(jsCode);
@@ -438,14 +574,17 @@
                     } catch(e) {}
                 }
                 
-                // Pokud okno nemá opener (nebo to prohlížeč zablokoval), vytvoříme bezpečný odkaz pro spuštění
+                // Jinak otevřeme nové okno a zkusíme skript vložit přes adresní řádek / data URI, aby fungoval jako bookmarklet
                 try {
-                    let blob = new Blob([jsCode], {type: 'text/javascript'});
-                    let blobUrl = URL.createObjectURL(blob);
-                    // Otevře skript jako novou stránku, kde ho prohlížeč nezablokuje
-                    window.open(currentUrl, '_blank');
+                    let newWin = window.open('about:blank', '_blank');
+                    if (newWin) {
+                        newWin.eval(jsCode);
+                    } else {
+                        // Fallback, pokud prohlížeč blokuje popup
+                        location.href = currentUrl;
+                    }
                 } catch(e) {
-                    alert('Chyba při spuštění: ' + e.message);
+                    alert('Chyba při spuštění bookmarkletu: ' + e.message);
                 }
             } else {
                 if (window.opener && !window.opener.closed) {
