@@ -59,50 +59,52 @@
             background: rgba(10, 10, 18, 0.92);
             border: 2px solid #ff0055;
             border-radius: 10px;
-            padding: 10px;
+            padding: 8px 10px 10px 10px;
             display: flex;
             flex-direction: column;
             align-items: center;
             box-shadow: 0 0 25px rgba(255, 0, 85, 0.5);
-            width: 230px;
+            width: 220px;
             backdrop-filter: blur(5px);
         }
 
         .header-title {
-            font-size: 9px;
+            font-size: 8.5px;
             letter-spacing: 1.2px;
             color: #ff3366;
             margin-bottom: 4px;
             font-weight: bold;
+            margin-right: auto;
         }
 
-        /* Ultra Compact Audio Controls */
+        /* Micro Audio Controls */
         .audio-controls {
             position: absolute;
-            top: 6px;
-            right: 6px;
+            top: 5px;
+            right: 5px;
             display: flex;
             align-items: center;
-            gap: 3px;
-            background: rgba(0, 0, 0, 0.7);
-            padding: 2px 5px;
-            border-radius: 6px;
-            border: 1px solid rgba(255, 0, 85, 0.4);
+            gap: 2px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 1px 4px;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 0, 85, 0.3);
             z-index: 20;
         }
 
         .mute-btn {
             cursor: pointer;
-            font-size: 9px;
+            font-size: 8px;
             background: none;
             border: none;
             color: #fff;
             outline: none;
+            line-height: 1;
         }
 
         .volume-slider {
-            width: 35px;
-            height: 3px;
+            width: 25px;
+            height: 2px;
             accent-color: #ff0055;
             cursor: pointer;
         }
@@ -110,23 +112,23 @@
         .stage-area {
             position: relative;
             width: 100%;
-            height: 55px;
+            height: 50px;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
         #launchBtn {
-            width: 50px;
-            height: 50px;
+            width: 46px;
+            height: 46px;
             border-radius: 50%;
             background: radial-gradient(circle, #ff0055 0%, #660022 100%);
             color: #fff;
             font-weight: 900;
-            font-size: 10px;
+            font-size: 9px;
             border: 2px solid #ff6699;
             cursor: pointer;
-            box-shadow: 0 0 12px rgba(255, 0, 85, 0.8);
+            box-shadow: 0 0 10px rgba(255, 0, 85, 0.8);
             z-index: 2;
         }
 
@@ -134,7 +136,7 @@
 
         #rocketElement {
             position: absolute;
-            font-size: 30px;
+            font-size: 26px;
             display: none;
             z-index: 10;
         }
@@ -170,7 +172,7 @@
         }
 
         .logo-box {
-            width: 32px; height: 32px;
+            width: 30px; height: 30px;
             background: #111;
             border: 2px solid #ff3366;
             border-radius: 6px;
@@ -180,19 +182,19 @@
             box-shadow: 0 0 10px #ff0055;
         }
 
-        .logo-box img { width: 18px; height: 18px; object-fit: contain; }
+        .logo-box img { width: 16px; height: 16px; object-fit: contain; }
 
         .url-section {
             width: 100%;
-            margin-top: 6px;
+            margin-top: 4px;
             background: rgba(0,0,0,0.6);
-            padding: 5px;
-            border-radius: 6px;
+            padding: 4px;
+            border-radius: 5px;
             border: 1px solid rgba(255, 0, 85, 0.3);
         }
 
         .url-label {
-            font-size: 7.5px;
+            font-size: 7px;
             color: #aaa;
             margin-bottom: 2px;
             display: block;
@@ -200,34 +202,34 @@
 
         .url-box {
             display: flex;
-            gap: 4px;
+            gap: 3px;
         }
 
         .url-input {
             flex: 1;
             background: #000;
             border: 1px solid #ff0055;
-            border-radius: 4px;
+            border-radius: 3px;
             color: #00ff88;
-            font-size: 9px;
-            padding: 3px;
+            font-size: 8.5px;
+            padding: 2px 4px;
             outline: none;
         }
 
         .url-btn {
             background: #ff0055;
             border: none;
-            border-radius: 4px;
+            border-radius: 3px;
             color: white;
             font-weight: bold;
             font-size: 8px;
-            padding: 0 6px;
+            padding: 0 5px;
             cursor: pointer;
         }
 
         .status-bar {
             margin-top: 4px;
-            font-size: 8.5px;
+            font-size: 8px;
             color: #00ff88;
             font-weight: bold;
         }
@@ -251,7 +253,7 @@
             <div id="rocketElement">🚀</div>
 
             <div id="parachuteBadge">
-                <span style="font-size:15px;">🪂</span>
+                <span style="font-size:13px;">🪂</span>
                 <div class="logo-box">
                     <img id="targetFavicon" src="" alt="Target">
                 </div>
