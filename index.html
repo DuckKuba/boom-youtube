@@ -1,86 +1,200 @@
 <!DOCTYPE html>
-<html lang="cs">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BOOM YouTube</title>
     <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
         body {
-            background-color: #141414;
+            background-color: #0a0a0c;
+            /* Cool animované pozadí s mřížkou a červenou září */
+            background-image: 
+                radial-gradient(circle at 50% 50%, rgba(255, 0, 0, 0.15), transparent 70%),
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 100% 100%, 30px 30px, 30px 30px;
             display: flex;
-            flex-direction: column; /* Rovná prvky pod sebe */
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            margin: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Segoe UI', Roboto, -apple-system, sans-serif;
             overflow: hidden;
             color: #ffffff;
+            user-select: none;
         }
 
+        /* Kontejner pro tlačítko a pulzující efekt */
+        .button-wrapper {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Pulzující červený kruh na pozadí tlačítka */
+        .pulse-ring {
+            position: absolute;
+            width: 240px;
+            height: 80px;
+            border-radius: 12px;
+            border: 2px solid rgba(255, 0, 0, 0.5);
+            animation: pulse 2s infinite;
+            pointer-events: none;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.95);
+                opacity: 0.8;
+            }
+            50% {
+                transform: scale(1.1);
+                opacity: 0.2;
+            }
+            100% {
+                transform: scale(0.95);
+                opacity: 0.8;
+            }
+        }
+
+        /* Hlavní cool tlačítko */
         #button1 {
-            width: 200px;
-            height: 60px;
-            background-color: #ff0000;
+            position: relative;
+            width: 230px;
+            height: 70px;
+            background: linear-gradient(135deg, #ff1e1e 0%, #a80000 100%);
             color: #ffffff;
-            font-size: 18px;
-            font-weight: bold;
-            border: none;
-            border-radius: 6px;
+            font-size: 20px;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            border: 1px solid #ff5555;
+            border-radius: 10px;
             cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
-            transition: transform 0.1s, background-color 0.2s;
+            outline: none;
+            overflow: hidden;
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.6),
+                        inset 0 1px 1px rgba(255, 255, 255, 0.4);
+            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 2;
+        }
+
+        /* Odlesk na tlačítku */
+        #button1::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: 0.5s;
+        }
+
+        #button1:hover::before {
+            left: 100%;
         }
 
         #button1:hover {
-            background-color: #8b0000;
-            transform: scale(1.05);
+            transform: translateY(-3px) scale(1.03);
+            background: linear-gradient(135deg, #ff3333 0%, #c40000 100%);
+            box-shadow: 0 0 40px rgba(255, 0, 0, 0.9),
+                        inset 0 1px 2px rgba(255, 255, 255, 0.6);
         }
 
-        /* Styl pro věc/text pod tlačítkem */
+        #button1:active {
+            transform: translateY(2px) scale(0.98);
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
+        }
+
+        /* Anglický text a indikátor pod tlačítkem */
+        .status-container {
+            margin-top: 35px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 18px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #00ff66;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #00ff66;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
         .extra-thing {
-            margin-top: 20px;
-            font-size: 14px;
-            color: #888888;
-            text-align: center;
+            font-size: 13px;
+            font-weight: 600;
+            color: #cccccc;
+            letter-spacing: 1px;
+            text-transform: uppercase;
         }
     </style>
 </head>
 <body>
 
-    <!-- Tlačítko -->
-    <button id="button1" onclick="spustBoom()">▶ YOUTUBE</button>
+    <div class="button-wrapper">
+        <div class="pulse-ring"></div>
+        <button id="button1" onclick="spustBoom()">▶ YOUTUBE</button>
+    </div>
 
-    <!-- Věc za/pod tlačítkem -->
-    <div class="extra-thing" id="pod-tlacitkem">
-        ⚠️ Připraveno k odpalu!
+    <div class="status-container">
+        <div class="status-dot" id="dot"></div>
+        <div class="extra-thing" id="pod-tlacitkem">SYSTEM READY • CLICK TO LAUNCH</div>
     </div>
 
     <script>
         async function spustBoom() {
             const btn = document.getElementById('button1');
             const podTlacitkem = document.getElementById('pod-tlacitkem');
+            const dot = document.getElementById('dot');
             const body = document.body;
 
+            // Zpětná vazba ihned po stisku
             body.style.backgroundColor = '#ffffff';
             btn.innerText = '💥 BOOM! 💥';
-            btn.style.backgroundColor = '#ff4500';
-            podTlacitkem.innerText = '🔥 Odpaluji...';
-            podTlacitkem.style.color = '#ff0000';
+            btn.style.background = '#ff0000';
+            btn.style.boxShadow = '0 0 50px #ff0000';
+            
+            podTlacitkem.innerText = 'LAUNCHING YOUTUBE...';
+            podTlacitkem.style.color = '#ff3333';
+            dot.style.backgroundColor = '#ff0000';
+            dot.style.boxShadow = '0 0 10px #ff0000';
 
-            for (let i = 0; i < 15; i++) {
-                const x = (Math.random() - 0.5) * 24;
-                const y = (Math.random() - 0.5) * 24;
+            // Silné třesení oknem
+            for (let i = 0; i < 20; i++) {
+                const x = (Math.random() - 0.5) * 30;
+                const y = (Math.random() - 0.5) * 30;
                 body.style.transform = `translate(${x}px, ${y}px)`;
-                await new Promise(r => setTimeout(r, 25));
+                await new Promise(r => setTimeout(r, 20));
             }
 
             body.style.transform = 'none';
-            body.style.backgroundColor = '#141414';
-            btn.innerText = 'OTEVÍRÁM...';
+            body.style.backgroundColor = '#0a0a0c';
+            btn.innerText = 'OPENING...';
 
-            await new Promise(r => setTimeout(r, 300));
+            await new Promise(r => setTimeout(r, 250));
 
+            // Přesměrování na YouTube
             window.location.href = 'https://www.youtube.com';
         }
     </script>
