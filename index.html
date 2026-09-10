@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOOM YouTube</title>
+    <style>
+        body {
+            background-color: #141414;
+            display: flex;
+            flex-direction: column; /* Rovná prvky pod sebe */
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            color: #ffffff;
+        }
+
+        #button1 {
+            width: 200px;
+            height: 60px;
+            background-color: #ff0000;
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            transition: transform 0.1s, background-color 0.2s;
+        }
+
+        #button1:hover {
+            background-color: #8b0000;
+            transform: scale(1.05);
+        }
+
+        /* Styl pro věc/text pod tlačítkem */
+        .extra-thing {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #888888;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Tlačítko -->
+    <button id="button1" onclick="spustBoom()">▶ YOUTUBE</button>
+
+    <!-- Věc za/pod tlačítkem -->
+    <div class="extra-thing" id="pod-tlacitkem">
+        ⚠️ Připraveno k odpalu!
+    </div>
+
+    <script>
+        async function spustBoom() {
+            const btn = document.getElementById('button1');
+            const podTlacitkem = document.getElementById('pod-tlacitkem');
+            const body = document.body;
+
+            body.style.backgroundColor = '#ffffff';
+            btn.innerText = '💥 BOOM! 💥';
+            btn.style.backgroundColor = '#ff4500';
+            podTlacitkem.innerText = '🔥 Odpaluji...';
+            podTlacitkem.style.color = '#ff0000';
+
+            for (let i = 0; i < 15; i++) {
+                const x = (Math.random() - 0.5) * 24;
+                const y = (Math.random() - 0.5) * 24;
+                body.style.transform = `translate(${x}px, ${y}px)`;
+                await new Promise(r => setTimeout(r, 25));
+            }
+
+            body.style.transform = 'none';
+            body.style.backgroundColor = '#141414';
+            btn.innerText = 'OTEVÍRÁM...';
+
+            await new Promise(r => setTimeout(r, 300));
+
+            window.location.href = 'https://www.youtube.com';
+        }
+    </script>
+</body>
+</html>
