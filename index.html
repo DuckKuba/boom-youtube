@@ -8,7 +8,7 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
-            background-color: #020208;
+            background-color: #030308;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -19,92 +19,82 @@
             user-select: none;
         }
 
-        /* Space Nebula Background */
+        /* Moving Space Background */
         .bg-space {
             position: absolute;
-            width: 100%; height: 100%;
-            background: radial-gradient(circle at 50% 50%, rgba(255, 0, 85, 0.15) 0%, rgba(10, 5, 20, 0.8) 50%, #020208 100%);
+            width: 140%;
+            height: 140%;
+            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwVazb0M65lvL54XnoVQTC6YUrUrOe7T1-BUhLJOhnxQ&s=10');
+            background-size: cover;
+            background-position: center;
             z-index: 1;
+            animation: moveSpace 25s infinite alternate ease-in-out;
         }
 
-        /* Animated Stars Field */
-        .stars-container {
-            position: absolute;
-            width: 100%; height: 100%;
-            z-index: 2;
-            overflow: hidden;
+        @keyframes moveSpace {
+            0% {
+                transform: scale(1) translate(0, 0) rotate(0deg);
+            }
+            50% {
+                transform: scale(1.1) translate(-2%, -2%) rotate(1deg);
+            }
+            100% {
+                transform: scale(1.05) translate(2%, 2%) rotate(-1deg);
+            }
         }
 
-        .star {
-            position: absolute;
-            background: #ffffff;
-            border-radius: 50%;
-            animation: moveStar linear infinite, twinkle ease-in-out infinite alternate;
-        }
-
-        @keyframes moveStar {
-            from { transform: translateY(0px); }
-            to { transform: translateY(100vh); }
-        }
-
-        @keyframes twinkle {
-            0% { opacity: 0.2; }
-            100% { opacity: 1; box-shadow: 0 0 6px #fff; }
-        }
-
-        /* Compact Cyber Card */
+        /* Original Card Size */
         .cyber-card {
             position: relative;
             z-index: 10;
-            background: rgba(10, 10, 18, 0.92);
+            background: rgba(12, 12, 20, 0.92);
             border: 2px solid #ff0055;
-            border-radius: 10px;
-            padding: 8px 10px 10px 10px;
+            border-radius: 16px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            box-shadow: 0 0 25px rgba(255, 0, 85, 0.5);
-            width: 220px;
-            backdrop-filter: blur(5px);
+            box-shadow: 0 0 35px rgba(255, 0, 85, 0.5);
+            width: 330px;
+            backdrop-filter: blur(4px);
         }
 
         .header-title {
-            font-size: 8.5px;
-            letter-spacing: 1.2px;
+            font-size: 12px;
+            letter-spacing: 2px;
             color: #ff3366;
-            margin-bottom: 4px;
+            margin-bottom: 12px;
             font-weight: bold;
             margin-right: auto;
         }
 
-        /* Micro Audio Controls */
+        /* Mini Audio Controls */
         .audio-controls {
             position: absolute;
-            top: 5px;
-            right: 5px;
+            top: 10px;
+            right: 10px;
             display: flex;
             align-items: center;
-            gap: 2px;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 1px 4px;
-            border-radius: 4px;
-            border: 1px solid rgba(255, 0, 85, 0.3);
+            gap: 3px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 2px 5px;
+            border-radius: 6px;
+            border: 1px solid rgba(255, 0, 85, 0.4);
             z-index: 20;
         }
 
         .mute-btn {
             cursor: pointer;
-            font-size: 8px;
+            font-size: 9px;
             background: none;
             border: none;
             color: #fff;
             outline: none;
-            line-height: 1;
         }
 
         .volume-slider {
-            width: 25px;
-            height: 2px;
+            width: 30px;
+            height: 3px;
             accent-color: #ff0055;
             cursor: pointer;
         }
@@ -112,23 +102,23 @@
         .stage-area {
             position: relative;
             width: 100%;
-            height: 50px;
+            height: 100px;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
         #launchBtn {
-            width: 46px;
-            height: 46px;
+            width: 85px;
+            height: 85px;
             border-radius: 50%;
             background: radial-gradient(circle, #ff0055 0%, #660022 100%);
             color: #fff;
             font-weight: 900;
-            font-size: 9px;
-            border: 2px solid #ff6699;
+            font-size: 14px;
+            border: 3px solid #ff6699;
             cursor: pointer;
-            box-shadow: 0 0 10px rgba(255, 0, 85, 0.8);
+            box-shadow: 0 0 25px rgba(255, 0, 85, 0.8);
             z-index: 2;
         }
 
@@ -136,7 +126,7 @@
 
         #rocketElement {
             position: absolute;
-            font-size: 26px;
+            font-size: 50px;
             display: none;
             z-index: 10;
         }
@@ -149,7 +139,7 @@
         @keyframes flyUp {
             0% { transform: translateY(0) scale(0.8); opacity: 1; }
             20% { transform: translateY(10px) scale(1.1); }
-            100% { transform: translateY(-350px) scale(0.4); opacity: 0; }
+            100% { transform: translateY(-500px) scale(0.4); opacity: 0; }
         }
 
         #parachuteBadge {
@@ -167,69 +157,69 @@
         }
 
         @keyframes dropDown {
-            0% { top: -100px; transform: scale(0.5); }
-            100% { top: 2px; transform: scale(1); }
+            0% { top: -150px; transform: scale(0.5); }
+            100% { top: 10px; transform: scale(1); }
         }
 
         .logo-box {
-            width: 30px; height: 30px;
+            width: 50px; height: 50px;
             background: #111;
             border: 2px solid #ff3366;
-            border-radius: 6px;
+            border-radius: 10px;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 0 10px #ff0055;
+            box-shadow: 0 0 20px #ff0055;
         }
 
-        .logo-box img { width: 16px; height: 16px; object-fit: contain; }
+        .logo-box img { width: 30px; height: 30px; object-fit: contain; }
 
         .url-section {
             width: 100%;
-            margin-top: 4px;
+            margin-top: 15px;
             background: rgba(0,0,0,0.6);
-            padding: 4px;
-            border-radius: 5px;
+            padding: 8px;
+            border-radius: 8px;
             border: 1px solid rgba(255, 0, 85, 0.3);
         }
 
         .url-label {
-            font-size: 7px;
+            font-size: 9px;
             color: #aaa;
-            margin-bottom: 2px;
+            margin-bottom: 4px;
             display: block;
         }
 
         .url-box {
             display: flex;
-            gap: 3px;
+            gap: 6px;
         }
 
         .url-input {
             flex: 1;
             background: #000;
             border: 1px solid #ff0055;
-            border-radius: 3px;
+            border-radius: 4px;
             color: #00ff88;
-            font-size: 8.5px;
-            padding: 2px 4px;
+            font-size: 11px;
+            padding: 6px;
             outline: none;
         }
 
         .url-btn {
             background: #ff0055;
             border: none;
-            border-radius: 3px;
+            border-radius: 4px;
             color: white;
             font-weight: bold;
-            font-size: 8px;
-            padding: 0 5px;
+            font-size: 10px;
+            padding: 0 10px;
             cursor: pointer;
         }
 
         .status-bar {
-            margin-top: 4px;
-            font-size: 8px;
+            margin-top: 10px;
+            font-size: 10px;
             color: #00ff88;
             font-weight: bold;
         }
@@ -238,7 +228,6 @@
 <body>
 
     <div class="bg-space"></div>
-    <div class="stars-container" id="starsContainer"></div>
 
     <div class="cyber-card">
         <div class="audio-controls">
@@ -253,7 +242,7 @@
             <div id="rocketElement">🚀</div>
 
             <div id="parachuteBadge">
-                <span style="font-size:13px;">🪂</span>
+                <span style="font-size:24px;">🪂</span>
                 <div class="logo-box">
                     <img id="targetFavicon" src="" alt="Target">
                 </div>
@@ -272,21 +261,6 @@
     </div>
 
     <script>
-        // Space Generator
-        const starsContainer = document.getElementById('starsContainer');
-        for (let i = 0; i < 70; i++) {
-            const star = document.createElement('div');
-            star.className = 'star';
-            const size = Math.random() * 2 + 1;
-            star.style.width = `${size}px`;
-            star.style.height = `${size}px`;
-            star.style.left = `${Math.random() * 100}%`;
-            star.style.top = `${Math.random() * -100}%`;
-            star.style.animationDuration = `${Math.random() * 8 + 4}s`;
-            star.style.animationDelay = `${Math.random() * 5}s`;
-            starsContainer.appendChild(star);
-        }
-
         let audioCtx = null;
         let isMuted = localStorage.getItem('boom_muted') === 'true';
         let currentVol = parseFloat(localStorage.getItem('boom_volume') || '0.8');
