@@ -20,7 +20,6 @@
             user-select: none;
         }
 
-        /* Moving Space Background with Stars */
         .bg-space {
             position: absolute;
             width: 140%;
@@ -39,7 +38,6 @@
             100% { transform: scale(1.05) translate(2%, 2%) rotate(-1.5deg); }
         }
 
-        /* Mini Browser Tab Bar (Bookmarklets style) */
         .browser-tabs {
             position: relative;
             z-index: 10;
@@ -76,9 +74,7 @@
             box-shadow: 0 -2px 10px rgba(255, 0, 85, 0.3);
         }
 
-        .tab-item:hover {
-            color: #fff;
-        }
+        .tab-item:hover { color: #fff; }
 
         .add-tab-btn {
             background: rgba(255, 0, 85, 0.2);
@@ -91,12 +87,8 @@
             font-weight: bold;
         }
 
-        .add-tab-btn:hover {
-            background: rgba(255, 0, 85, 0.4);
-            color: #fff;
-        }
+        .add-tab-btn:hover { background: rgba(255, 0, 85, 0.4); color: #fff; }
 
-        /* Adaptive Cyber Card */
         .cyber-card {
             position: relative;
             z-index: 10;
@@ -124,7 +116,6 @@
             width: 100%;
         }
 
-        /* Mini Audio Controls */
         .audio-controls {
             position: absolute;
             top: 12px;
@@ -139,21 +130,8 @@
             z-index: 20;
         }
 
-        .mute-btn {
-            cursor: pointer;
-            font-size: 12px;
-            background: none;
-            border: none;
-            color: #fff;
-            outline: none;
-        }
-
-        .volume-slider {
-            width: 40px;
-            height: 3px;
-            accent-color: #ff0055;
-            cursor: pointer;
-        }
+        .mute-btn { cursor: pointer; font-size: 12px; background: none; border: none; color: #fff; outline: none; }
+        .volume-slider { width: 40px; height: 3px; accent-color: #ff0055; cursor: pointer; }
 
         .stage-area {
             position: relative;
@@ -247,10 +225,7 @@
             justify-content: space-between;
         }
 
-        .url-box {
-            display: flex;
-            gap: 6px;
-        }
+        .url-box { display: flex; gap: 6px; }
 
         .url-input {
             flex: 1;
@@ -274,59 +249,42 @@
             cursor: pointer;
         }
 
-        .status-bar {
-            margin-top: 12px;
-            font-size: 12px;
-            color: #00ff88;
-            font-weight: bold;
-        }
+        .status-bar { margin-top: 12px; font-size: 12px; color: #00ff88; font-weight: bold; }
 
-        /* --- STYLY PRO MALÉ OKNO --- */
-        @media (max-width: 450px), (max-height: 450px) {
-            .cyber-card {
-                width: 230px;
-                padding: 10px;
-                border-radius: 0 10px 10px 10px;
-                border-width: 2px;
-            }
-            .browser-tabs { width: 230px; }
-            .header-title {
-                font-size: 9px;
-                margin-bottom: 10px;
-                letter-spacing: 1px;
-            }
-            .audio-controls {
-                top: 5px;
-                right: 5px;
-                padding: 1px 4px;
-            }
-            .mute-btn { font-size: 8px; }
-            .volume-slider { width: 25px; height: 2px; }
-            .stage-area { height: 55px; }
-            #launchBtn {
-                width: 50px;
-                height: 50px;
-                font-size: 9px;
-                border-width: 2px;
-            }
-            #rocketElement { font-size: 30px; }
-            .logo-box { width: 32px; height: 32px; border-width: 2px; }
-            .logo-box img { width: 18px; height: 18px; }
-            .url-section { margin-top: 6px; padding: 4px; }
-            .url-label { font-size: 7.5px; margin-bottom: 2px; }
-            .url-input { font-size: 9px; padding: 3px; }
-            .url-btn { font-size: 8px; padding: 0 6px; }
-            .status-bar { font-size: 8.5px; margin-top: 4px; }
+        /* Styly pro modální okno výběru tabu */
+        #modalOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); z-index: 100; display: none;
+            justify-content: center; align-items: center; backdrop-filter: blur(4px);
         }
+        .modal-box {
+            background: #0c0c14; border: 2px solid #ff0055; border-radius: 12px;
+            padding: 20px; width: 350px; text-align: center; box-shadow: 0 0 30px rgba(255,0,85,0.5);
+        }
+        .modal-title { font-size: 14px; color: #ff3366; margin-bottom: 12px; font-weight: bold; }
+        .modal-list { display: flex; flex-direction: column; gap: 6px; max-height: 200px; overflow-y: auto; margin-bottom: 15px; }
+        .modal-tab-btn {
+            background: #161622; border: 1px solid rgba(255,0,85,0.3); color: #fff;
+            padding: 8px; border-radius: 6px; cursor: pointer; font-family: 'Consolas', monospace; font-size: 11px; text-align: left;
+        }
+        .modal-tab-btn:hover { background: #ff0055; color: #fff; border-color: #ff0055; }
+        .modal-cancel { background: #333; border: none; color: #aaa; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <div class="bg-space"></div>
 
-    <!-- Lišta záložek (Mini Browser Tabs) -->
+    <!-- Modální okno pro výběr tabu při spuštění skriptu -->
+    <div id="modalOverlay">
+        <div class="modal-box">
+            <div class="modal-title">// VYBER CÍLOVÝ TAB PRO SKRIPT //</div>
+            <div class="modal-list" id="modalTabList"></div>
+            <button class="modal-cancel" onclick="closeModal()">ZRUŠIT</button>
+        </div>
+    </div>
+
     <div class="browser-tabs" id="tabsContainer">
-        <!-- Zde se dynamicky generují taby -->
         <button class="add-tab-btn" onclick="addNewTab()">+ Tab</button>
     </div>
 
@@ -336,7 +294,6 @@
             <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.01" value="0.8" oninput="changeVolume(this.value)">
         </div>
 
-        <!-- Nápis přesně nad tlačítkem -->
         <div class="header-title">// BOOM CONTROL //</div>
 
         <div class="stage-area">
@@ -372,13 +329,11 @@
 
         if (isMuted) currentVol = 0;
 
-        // Správa záložek (Tabs)
         let tabs = JSON.parse(localStorage.getItem('boom_tabs')) || [
             { name: 'YouTube', url: 'https://www.youtube.com' },
             { name: 'Google', url: 'https://www.google.com' }
         ];
         let activeTabIdx = parseInt(localStorage.getItem('boom_active_tab') || '0');
-
         if (activeTabIdx >= tabs.length) activeTabIdx = 0;
 
         const slider = document.getElementById('volumeSlider');
@@ -446,12 +401,8 @@
         }
 
         function initAudio() {
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') audioCtx.resume();
         }
 
         document.body.addEventListener('click', initAudio, { once: true });
@@ -459,27 +410,17 @@
         function toggleMute() {
             isMuted = !isMuted;
             localStorage.setItem('boom_muted', isMuted);
-            if (isMuted) {
-                slider.value = 0;
-                muteBtn.innerText = '🔇';
-            } else {
-                currentVol = parseFloat(localStorage.getItem('boom_last_vol') || '0.8');
-                slider.value = currentVol;
-                muteBtn.innerText = '🔊';
-            }
+            if (isMuted) { slider.value = 0; muteBtn.innerText = '🔇'; }
+            else { currentVol = parseFloat(localStorage.getItem('boom_last_vol') || '0.8'); slider.value = currentVol; muteBtn.innerText = '🔊'; }
         }
 
         function changeVolume(val) {
             currentVol = parseFloat(val);
             if (currentVol > 0) {
-                isMuted = false;
-                localStorage.setItem('boom_muted', 'false');
-                localStorage.setItem('boom_last_vol', currentVol);
-                muteBtn.innerText = '🔊';
+                isMuted = false; localStorage.setItem('boom_muted', 'false');
+                localStorage.setItem('boom_last_vol', currentVol); muteBtn.innerText = '🔊';
             } else {
-                isMuted = true;
-                localStorage.setItem('boom_muted', 'true');
-                muteBtn.innerText = '🔇';
+                isMuted = true; localStorage.setItem('boom_muted', 'true'); muteBtn.innerText = '🔇';
             }
             localStorage.setItem('boom_volume', currentVol);
         }
@@ -487,7 +428,6 @@
         function playSound() {
             initAudio();
             if (!audioCtx) return;
-
             const vol = isMuted ? 0 : currentVol;
             if (vol <= 0) return;
 
@@ -498,7 +438,6 @@
 
             const noise = audioCtx.createBufferSource();
             noise.buffer = buffer;
-
             const filter = audioCtx.createBiquadFilter();
             filter.type = 'lowpass';
             filter.frequency.setValueAtTime(900, audioCtx.currentTime);
@@ -508,10 +447,7 @@
             gain.gain.setValueAtTime(vol * 0.6, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.5);
 
-            noise.connect(filter);
-            filter.connect(gain);
-            gain.connect(audioCtx.destination);
-
+            noise.connect(filter); filter.connect(gain); gain.connect(audioCtx.destination);
             noise.start();
         }
 
@@ -533,7 +469,6 @@
             if (input && !input.startsWith('http://') && !input.startsWith('https://') && !input.startsWith('javascript:')) {
                 input = 'https://' + input;
             }
-            
             tabs[activeTabIdx].url = input || 'https://www.youtube.com';
             localStorage.setItem('boom_tabs', JSON.stringify(tabs));
             document.getElementById('targetInput').value = tabs[activeTabIdx].url;
@@ -563,37 +498,64 @@
             let currentUrl = tabs[activeTabIdx].url;
 
             if (currentUrl.startsWith('javascript:')) {
-                let jsCode = decodeURIComponent(currentUrl.replace(/^javascript:/i, ''));
-                
-                // Pokud má okno opener, zkusíme spustit v něm
-                if (window.opener && !window.opener.closed) {
-                    try {
-                        window.opener.eval(jsCode);
-                        window.close();
-                        return;
-                    } catch(e) {}
-                }
-                
-                // Jinak otevřeme nové okno a zkusíme skript vložit přes adresní řádek / data URI, aby fungoval jako bookmarklet
-                try {
-                    let newWin = window.open('about:blank', '_blank');
-                    if (newWin) {
-                        newWin.eval(jsCode);
-                    } else {
-                        // Fallback, pokud prohlížeč blokuje popup
-                        location.href = currentUrl;
-                    }
-                } catch(e) {
-                    alert('Chyba při spuštění bookmarkletu: ' + e.message);
-                }
+                // Pokud jde o skript, vyvoláme výběr tabu
+                openTabSelectorModal(currentUrl);
             } else {
+                // Normální URL otevře v novém okně nebo v openeru a zavře se
                 if (window.opener && !window.opener.closed) {
                     window.opener.location.href = currentUrl;
-                    window.close();
                 } else {
                     window.open(currentUrl, '_blank');
                 }
+                window.close();
             }
+        }
+
+        function openTabSelectorModal(jsUrl) {
+            let modal = document.getElementById('modalOverlay');
+            let list = document.getElementById('modalTabList');
+            list.innerHTML = '';
+
+            tabs.forEach((tab, index) => {
+                let btn = document.createElement('button');
+                btn.className = 'modal-tab-btn';
+                btn.innerHTML = `📁 <b>${tab.name}</b><br><span style="font-size:9px; color:#aaa;">${tab.url.substring(0, 35)}...</span>`;
+                btn.onclick = () => executeScriptOnTab(jsUrl, tab.url);
+                list.appendChild(btn);
+            });
+
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('modalOverlay').style.display = 'none';
+            document.getElementById('statusText').innerText = 'SYSTEM READY';
+            // Reset animací
+            document.getElementById('rocketElement').classList.remove('rocket-launch');
+            document.getElementById('parachuteBadge').classList.remove('parachute-drop');
+        }
+
+        function executeScriptOnTab(jsUrl, targetUrl) {
+            let jsCode = decodeURIComponent(jsUrl.replace(/^javascript:/i, ''));
+            
+            // Otevřeme cílovou URL (nebo prázdnou stránku, pokud je to čistý kód) v novém okně/tabu
+            let winTarget = targetUrl.startsWith('javascript:') ? 'about:blank' : targetUrl;
+            let newWindow = window.open(winTarget, '_blank');
+
+            if (newWindow) {
+                // Počkáme chvíli, než se stránka načte, a injektneme kód
+                setTimeout(() => {
+                    try {
+                        newWindow.eval(jsCode);
+                    } catch(e) {
+                        // Pokud prohlížeč blokuje cross-origin eval, upozorníme uživatele
+                        alert("Prohlížeč zablokoval spuštění skriptu na této doméně kvůli zabezpečení. Zkus spustit jako klasický bookmarklet.");
+                    }
+                }, 500);
+            }
+
+            // Zavřeme Launcher okno
+            window.close();
         }
     </script>
 </body>
