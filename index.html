@@ -54,7 +54,7 @@
             background: rgba(18, 18, 28, 0.85);
             border: 1px solid rgba(255, 0, 85, 0.4);
             border-bottom: none;
-            padding: 6px 12px;
+            padding: 6px 10px;
             border-radius: 8px 8px 0 0;
             font-size: 11px;
             cursor: pointer;
@@ -75,6 +75,15 @@
         }
 
         .tab-item:hover { color: #fff; }
+
+        .tab-close {
+            font-size: 10px;
+            color: #ff3366;
+            margin-left: 4px;
+            padding: 0 3px;
+            border-radius: 3px;
+        }
+        .tab-close:hover { background: rgba(255,0,85,0.3); color: #fff; }
 
         .add-tab-btn {
             background: rgba(255, 0, 85, 0.2);
@@ -251,7 +260,7 @@
 
         .status-bar { margin-top: 12px; font-size: 12px; color: #00ff88; font-weight: bold; }
 
-        /* Styly pro modální okno výběru tabu */
+        /* Modální okno pro výběr tabu */
         #modalOverlay {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.85); z-index: 100; display: none;
@@ -275,7 +284,7 @@
 
     <div class="bg-space"></div>
 
-    <!-- Modální okno pro výběr tabu při spuštění skriptu -->
+    <!-- Výběrové okno pro skripty -->
     <div id="modalOverlay">
         <div class="modal-box">
             <div class="modal-title">// VYBER CÍLOVÝ TAB PRO SKRIPT //</div>
@@ -311,7 +320,6 @@
         <div class="url-section">
             <span class="url-label">
                 <span id="activeTabName">TARGET URL / SCRIPT:</span>
-                <span style="cursor:pointer; color:#ff0055;" onclick="deleteActiveTab()">[delete tab]</span>
             </span>
             <div class="url-box">
                 <input type="text" id="targetInput" class="url-input" placeholder="https://youtube.com or javascript:...">
@@ -351,8 +359,25 @@
             tabs.forEach((tab, index) => {
                 let btn = document.createElement('div');
                 btn.className = `tab-item ${index === activeTabIdx ? 'active' : ''}`;
-                btn.innerHTML = `<span>${tab.name}</span>`;
-                btn.onclick = () => switchTab(index);
+                
+                let nameSpan = document.createElement('span');
+                nameSpan.innerText = tab.name;
+                nameSpan.onclick = () => switchTab(index);
+                btn.appendChild(nameSpan);
+
+                // Tlačítko pro smazání záložky (křížek)
+                if (tabs.length > 1) {
+                    let closeBtn = document.createElement('span');
+                    closeBtn.className = 'tab-close';
+                    closeBtn.innerHTML = '×';
+                    closeBtn.title = 'Smazat tab';
+                    closeBtn.onclick = (e) => {
+                        e.stopPropagation();
+                        deleteTab(index);
+                    };
+                    btn.appendChild(closeBtn);
+                }
+
                 container.appendChild(btn);
             });
 
@@ -388,14 +413,17 @@
             switchTab(tabs.length - 1);
         }
 
-        function deleteActiveTab() {
+        function deleteTab(index) {
             if (tabs.length <= 1) {
                 alert("Musíš tu mít alespoň jednu záložku!");
                 return;
             }
-            tabs.splice(activeTabIdx, 1);
+            tabs.splice(index, 1);
             localStorage.setItem('boom_tabs', JSON.stringify(tabs));
-            activeTabIdx = Math.max(0, activeTabIdx - 1);
+            if (activeTabIdx >= tabs.length) {
+                activeTabIdx = tabs.length - 1;
+            }
+            localStorage.setItem('boom_active_tab', activeTabIdx);
             renderTabs();
             loadActiveTab();
         }
@@ -460,7 +488,7 @@
                 const domain = new URL(url).hostname;
                 document.getElementById('targetFavicon').src = `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
             } catch(e) {
-                document.getElementById('targetFavicon').src = `https://www.google.com/s2/favicons?domain=youtube.com&sz=128`;
+                document.getElementById('targetFaviconસર').src = `https://www.google.com/s2/favicons?domain=youtube.com&sz=128`;
             }
         }
 
@@ -498,10 +526,10 @@
             let currentUrl = tabs[activeTabIdx].url;
 
             if (currentUrl.startsWith('javascript:')) {
-                // Pokud jde o skript, vyvoláme výběr tabu
+                // Pokud je v aktivním tabu skript, zobrazíme modální okno pro výběr cíle
                 openTabSelectorModal(currentUrl);
             } else {
-                // Normální URL otevře v novém okně nebo v openeru a zavře se
+                // Normální URL otevře klasicky a okno se zavře
                 if (window.opener && !window.opener.closed) {
                     window.opener.location.href = currentUrl;
                 } else {
@@ -516,11 +544,11 @@
             let list = document.getElementById('modalTabList');
             list.innerHTML = '';
 
-            tabs.forEach((tab, index) => {
+            tabs.forEach((tab) => {
                 let btn = document.createElement('button');
                 btn.className = 'modal-tab-btn';
                 btn.innerHTML = `📁 <b>${tab.name}</b><br><span style="font-size:9px; color:#aaa;">${tab.url.substring(0, 35)}...</span>`;
-                btn.onclick = () => executeScriptOnTab(jsUrl, tab.url);
+                btn.onclick = () => executeScriptOnChosenTab(jsUrl, tab.url);
                 list.appendChild(btn);
             });
 
@@ -530,31 +558,28 @@
         function closeModal() {
             document.getElementById('modalOverlay').style.display = 'none';
             document.getElementById('statusText').innerText = 'SYSTEM READY';
-            // Reset animací
             document.getElementById('rocketElement').classList.remove('rocket-launch');
             document.getElementById('parachuteBadge').classList.remove('parachute-drop');
         }
 
-        function executeScriptOnTab(jsUrl, targetUrl) {
+        function executeScriptOnChosenTab(jsUrl, targetUrl) {
             let jsCode = decodeURIComponent(jsUrl.replace(/^javascript:/i, ''));
             
-            // Otevřeme cílovou URL (nebo prázdnou stránku, pokud je to čistý kód) v novém okně/tabu
+            // Určíme, co se otevře: pokud je vybraný tab webová adresa, otevře se ta adresa, jinak prázdná stránka
             let winTarget = targetUrl.startsWith('javascript:') ? 'about:blank' : targetUrl;
             let newWindow = window.open(winTarget, '_blank');
 
             if (newWindow) {
-                // Počkáme chvíli, než se stránka načte, a injektneme kód
                 setTimeout(() => {
                     try {
                         newWindow.eval(jsCode);
                     } catch(e) {
-                        // Pokud prohlížeč blokuje cross-origin eval, upozorníme uživatele
-                        alert("Prohlížeč zablokoval spuštění skriptu na této doméně kvůli zabezpečení. Zkus spustit jako klasický bookmarklet.");
+                        alert("Prohlížeč zablokoval spuštění skriptu na této doméně. Zkus to spustit jako bookmarklet.");
                     }
-                }, 500);
+                }, 600);
             }
 
-            // Zavřeme Launcher okno
+            // Launcher okno se zavře
             window.close();
         }
     </script>
