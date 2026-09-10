@@ -1,0 +1,70 @@
+﻿<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <title>BOOM YouTube</title>
+    <style>
+        body {
+            background-color: #141414;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        #button1 {
+            width: 200px;
+            height: 60px;
+            background-color: #ff0000;
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: bold;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            transition: transform 0.1s, background-color 0.2s;
+        }
+
+            #button1:hover {
+                background-color: #8b0000;
+                transform: scale(1.05);
+            }
+    </style>
+</head>
+<body>
+
+    <button id="button1" onclick="spustBoom()">▶ YOUTUBE</button>
+
+    <script>
+        async function spustBoom() {
+            const btn = document.getElementById('button1');
+            const body = document.body;
+
+            body.style.backgroundColor = '#ffffff';
+            btn.innerText = '💥 BOOM! 💥';
+            btn.style.backgroundColor = '#ff4500';
+
+            for (let i = 0; i < 15; i++) {
+                const x = (Math.random() - 0.5) * 24;
+                const y = (Math.random() - 0.5) * 24;
+                body.style.transform = `translate(${x}px, ${y}px)`;
+                await new Promise(r => setTimeout(r, 25));
+            }
+
+            body.style.transform = 'none';
+            body.style.backgroundColor = '#141414';
+            btn.innerText = 'OTEVÍRÁM...';
+
+            await new Promise(r => setTimeout(r, 300));
+
+            window.open('https://www.youtube.com', '_blank');
+
+            btn.innerText = '▶ YOUTUBE';
+            btn.style.backgroundColor = '#ff0000';
+        }
+    </script>
+</body>
+</html>
