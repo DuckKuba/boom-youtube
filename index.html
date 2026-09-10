@@ -25,7 +25,7 @@
             background: radial-gradient(circle at 50% 50%, rgba(255, 0, 85, 0.25) 0%, transparent 50%),
                         linear-gradient(rgba(255, 0, 85, 0.1) 1px, transparent 1px),
                         linear-gradient(90deg, rgba(255, 0, 85, 0.1) 1px, transparent 1px);
-            background-size: 100% 100%, 25px 25px, 25px 25px;
+            background-size: 100% 100%, 20px 20px, 20px 20px;
             z-index: 1;
         }
 
@@ -34,41 +34,41 @@
             z-index: 5;
             background: rgba(12, 12, 20, 0.95);
             border: 2px solid #ff0055;
-            border-radius: 16px;
-            padding: 20px;
+            border-radius: 12px;
+            padding: 12px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            box-shadow: 0 0 35px rgba(255, 0, 85, 0.4);
-            width: 330px;
+            box-shadow: 0 0 25px rgba(255, 0, 85, 0.4);
+            width: 250px;
         }
 
         .header-title {
-            font-size: 12px;
-            letter-spacing: 2px;
+            font-size: 10px;
+            letter-spacing: 1.5px;
             color: #ff3366;
-            margin-bottom: 12px;
+            margin-bottom: 6px;
             font-weight: bold;
         }
 
-        /* Audio Controls Bar */
+        /* Compact Audio Controls */
         .audio-controls {
             position: absolute;
-            top: 12px;
-            right: 14px;
+            top: 8px;
+            right: 8px;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 4px;
             background: rgba(0, 0, 0, 0.7);
-            padding: 4px 8px;
-            border-radius: 12px;
+            padding: 2px 6px;
+            border-radius: 8px;
             border: 1px solid rgba(255, 0, 85, 0.4);
             z-index: 20;
         }
 
         .mute-btn {
             cursor: pointer;
-            font-size: 12px;
+            font-size: 10px;
             background: none;
             border: none;
             color: #fff;
@@ -76,8 +76,8 @@
         }
 
         .volume-slider {
-            width: 55px;
-            height: 4px;
+            width: 40px;
+            height: 3px;
             accent-color: #ff0055;
             cursor: pointer;
         }
@@ -85,22 +85,23 @@
         .stage-area {
             position: relative;
             width: 100%;
-            height: 100px;
+            height: 70px;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
         #launchBtn {
-            width: 85px;
-            height: 85px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             background: radial-gradient(circle, #ff0055 0%, #660022 100%);
             color: #fff;
             font-weight: 900;
-            border: 3px solid #ff6699;
+            font-size: 12px;
+            border: 2px solid #ff6699;
             cursor: pointer;
-            box-shadow: 0 0 25px rgba(255, 0, 85, 0.8);
+            box-shadow: 0 0 15px rgba(255, 0, 85, 0.8);
             z-index: 2;
         }
 
@@ -108,7 +109,7 @@
 
         #rocketElement {
             position: absolute;
-            font-size: 50px;
+            font-size: 36px;
             display: none;
             z-index: 10;
         }
@@ -121,7 +122,7 @@
         @keyframes flyUp {
             0% { transform: translateY(0) scale(0.8); opacity: 1; }
             20% { transform: translateY(10px) scale(1.1); }
-            100% { transform: translateY(-500px) scale(0.4); opacity: 0; }
+            100% { transform: translateY(-400px) scale(0.4); opacity: 0; }
         }
 
         #parachuteBadge {
@@ -139,42 +140,42 @@
         }
 
         @keyframes dropDown {
-            0% { top: -150px; transform: scale(0.5); }
-            100% { top: 10px; transform: scale(1); }
+            0% { top: -120px; transform: scale(0.5); }
+            100% { top: 5px; transform: scale(1); }
         }
 
         .logo-box {
-            width: 50px; height: 50px;
+            width: 38px; height: 38px;
             background: #111;
             border: 2px solid #ff3366;
-            border-radius: 10px;
+            border-radius: 8px;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 0 20px #ff0055;
+            box-shadow: 0 0 15px #ff0055;
         }
 
-        .logo-box img { width: 30px; height: 30px; object-fit: contain; }
+        .logo-box img { width: 22px; height: 22px; object-fit: contain; }
 
         .url-section {
             width: 100%;
-            margin-top: 15px;
+            margin-top: 8px;
             background: rgba(0,0,0,0.5);
-            padding: 8px;
-            border-radius: 8px;
+            padding: 6px;
+            border-radius: 6px;
             border: 1px solid rgba(255, 0, 85, 0.3);
         }
 
         .url-label {
-            font-size: 9px;
+            font-size: 8px;
             color: #aaa;
-            margin-bottom: 4px;
+            margin-bottom: 3px;
             display: block;
         }
 
         .url-box {
             display: flex;
-            gap: 6px;
+            gap: 4px;
         }
 
         .url-input {
@@ -183,8 +184,8 @@
             border: 1px solid #ff0055;
             border-radius: 4px;
             color: #00ff88;
-            font-size: 11px;
-            padding: 6px;
+            font-size: 10px;
+            padding: 4px;
             outline: none;
         }
 
@@ -194,14 +195,14 @@
             border-radius: 4px;
             color: white;
             font-weight: bold;
-            font-size: 10px;
-            padding: 0 10px;
+            font-size: 9px;
+            padding: 0 8px;
             cursor: pointer;
         }
 
         .status-bar {
-            margin-top: 10px;
-            font-size: 10px;
+            margin-top: 6px;
+            font-size: 9px;
             color: #00ff88;
             font-weight: bold;
         }
@@ -212,20 +213,19 @@
     <div class="bg-space"></div>
 
     <div class="cyber-card">
-        <!-- Audio Controls -->
         <div class="audio-controls">
             <button class="mute-btn" id="muteBtn" onclick="toggleMute()">🔊</button>
             <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.01" value="0.8" oninput="changeVolume(this.value)">
         </div>
 
-        <div class="header-title">// LAUNCH CONTROL //</div>
+        <div class="header-title">// BOOM CONTROL //</div>
 
         <div class="stage-area">
             <button id="launchBtn" onclick="launchSequence()">BOOM</button>
             <div id="rocketElement">🚀</div>
 
             <div id="parachuteBadge">
-                <span style="font-size:24px;">🪂</span>
+                <span style="font-size:18px;">🪂</span>
                 <div class="logo-box">
                     <img id="targetFavicon" src="" alt="Target">
                 </div>
@@ -233,7 +233,7 @@
         </div>
 
         <div class="url-section">
-            <span class="url-label">TARGET URL OR SCRIPT:</span>
+            <span class="url-label">TARGET URL / SCRIPT:</span>
             <div class="url-box">
                 <input type="text" id="targetInput" class="url-input" placeholder="https://youtube.com">
                 <button class="url-btn" onclick="saveUrl()">SAVE</button>
@@ -254,7 +254,6 @@
         document.getElementById('targetInput').value = currentUrl;
         updateFavicon(currentUrl);
 
-        // Sync audio UI on load
         const slider = document.getElementById('volumeSlider');
         const muteBtn = document.getElementById('muteBtn');
         slider.value = isMuted ? 0 : currentVol;
@@ -353,7 +352,7 @@
             document.getElementById('targetInput').value = currentUrl;
             updateFavicon(currentUrl);
 
-            document.getElementById('statusText').innerText = 'SAVED SUCCESSFULLY!';
+            document.getElementById('statusText').innerText = 'SAVED!';
             setTimeout(() => { document.getElementById('statusText').innerText = 'SYSTEM READY'; }, 1500);
         }
 
@@ -363,13 +362,13 @@
             const badge = document.getElementById('parachuteBadge');
             const status = document.getElementById('statusText');
 
-            status.innerText = 'LAUNCHING ROCKET...';
+            status.innerText = 'LAUNCHING...';
             status.style.color = '#ff0055';
 
             rocket.classList.add('rocket-launch');
             await new Promise(r => setTimeout(r, 1600));
 
-            status.innerText = 'LANDING AT TARGET...';
+            status.innerText = 'LANDING...';
             status.style.color = '#ffcc00';
             badge.classList.add('parachute-drop');
             await new Promise(r => setTimeout(r, 1200));
@@ -379,13 +378,13 @@
                     try {
                         window.opener.eval(currentUrl.replace('javascript:', ''));
                     } catch(e) {
-                        alert('JS Execution Error: ' + e.message);
+                        alert('JS Error: ' + e.message);
                     }
                 } else {
                     try {
                         eval(currentUrl.replace('javascript:', ''));
                     } catch(e) {
-                        alert('JS Execution Error: ' + e.message);
+                        alert('JS Error: ' + e.message);
                     }
                 }
             } else {
