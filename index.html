@@ -60,7 +60,6 @@
             align-items: center;
         }
 
-        /* Fixed Boom Button */
         #launchBtn {
             width: 85px;
             height: 85px;
@@ -76,7 +75,6 @@
 
         #launchBtn:hover { transform: scale(1.05); }
 
-        /* Rocket Element */
         #rocketElement {
             position: absolute;
             font-size: 50px;
@@ -95,7 +93,6 @@
             100% { transform: translateY(-500px) scale(0.4); opacity: 0; }
         }
 
-        /* Parachute Target Logo */
         #parachuteBadge {
             position: absolute;
             top: -200px;
@@ -128,7 +125,6 @@
 
         .logo-box img { width: 30px; height: 30px; object-fit: contain; }
 
-        /* Highlighted URL Input Box */
         .url-section {
             width: 100%;
             margin-top: 15px;
@@ -199,9 +195,8 @@
             </div>
         </div>
 
-        <!-- Custom URL Box -->
         <div class="url-section">
-            <span class="url-label">TARGET URL:</span>
+            <span class="url-label">TARGET URL OR SCRIPT:</span>
             <div class="url-box">
                 <input type="text" id="targetInput" class="url-input" placeholder="https://youtube.com">
                 <button class="url-btn" onclick="saveUrl()">SAVE</button>
@@ -212,12 +207,56 @@
     </div>
 
     <script>
+        let audioCtx = null;
         let currentUrl = localStorage.getItem('boom_url') || 'https://www.youtube.com';
         document.getElementById('targetInput').value = currentUrl;
         updateFavicon(currentUrl);
 
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        document.body.addEventListener('click', initAudio, { once: true });
+
+        function playSound() {
+            initAudio();
+            if (!audioCtx) return;
+
+            const bufferSize = audioCtx.sampleRate * 2.0;
+            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+            const data = buffer.getChannelData(0);
+            for (let i = 0; i < bufferSize; i++) { data[i] = Math.random() * 2 - 1; }
+
+            const noise = audioCtx.createBufferSource();
+            noise.buffer = buffer;
+
+            const filter = audioCtx.createBiquadFilter();
+            filter.type = 'lowpass';
+            filter.frequency.setValueAtTime(1000, audioCtx.currentTime);
+            filter.frequency.linearRampToValueAtTime(100, audioCtx.currentTime + 1.8);
+
+            const gain = audioCtx.createGain();
+            gain.gain.setValueAtTime(0.8, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.8);
+
+            noise.connect(filter);
+            filter.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            noise.start();
+        }
+
         function updateFavicon(url) {
             try {
+                if (url.startsWith('javascript:')) {
+                    document.getElementById('targetFavicon').src = 'https://www.google.com/s2/favicons?domain=javascript.info&sz=128';
+                    return;
+                }
                 const domain = new URL(url).hostname;
                 document.getElementById('targetFavicon').src = `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
             } catch(e) {
@@ -227,7 +266,7 @@
 
         function saveUrl() {
             let input = document.getElementById('targetInput').value.trim();
-            if (input && !input.startsWith('http://') && !input.startsWith('https://')) {
+            if (input && !input.startsWith('http://') && !input.startsWith('https://') && !input.startsWith('javascript:')) {
                 input = 'https://' + input;
             }
             currentUrl = input || 'https://www.youtube.com';
@@ -240,6 +279,7 @@
         }
 
         async function launchSequence() {
+            playSound();
             const rocket = document.getElementById('rocketElement');
             const badge = document.getElementById('parachuteBadge');
             const status = document.getElementById('statusText');
@@ -247,21 +287,26 @@
             status.innerText = 'LAUNCHING ROCKET...';
             status.style.color = '#ff0055';
 
-            // Launch Rocket
             rocket.classList.add('rocket-launch');
             await new Promise(r => setTimeout(r, 1600));
 
-            // Drop Parachute Logo
             status.innerText = 'LANDING AT TARGET...';
             status.style.color = '#ffcc00';
             badge.classList.add('parachute-drop');
             await new Promise(r => setTimeout(r, 1200));
 
-            // Redirect
-            if (window.opener && !window.opener.closed) {
-                window.opener.location.href = currentUrl;
+            if (currentUrl.startsWith('javascript:')) {
+                try {
+                    eval(currentUrl.replace('javascript:', ''));
+                } catch(e) {
+                    alert('JS Execution Error: ' + e.message);
+                }
             } else {
-                window.open(currentUrl, '_blank');
+                if (window.opener && !window.opener.closed) {
+                    window.opener.location.href = currentUrl;
+                } else {
+                    window.open(currentUrl, '_blank');
+                }
             }
             window.close();
         }
