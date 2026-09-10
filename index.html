@@ -19,39 +19,40 @@
             user-select: none;
         }
 
-        /* Moving Space Background */
+        /* Moving Space Background with Stars */
         .bg-space {
             position: absolute;
             width: 140%;
             height: 140%;
-            background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwVazb0M65lvL54XnoVQTC6YUrUrOe7T1-BUhLJOhnxQ&s=10');
+            background-image: url('https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?q=80&w=2000&auto=format&fit=crop');
             background-size: cover;
             background-position: center;
             z-index: 1;
-            animation: moveSpace 25s infinite alternate ease-in-out;
+            animation: moveSpace 30s infinite alternate ease-in-out;
+            filter: brightness(0.85) contrast(1.1);
         }
 
         @keyframes moveSpace {
             0% { transform: scale(1) translate(0, 0) rotate(0deg); }
-            50% { transform: scale(1.1) translate(-2%, -2%) rotate(1deg); }
-            100% { transform: scale(1.05) translate(2%, 2%) rotate(-1deg); }
+            50% { transform: scale(1.12) translate(-2%, -2%) rotate(1.5deg); }
+            100% { transform: scale(1.05) translate(2%, 2%) rotate(-1.5deg); }
         }
 
-        /* Adaptive Cyber Card (Responsive) */
+        /* Adaptive Cyber Card */
         .cyber-card {
             position: relative;
             z-index: 10;
-            background: rgba(12, 12, 20, 0.92);
+            background: rgba(12, 12, 20, 0.88);
             border: 3px solid #ff0055;
             border-radius: 20px;
             padding: 30px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            box-shadow: 0 0 40px rgba(255, 0, 85, 0.6);
+            box-shadow: 0 0 45px rgba(255, 0, 85, 0.6);
             width: 520px;
             max-width: 90vw;
-            backdrop-filter: blur(4px);
+            backdrop-filter: blur(6px);
         }
 
         .header-title {
@@ -61,6 +62,7 @@
             margin-bottom: 15px;
             font-weight: bold;
             margin-right: auto;
+            text-shadow: 0 0 10px rgba(255, 0, 85, 0.5);
         }
 
         /* Mini Audio Controls */
@@ -71,7 +73,7 @@
             display: flex;
             align-items: center;
             gap: 4px;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.75);
             padding: 3px 6px;
             border-radius: 6px;
             border: 1px solid rgba(255, 0, 85, 0.4);
@@ -423,17 +425,18 @@
             await new Promise(r => setTimeout(r, 1200));
 
             if (currentUrl.startsWith('javascript:')) {
+                let jsCode = decodeURIComponent(currentUrl.replace(/^javascript:/i, ''));
                 if (window.opener && !window.opener.closed) {
                     try {
-                        window.opener.eval(currentUrl.replace('javascript:', ''));
+                        window.opener.eval(jsCode);
                     } catch(e) {
-                        alert('JS Error: ' + e.message);
+                        alert('Chyba při spuštění skriptu: ' + e.message);
                     }
                 } else {
                     try {
-                        eval(currentUrl.replace('javascript:', ''));
+                        eval(jsCode);
                     } catch(e) {
-                        alert('JS Error: ' + e.message);
+                        alert('Chyba při spuštění skriptu: ' + e.message);
                     }
                 }
             } else {
