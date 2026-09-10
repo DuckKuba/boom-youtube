@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BOOM YouTube - Rocket Launch</title>
+    <title>BOOM Launcher - Deep Space Edition</title>
     <style>
         * {
             box-sizing: border-box;
@@ -12,7 +12,7 @@
         }
 
         body {
-            background-color: #050508;
+            background-color: #030308;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -23,90 +23,106 @@
             color: #ffffff;
             user-select: none;
             position: relative;
+            perspective: 1000px;
         }
 
-        /* Animated Grid & Cyber Background */
-        .bg-grid {
+        /* Enhanced Deep Space & Nebula Background */
+        .bg-space {
             position: absolute;
             width: 200%;
             height: 200%;
             top: -50%;
             left: -50%;
-            background-image: 
-                radial-gradient(circle at 50% 50%, rgba(255, 0, 55, 0.25), transparent 60%),
-                linear-gradient(rgba(255, 0, 55, 0.1) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255, 0, 55, 0.1) 1px, transparent 1px);
-            background-size: 100% 100%, 25px 25px, 25px 25px;
-            animation: gridMove 20s linear infinite;
+            background: 
+                radial-gradient(circle at 50% 50%, rgba(255, 0, 85, 0.25) 0%, transparent 50%),
+                radial-gradient(circle at 20% 20%, rgba(0, 150, 255, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 80% 80%, rgba(138, 43, 226, 0.15) 0%, transparent 40%),
+                linear-gradient(rgba(255, 0, 85, 0.08) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 0, 85, 0.08) 1px, transparent 1px);
+            background-size: 100% 100%, 100% 100%, 100% 100%, 30px 30px, 30px 30px;
+            transform: rotateX(20deg);
+            animation: spaceGrid 25s linear infinite;
             z-index: 1;
         }
 
-        @keyframes gridMove {
-            0% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-25px) rotate(0.5deg); }
-            100% { transform: translateY(0) rotate(0deg); }
+        @keyframes spaceGrid {
+            0% { transform: rotateX(20deg) translateY(0); }
+            50% { transform: rotateX(25deg) translateY(-30px); }
+            100% { transform: rotateX(20deg) translateY(0); }
+        }
+
+        /* Particle Stars */
+        .stars {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(1px 1px at 10px 20px, #fff, transparent),
+                        radial-gradient(1px 1px at 40px 70px, #fff, transparent),
+                        radial-gradient(2px 2px at 100px 150px, #ff3366, transparent),
+                        radial-gradient(1px 1px at 200px 80px, #fff, transparent),
+                        radial-gradient(2px 2px at 300px 250px, #00ff88, transparent);
+            background-size: 350px 350px;
+            z-index: 2;
+            opacity: 0.6;
         }
 
         .scanline {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.4) 51%);
+            background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.5) 51%);
             background-size: 100% 4px;
             pointer-events: none;
             z-index: 10;
-            opacity: 0.6;
+            opacity: 0.5;
         }
 
-        /* Card Container */
+        /* Cyberpunk Card Container */
         .cyber-card {
             position: relative;
             z-index: 5;
-            background: rgba(12, 12, 18, 0.85);
-            border: 1px solid rgba(255, 0, 55, 0.4);
+            background: rgba(10, 10, 18, 0.9);
+            border: 1px solid rgba(255, 0, 85, 0.5);
             border-radius: 16px;
-            padding: 22px 30px;
+            padding: 18px 24px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            box-shadow: 0 0 35px rgba(255, 0, 55, 0.25), inset 0 0 15px rgba(255, 0, 55, 0.1);
-            backdrop-filter: blur(10px);
+            box-shadow: 0 0 40px rgba(255, 0, 85, 0.3), inset 0 0 20px rgba(255, 0, 85, 0.15);
+            backdrop-filter: blur(12px);
             width: 330px;
-            height: 280px;
-            justify-content: space-between;
         }
 
         .header-title {
             font-size: 11px;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             color: #ff3366;
             text-transform: uppercase;
-            text-shadow: 0 0 8px rgba(255, 0, 55, 0.8);
+            text-shadow: 0 0 8px rgba(255, 0, 85, 0.8);
+            margin-bottom: 5px;
         }
 
-        /* Button & Stage Arena */
         .stage-area {
             position: relative;
             width: 100%;
-            height: 120px;
+            height: 110px;
             display: flex;
             justify-content: center;
             align-items: center;
         }
 
-        /* Cyber Button */
         #button1 {
             position: relative;
-            width: 100px;
-            height: 100px;
+            width: 90px;
+            height: 90px;
             border-radius: 50%;
-            background: radial-gradient(circle, #ff0037 0%, #80001a 100%);
+            background: radial-gradient(circle, #ff0055 0%, #660022 100%);
             color: #ffffff;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 900;
             letter-spacing: 1px;
-            border: 3px solid #ff6688;
+            border: 3px solid #ff6699;
             cursor: pointer;
-            box-shadow: 0 0 30px rgba(255, 0, 55, 0.8);
+            box-shadow: 0 0 30px rgba(255, 0, 85, 0.8);
             transition: transform 0.2s, background 0.2s;
             z-index: 2;
             display: flex;
@@ -116,22 +132,24 @@
         }
 
         #button1:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 50px rgba(255, 0, 55, 1);
+            transform: scale(1.08);
+            box-shadow: 0 0 50px rgba(255, 0, 85, 1);
         }
 
-        /* Rocket Launch Animation */
+        /* Long Rocket Flight Animation (1.8s) */
         .launch-rocket {
-            animation: rocketFly 0.6s cubic-bezier(0.4, 0, 0.2, 1) forwards !important;
+            animation: rocketFlyLong 1.8s cubic-bezier(0.25, 1, 0.5, 1) forwards !important;
         }
 
-        @keyframes rocketFly {
+        @keyframes rocketFlyLong {
             0% { transform: translateY(0) scale(1.1); }
-            30% { transform: translateY(20px) scale(0.9); }
-            100% { transform: translateY(-400px) scale(0.5); opacity: 0; }
+            15% { transform: translateY(25px) scale(0.9); }
+            40% { transform: translateY(-80px) scale(0.8); }
+            70% { transform: translateY(-250px) scale(0.6); opacity: 0.8; }
+            100% { transform: translateY(-600px) scale(0.3); opacity: 0; }
         }
 
-        /* Parachute Drop YouTube Logo */
+        /* Parachute Landing */
         #ytLogo {
             position: absolute;
             top: -200px;
@@ -143,79 +161,112 @@
 
         .parachute-drop {
             display: flex !important;
-            animation: parachuteFall 1.2s ease-out forwards;
+            animation: parachuteFall 1.3s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
         }
 
         @keyframes parachuteFall {
-            0% { top: -150px; transform: scale(0.6) rotate(-5deg); }
-            60% { transform: rotate(5deg); }
-            100% { top: 20px; transform: scale(1) rotate(0deg); }
+            0% { top: -160px; transform: scale(0.5) rotate(-8deg); }
+            50% { transform: rotate(6deg); }
+            100% { top: 15px; transform: scale(1) rotate(0deg); }
         }
 
-        .parachute-icon {
-            font-size: 32px;
-            margin-bottom: -10px;
-        }
+        .parachute-icon { font-size: 28px; margin-bottom: -8px; }
 
         .yt-icon {
-            width: 65px;
-            height: 45px;
+            width: 55px;
+            height: 38px;
             background: #ff0000;
-            border-radius: 10px;
+            border-radius: 8px;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 0 25px rgba(255, 0, 0, 0.8);
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.9);
         }
 
         .yt-play {
-            width: 0;
-            height: 0;
-            border-top: 10px solid transparent;
-            border-bottom: 10px solid transparent;
-            border-left: 18px solid #ffffff;
-            margin-left: 3px;
+            width: 0; height: 0;
+            border-top: 8px solid transparent;
+            border-bottom: 8px solid transparent;
+            border-left: 14px solid #ffffff;
+            margin-left: 2px;
         }
 
-        /* HUD & Status */
+        /* URL Input Area */
+        .url-box {
+            width: 100%;
+            margin-top: 10px;
+            display: flex;
+            gap: 6px;
+        }
+
+        .url-input {
+            flex: 1;
+            background: rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 0, 85, 0.4);
+            border-radius: 6px;
+            color: #00ff88;
+            font-family: inherit;
+            font-size: 10px;
+            padding: 6px 10px;
+            outline: none;
+        }
+
+        .url-input::placeholder { color: #555; }
+
+        .url-btn {
+            background: #ff0055;
+            border: none;
+            border-radius: 6px;
+            color: white;
+            font-weight: bold;
+            font-size: 9px;
+            padding: 0 10px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .url-btn:hover { background: #ff3366; }
+
         .hud-stats {
             width: 100%;
             display: flex;
             justify-content: space-between;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 8px;
+            margin-top: 10px;
+            padding-top: 6px;
             font-size: 9px;
             color: #aaa;
         }
 
-        .stat-value { color: #ff3366; font-weight: bold; font-size: 11px; }
+        .stat-value { color: #ff3366; font-weight: bold; }
 
         .status-container {
             display: flex;
             align-items: center;
             gap: 8px;
             background: rgba(0, 0, 0, 0.5);
-            padding: 5px 12px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 0, 55, 0.3);
+            padding: 4px 10px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 0, 85, 0.3);
+            margin-top: 8px;
         }
 
         .status-dot {
-            width: 7px;
-            height: 7px;
+            width: 6px; height: 6px;
             background-color: #00ff88;
             border-radius: 50%;
-            box-shadow: 0 0 8px #00ff88;
+            box-shadow: 0 0 6px #00ff88;
         }
 
-        .status-text { font-size: 10px; font-weight: bold; color: #00ff88; letter-spacing: 1px; }
+        .status-text { font-size: 9px; font-weight: bold; color: #00ff88; letter-spacing: 1px; }
 
-        .sound-toggle { position: absolute; top: 10px; right: 12px; cursor: pointer; opacity: 0.7; }
+        .sound-toggle { position: absolute; top: 10px; right: 12px; cursor: pointer; opacity: 0.7; font-size: 12px; }
     </style>
 </head>
 <body>
 
-    <div class="bg-grid"></div>
+    <div class="bg-space"></div>
+    <div class="stars"></div>
     <div class="scanline"></div>
 
     <div class="cyber-card" id="card">
@@ -224,20 +275,25 @@
 
         <div class="stage-area">
             <button id="button1" onclick="spustBoom()">
-                <span style="font-size:20px;">▶</span>
+                <span style="font-size:18px;">▶</span>
                 <span>BOOM</span>
             </button>
 
-            <!-- YouTube Parachute Element -->
             <div id="ytLogo">
                 <span class="parachute-icon">🪂</span>
                 <div class="yt-icon"><div class="yt-play"></div></div>
             </div>
         </div>
 
+        <!-- Custom Target Input -->
+        <div class="url-box">
+            <input type="text" id="targetUrl" class="url-input" placeholder="https://www.youtube.com">
+            <button class="url-btn" onclick="saveCustomUrl()">SET</button>
+        </div>
+
         <div class="hud-stats">
             <div>LAUNCHES: <span class="stat-value" id="launchCount">0</span></div>
-            <div>TARGET: <span class="stat-value">YOUTUBE.COM</span></div>
+            <div>TARGET: <span class="stat-value" id="targetDisplay">YOUTUBE</span></div>
         </div>
 
         <div class="status-container">
@@ -249,52 +305,73 @@
     <script>
         let soundEnabled = true;
         let launches = parseInt(localStorage.getItem('boom_launches') || '0');
+        let targetUrl = localStorage.getItem('boom_target_url') || 'https://www.youtube.com';
+
         document.getElementById('launchCount').innerText = launches;
+        document.getElementById('targetUrl').value = targetUrl;
+        updateTargetDisplay(targetUrl);
+
+        function saveCustomUrl() {
+            let input = document.getElementById('targetUrl').value.trim();
+            if (input !== '' && !input.startsWith('http://') && !input.startsWith('https://')) {
+                input = 'https://' + input;
+            }
+            targetUrl = input || 'https://www.youtube.com';
+            localStorage.setItem('boom_target_url', targetUrl);
+            document.getElementById('targetUrl').value = targetUrl;
+            updateTargetDisplay(targetUrl);
+            
+            const statusText = document.getElementById('statusText');
+            statusText.innerText = 'TARGET SAVED!';
+            setTimeout(() => { statusText.innerText = 'SYSTEM READY'; }, 1500);
+        }
+
+        function updateTargetDisplay(url) {
+            try {
+                const domain = new URL(url).hostname.replace('www.', '').toUpperCase();
+                document.getElementById('targetDisplay').innerText = domain;
+            } catch(e) {
+                document.getElementById('targetDisplay').innerText = 'CUSTOM';
+            }
+        }
 
         function toggleSound() {
             soundEnabled = !soundEnabled;
             document.getElementById('soundBtn').innerText = soundEnabled ? '🔊' : '🔇';
         }
 
-        // Realistic Rocket Launch Sound (Thrust + Explosion)
         function playRocketSound() {
             if (!soundEnabled) return;
             try {
                 const ctx = new (window.AudioContext || window.webkitAudioContext)();
-
-                // 1. White Noise Generator for Rocket Thrust
-                const bufferSize = ctx.sampleRate * 1.5;
+                const bufferSize = ctx.sampleRate * 2.5;
                 const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
                 const data = buffer.getChannelData(0);
-                for (let i = 0; i < bufferSize; i++) {
-                    data[i] = Math.random() * 2 - 1;
-                }
+                for (let i = 0; i < bufferSize; i++) { data[i] = Math.random() * 2 - 1; }
 
                 const noise = ctx.createBufferSource();
                 noise.buffer = buffer;
-
                 const filter = ctx.createBiquadFilter();
                 filter.type = 'lowpass';
-                filter.frequency.setValueAtTime(800, ctx.currentTime);
-                filter.frequency.linearRampToValueAtTime(100, ctx.currentTime + 1.2);
+                filter.frequency.setValueAtTime(900, ctx.currentTime);
+                filter.frequency.linearRampToValueAtTime(150, ctx.currentTime + 2.2);
 
                 const gain = ctx.createGain();
-                gain.gain.setValueAtTime(0.5, ctx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 1.2);
+                gain.gain.setValueAtTime(0.6, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 2.2);
 
                 noise.connect(filter);
                 filter.connect(gain);
                 gain.connect(ctx.destination);
 
-                // 2. Sub-bass Explosion Pulse
                 const osc = ctx.createOscillator();
                 const oscGain = ctx.createGain();
                 osc.type = 'triangle';
-                osc.frequency.setValueAtTime(150, ctx.currentTime);
-                osc.frequency.exponentialRampToValueAtTime(20, ctx.currentTime + 0.8);
+                osc.frequency.setValueAtTime(160, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(25, ctx.currentTime + 1.5);
 
-                oscGain.gain.setValueAtTime(0.6, ctx.currentTime);
-                oscGain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.8);
+                oscGain.gain.setValueAtTime(0.7, ctx.currentTime);
+                oscGain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 1.5);
 
                 osc.connect(oscGain);
                 oscGain.connect(ctx.destination);
@@ -317,39 +394,38 @@
 
             playRocketSound();
 
-            // Phase 1: Ignition & Shake
-            btn.innerHTML = '<span style="font-size:24px;">🚀</span><span>LAUNCH</span>';
-            statusText.innerText = 'IGNITION...';
-            statusText.style.color = '#ff0037';
-            dot.style.backgroundColor = '#ff0037';
+            btn.innerHTML = '<span style="font-size:20px;">🚀</span><span>LAUNCH</span>';
+            statusText.innerText = 'IGNITION & LIFT-OFF!';
+            statusText.style.color = '#ff0055';
+            dot.style.backgroundColor = '#ff0055';
 
-            for (let i = 0; i < 20; i++) {
-                const x = (Math.random() - 0.5) * 25;
-                const y = (Math.random() - 0.5) * 25;
+            for (let i = 0; i < 25; i++) {
+                const x = (Math.random() - 0.5) * 20;
+                const y = (Math.random() - 0.5) * 20;
                 body.style.transform = `translate(${x}px, ${y}px)`;
                 await new Promise(r => setTimeout(r, 15));
             }
             body.style.transform = 'none';
 
-            // Phase 2: Rocket Fly Away
             btn.classList.add('launch-rocket');
-            statusText.innerText = 'ROCKET DEPLOYED!';
+            
+            setTimeout(() => {
+                statusText.innerText = 'ASCENDING TO ORBIT...';
+            }, 600);
 
-            await new Promise(r => setTimeout(r, 400));
+            await new Promise(r => setTimeout(r, 1600));
 
-            // Phase 3: Parachute YouTube Drops Down
             ytLogo.classList.add('parachute-drop');
-            statusText.innerText = 'LANDING YOUTUBE...';
+            statusText.innerText = 'LANDING AT TARGET...';
             statusText.style.color = '#ffcc00';
             dot.style.backgroundColor = '#ffcc00';
 
-            await new Promise(r => setTimeout(r, 1200));
+            await new Promise(r => setTimeout(r, 1300));
 
-            // Launch Target Window & Close Popup
             if (window.opener && !window.opener.closed) {
-                window.opener.location.href = 'https://www.youtube.com';
+                window.opener.location.href = targetUrl;
             } else {
-                window.open('https://www.youtube.com', '_blank');
+                window.open(targetUrl, '_blank');
             }
             window.close();
         }
