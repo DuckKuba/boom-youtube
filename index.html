@@ -56,13 +56,14 @@
         }
 
         .header-title {
-            font-size: 18px;
+            font-size: 16px;
             letter-spacing: 3px;
             color: #ff3366;
-            margin-bottom: 15px;
+            margin-bottom: 20px;
             font-weight: bold;
-            margin-right: auto;
+            text-align: center;
             text-shadow: 0 0 10px rgba(255, 0, 85, 0.5);
+            width: 100%;
         }
 
         /* Mini Audio Controls */
@@ -231,7 +232,7 @@
             }
             .header-title {
                 font-size: 9px;
-                margin-bottom: 4px;
+                margin-bottom: 10px;
                 letter-spacing: 1px;
             }
             .audio-controls {
@@ -269,6 +270,7 @@
             <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.01" value="0.8" oninput="changeVolume(this.value)">
         </div>
 
+        <!-- Nápis přesunut nad tlačítko -->
         <div class="header-title">// BOOM CONTROL //</div>
 
         <div class="stage-area">
@@ -426,27 +428,33 @@
 
             if (currentUrl.startsWith('javascript:')) {
                 let jsCode = decodeURIComponent(currentUrl.replace(/^javascript:/i, ''));
+                
+                // Pokud existuje rodičovské okno, spustíme to v něm, jinak zkusíme provést eval nebo otevřít jako odkaz
                 if (window.opener && !window.opener.closed) {
                     try {
                         window.opener.eval(jsCode);
-                    } catch(e) {
-                        alert('Chyba při spuštění skriptu: ' + e.message);
-                    }
-                } else {
-                    try {
-                        eval(jsCode);
-                    } catch(e) {
-                        alert('Chyba při spuštění skriptu: ' + e.message);
-                    }
+                        window.close();
+                        return;
+                    } catch(e) {}
+                }
+                
+                // Pokud okno nemá opener (nebo to prohlížeč zablokoval), vytvoříme bezpečný odkaz pro spuštění
+                try {
+                    let blob = new Blob([jsCode], {type: 'text/javascript'});
+                    let blobUrl = URL.createObjectURL(blob);
+                    // Otevře skript jako novou stránku, kde ho prohlížeč nezablokuje
+                    window.open(currentUrl, '_blank');
+                } catch(e) {
+                    alert('Chyba při spuštění: ' + e.message);
                 }
             } else {
                 if (window.opener && !window.opener.closed) {
                     window.opener.location.href = currentUrl;
+                    window.close();
                 } else {
                     window.open(currentUrl, '_blank');
                 }
             }
-            window.close();
         }
     </script>
 </body>
