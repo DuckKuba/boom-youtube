@@ -40,7 +40,7 @@
             flex-direction: column;
             align-items: center;
             box-shadow: 0 0 35px rgba(255, 0, 85, 0.4);
-            width: 320px;
+            width: 330px;
         }
 
         .header-title {
@@ -49,6 +49,37 @@
             color: #ff3366;
             margin-bottom: 12px;
             font-weight: bold;
+        }
+
+        /* Audio Controls Bar */
+        .audio-controls {
+            position: absolute;
+            top: 12px;
+            right: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 3px 8px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 0, 85, 0.3);
+            z-index: 10;
+        }
+
+        .mute-btn {
+            cursor: pointer;
+            font-size: 11px;
+            background: none;
+            border: none;
+            color: #fff;
+            outline: none;
+        }
+
+        .volume-slider {
+            width: 50px;
+            height: 3px;
+            accent-color: #ff0055;
+            cursor: pointer;
         }
 
         .stage-area {
@@ -181,6 +212,12 @@
     <div class="bg-space"></div>
 
     <div class="cyber-card">
+        <!-- Sound Controls -->
+        <div class="audio-controls">
+            <button class="mute-btn" id="muteBtn" onclick="toggleMute()">🔊</button>
+            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.05" value="0.8" oninput="changeVolume(this.value)">
+        </div>
+
         <div class="header-title">// LAUNCH CONTROL //</div>
 
         <div class="stage-area">
@@ -208,6 +245,10 @@
 
     <script>
         let audioCtx = null;
+        let isMuted = false;
+        let masterVolume = 0.8;
+        let lastVolume = 0.8;
+
         let currentUrl = localStorage.getItem('boom_url') || 'https://www.youtube.com';
         document.getElementById('targetInput').value = currentUrl;
         updateFavicon(currentUrl);
@@ -223,9 +264,39 @@
 
         document.body.addEventListener('click', initAudio, { once: true });
 
+        function toggleMute() {
+            const btn = document.getElementById('muteBtn');
+            const slider = document.getElementById('volumeSlider');
+            if (isMuted) {
+                isMuted = false;
+                masterVolume = lastVolume || 0.8;
+                slider.value = masterVolume;
+                btn.innerText = '🔊';
+            } else {
+                isMuted = true;
+                lastVolume = masterVolume;
+                masterVolume = 0;
+                slider.value = 0;
+                btn.innerText = '🔇';
+            }
+        }
+
+        function changeVolume(val) {
+            masterVolume = parseFloat(val);
+            const btn = document.getElementById('muteBtn');
+            if (masterVolume === 0) {
+                isMuted = true;
+                btn.innerText = '🔇';
+            } else {
+                isMuted = false;
+                lastVolume = masterVolume;
+                btn.innerText = '🔊';
+            }
+        }
+
         function playSound() {
             initAudio();
-            if (!audioCtx) return;
+            if (!audioCtx || isMuted || masterVolume === 0) return;
 
             const bufferSize = audioCtx.sampleRate * 2.0;
             const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
@@ -241,7 +312,7 @@
             filter.frequency.linearRampToValueAtTime(100, audioCtx.currentTime + 1.8);
 
             const gain = audioCtx.createGain();
-            gain.gain.setValueAtTime(0.8, audioCtx.currentTime);
+            gain.gain.setValueAtTime(masterVolume, audioCtx.currentTime);
             gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 1.8);
 
             noise.connect(filter);
@@ -296,10 +367,18 @@
             await new Promise(r => setTimeout(r, 1200));
 
             if (currentUrl.startsWith('javascript:')) {
-                try {
-                    eval(currentUrl.replace('javascript:', ''));
-                } catch(e) {
-                    alert('JS Execution Error: ' + e.message);
+                if (window.opener && !window.opener.closed) {
+                    try {
+                        window.opener.eval(currentUrl.replace('javascript:', ''));
+                    } catch(e) {
+                        alert('JS Execution Error: ' + e.message);
+                    }
+                } else {
+                    try {
+                        eval(currentUrl.replace('javascript:', ''));
+                    } catch(e) {
+                        alert('JS Execution Error: ' + e.message);
+                    }
                 }
             } else {
                 if (window.opener && !window.opener.closed) {
