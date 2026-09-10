@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BOOM Launcher - Deep Space Edition</title>
+    <title>BOOM Launcher - Custom Favicon Edition</title>
     <style>
         * {
             box-sizing: border-box;
@@ -26,7 +26,7 @@
             perspective: 1000px;
         }
 
-        /* Enhanced Deep Space & Nebula Background */
+        /* Sci-Fi Nebula Background */
         .bg-space {
             position: absolute;
             width: 200%;
@@ -51,13 +51,10 @@
             100% { transform: rotateX(20deg) translateY(0); }
         }
 
-        /* Particle Stars */
         .stars {
             position: absolute;
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%;
             background: radial-gradient(1px 1px at 10px 20px, #fff, transparent),
-                        radial-gradient(1px 1px at 40px 70px, #fff, transparent),
                         radial-gradient(2px 2px at 100px 150px, #ff3366, transparent),
                         radial-gradient(1px 1px at 200px 80px, #fff, transparent),
                         radial-gradient(2px 2px at 300px 250px, #00ff88, transparent);
@@ -76,7 +73,6 @@
             opacity: 0.5;
         }
 
-        /* Cyberpunk Card Container */
         .cyber-card {
             position: relative;
             z-index: 5;
@@ -110,7 +106,8 @@
             align-items: center;
         }
 
-        #button1 {
+        /* Launch Button (Stays Grounded) */
+        #launchBtn {
             position: relative;
             width: 90px;
             height: 90px;
@@ -131,26 +128,35 @@
             align-items: center;
         }
 
-        #button1:hover {
+        #launchBtn:hover {
             transform: scale(1.08);
             box-shadow: 0 0 50px rgba(255, 0, 85, 1);
         }
 
-        /* Long Rocket Flight Animation (1.8s) */
-        .launch-rocket {
-            animation: rocketFlyLong 1.8s cubic-bezier(0.25, 1, 0.5, 1) forwards !important;
+        /* Dedicated Rocket Object */
+        #rocketObject {
+            position: absolute;
+            font-size: 45px;
+            display: none;
+            z-index: 4;
+            filter: drop-shadow(0 0 15px #ff0055);
         }
 
-        @keyframes rocketFlyLong {
-            0% { transform: translateY(0) scale(1.1); }
-            15% { transform: translateY(25px) scale(0.9); }
-            40% { transform: translateY(-80px) scale(0.8); }
-            70% { transform: translateY(-250px) scale(0.6); opacity: 0.8; }
+        .flying-rocket {
+            display: block !important;
+            animation: rocketTakeoff 1.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+        }
+
+        @keyframes rocketTakeoff {
+            0% { transform: translateY(0) scale(0.6); opacity: 1; }
+            20% { transform: translateY(15px) scale(0.9); }
+            50% { transform: translateY(-120px) scale(1.1); }
+            80% { transform: translateY(-300px) scale(0.7); opacity: 0.8; }
             100% { transform: translateY(-600px) scale(0.3); opacity: 0; }
         }
 
-        /* Parachute Landing */
-        #ytLogo {
+        /* Parachute Landing Logo */
+        #targetBadge {
             position: absolute;
             top: -200px;
             display: none;
@@ -172,26 +178,27 @@
 
         .parachute-icon { font-size: 28px; margin-bottom: -8px; }
 
-        .yt-icon {
+        .logo-box {
             width: 55px;
-            height: 38px;
-            background: #ff0000;
-            border-radius: 8px;
+            height: 40px;
+            background: #111;
+            border: 2px solid #ff3366;
+            border-radius: 10px;
             display: flex;
             justify-content: center;
             align-items: center;
-            box-shadow: 0 0 25px rgba(255, 0, 0, 0.9);
+            box-shadow: 0 0 25px rgba(255, 0, 85, 0.9);
+            overflow: hidden;
+            padding: 4px;
         }
 
-        .yt-play {
-            width: 0; height: 0;
-            border-top: 8px solid transparent;
-            border-bottom: 8px solid transparent;
-            border-left: 14px solid #ffffff;
-            margin-left: 2px;
+        .logo-img {
+            width: 28px;
+            height: 28px;
+            object-fit: contain;
         }
 
-        /* URL Input Area */
+        /* Custom URL Area */
         .url-box {
             width: 100%;
             margin-top: 10px;
@@ -220,7 +227,7 @@
             color: white;
             font-weight: bold;
             font-size: 9px;
-            padding: 0 10px;
+            padding: 0 12px;
             cursor: pointer;
             transition: background 0.2s;
         }
@@ -274,21 +281,25 @@
         <div class="header-title">// QUANTUM LAUNCHER //</div>
 
         <div class="stage-area">
-            <button id="button1" onclick="spustBoom()">
+            <button id="launchBtn" onclick="spustBoom()">
                 <span style="font-size:18px;">▶</span>
                 <span>BOOM</span>
             </button>
 
-            <div id="ytLogo">
+            <div id="rocketObject">🚀</div>
+
+            <div id="targetBadge">
                 <span class="parachute-icon">🪂</span>
-                <div class="yt-icon"><div class="yt-play"></div></div>
+                <div class="logo-box">
+                    <img id="dynamicLogo" class="logo-img" src="" alt="Target Logo">
+                </div>
             </div>
         </div>
 
-        <!-- Custom Target Input -->
+        <!-- Custom Target URL Input -->
         <div class="url-box">
             <input type="text" id="targetUrl" class="url-input" placeholder="https://www.youtube.com">
-            <button class="url-btn" onclick="saveCustomUrl()">SET</button>
+            <button class="url-btn" onclick="saveCustomUrl()">SAVE</button>
         </div>
 
         <div class="hud-stats">
@@ -310,6 +321,15 @@
         document.getElementById('launchCount').innerText = launches;
         document.getElementById('targetUrl').value = targetUrl;
         updateTargetDisplay(targetUrl);
+
+        function getFaviconUrl(url) {
+            try {
+                const domain = new URL(url).hostname;
+                return `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
+            } catch(e) {
+                return 'https://www.google.com/s2/favicons?domain=youtube.com&sz=128';
+            }
+        }
 
         function saveCustomUrl() {
             let input = document.getElementById('targetUrl').value.trim();
@@ -333,6 +353,7 @@
             } catch(e) {
                 document.getElementById('targetDisplay').innerText = 'CUSTOM';
             }
+            document.getElementById('dynamicLogo').src = getFaviconUrl(url);
         }
 
         function toggleSound() {
@@ -382,8 +403,8 @@
         }
 
         async function spustBoom() {
-            const btn = document.getElementById('button1');
-            const ytLogo = document.getElementById('ytLogo');
+            const rocketObj = document.getElementById('rocketObject');
+            const targetBadge = document.getElementById('targetBadge');
             const statusText = document.getElementById('statusText');
             const dot = document.getElementById('dot');
             const body = document.body;
@@ -394,7 +415,6 @@
 
             playRocketSound();
 
-            btn.innerHTML = '<span style="font-size:20px;">🚀</span><span>LAUNCH</span>';
             statusText.innerText = 'IGNITION & LIFT-OFF!';
             statusText.style.color = '#ff0055';
             dot.style.backgroundColor = '#ff0055';
@@ -407,7 +427,8 @@
             }
             body.style.transform = 'none';
 
-            btn.classList.add('launch-rocket');
+            // Rocket ascends
+            rocketObj.classList.add('flying-rocket');
             
             setTimeout(() => {
                 statusText.innerText = 'ASCENDING TO ORBIT...';
@@ -415,7 +436,8 @@
 
             await new Promise(r => setTimeout(r, 1600));
 
-            ytLogo.classList.add('parachute-drop');
+            // Custom Favicon badge drops on parachute
+            targetBadge.classList.add('parachute-drop');
             statusText.innerText = 'LANDING AT TARGET...';
             statusText.style.color = '#ffcc00';
             dot.style.backgroundColor = '#ffcc00';
