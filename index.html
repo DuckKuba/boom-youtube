@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CYBER_NEXUS_ARCADE // v204.0 ULTIMATE</title>
+    <title>CYBER_NEXUS_ARCADE // v205.0 ULTIMATE</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         :root {
@@ -59,6 +59,73 @@
             grid-template-rows: auto 1fr;
             box-shadow: 0 0 100px rgba(0, 255, 204, 0.35), inset 0 0 30px rgba(0,255,204,0.05);
             overflow: hidden;
+            transition: all 0.5s ease;
+        }
+
+        /* GIRLY THEME OVERRIDES FOR CATCH MODE */
+        .app-wrapper.girly-theme {
+            --neon-cyan: #ff99cc;
+            --neon-pink: #ff3399;
+            --neon-purple: #ff66b2;
+            background: rgba(20, 5, 20, 0.98);
+            border-color: var(--neon-pink);
+            box-shadow: 0 0 100px rgba(255, 51, 153, 0.4), inset 0 0 30px rgba(255,51,153,0.1);
+        }
+        .app-wrapper.girly-theme .top-nav {
+            background: rgba(25, 2, 20, 0.98);
+            border-bottom-color: rgba(255, 51, 153, 0.4);
+        }
+        .app-wrapper.girly-theme .nav-title {
+            color: #ffb3d9;
+            text-shadow: 0 0 12px var(--neon-pink);
+        }
+        .app-wrapper.girly-theme .arcade-arena {
+            background: radial-gradient(circle, rgba(60,10,40,0.85) 0%, rgba(15,2,12,0.99) 100%);
+        }
+        .app-wrapper.girly-theme .sidebar-lb {
+            background: rgba(25, 5, 20, 0.98);
+            border-left-color: rgba(255, 51, 153, 0.4);
+        }
+        .app-wrapper.girly-theme .sidebar-lb h3 {
+            color: var(--neon-pink);
+            border-bottom-color: rgba(255, 51, 153, 0.4);
+        }
+        .app-wrapper.girly-theme .lb-tab-btn {
+            background: rgba(255, 51, 153, 0.1);
+            border-color: rgba(255, 51, 153, 0.3);
+            color: #ffb3d9;
+        }
+        .app-wrapper.girly-theme .lb-tab-btn.active {
+            background: var(--neon-pink);
+            color: #fff;
+            box-shadow: 0 0 10px var(--neon-pink);
+        }
+        .app-wrapper.girly-theme .lb-row {
+            background: rgba(255, 51, 153, 0.08);
+            border-color: rgba(255, 51, 153, 0.3);
+        }
+        .app-wrapper.girly-theme .lb-row.me {
+            background: rgba(255, 51, 153, 0.25);
+            border-color: var(--neon-pink);
+        }
+        .app-wrapper.girly-theme .lb-row span:last-child {
+            color: #ffb3d9;
+        }
+        .app-wrapper.girly-theme .game-hud {
+            background: rgba(25, 5, 20, 0.94);
+            border-bottom-color: rgba(255, 51, 153, 0.3);
+        }
+        .app-wrapper.girly-theme .game-hud span {
+            color: var(--neon-pink);
+        }
+        .app-wrapper.girly-theme .back-hub-btn {
+            border-color: var(--neon-pink);
+            color: var(--neon-pink);
+        }
+        .app-wrapper.girly-theme .back-hub-btn:hover {
+            background: var(--neon-pink);
+            color: #fff;
+            box-shadow: 0 0 15px var(--neon-pink);
         }
 
         /* TOAST NOTIFICATION SYSTEM */
@@ -451,7 +518,7 @@
     <div class="scanlines"></div>
     <div id="toastContainer"></div>
 
-    <div class="app-wrapper">
+    <div class="app-wrapper" id="appWrapper">
         <div class="top-nav">
             <div class="nav-title">// CYBER_NEXUS_ULTRA</div>
             <div class="nav-stats">
@@ -508,7 +575,7 @@
             <div class="shop-items">
                 <div class="shop-card">
                     <h4>+100 BONUS CREDITS</h4>
-                    <p>Instant injection of emergency funds into your account (2s cooldown).</p>
+                    <p>Instant injection of emergency funds into your account (30 min cooldown).</p>
                     <button class="card-btn shop-btn" id="btnBonusCredits" onclick="buyItem('credits', 0)">CLAIM FREE</button>
                 </div>
                 <div class="shop-card">
@@ -590,7 +657,7 @@
         setInterval(() => {
             ctx.fillStyle = 'rgba(1, 0, 4, 0.15)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#00ffcc';
+            ctx.fillStyle = document.getElementById('appWrapper').classList.contains('girly-theme') ? '#ff99cc' : '#00ffcc';
             ctx.font = fontSize + 'px monospace';
             for (let i = 0; i < drops.length; i++) {
                 let text = chars.charAt(Math.floor(Math.random() * chars.length));
@@ -615,36 +682,27 @@
         let activeGame = null;
         let activeMode = 'normal';
         let playerName = '';
-        let credits = parseInt(localStorage.getItem('cyber_nexus_credits_v204')) || 200;
-        let upgrades = JSON.parse(localStorage.getItem('cyber_nexus_upgrades_v204')) || { paddle: false, multiplier: false, goldenSkin: false };
+        let credits = parseInt(localStorage.getItem('cyber_nexus_credits_v205')) || 200;
+        let upgrades = JSON.parse(localStorage.getItem('cyber_nexus_upgrades_v205')) || { paddle: false, multiplier: false, goldenSkin: false };
         let score = 0;
         let timeLeft = 40;
         let gameInterval = null;
         let loopInterval = null;
         let physicsInterval = null;
         let currentLbTab = 'slasher_normal';
-        let bonusCooldown = false;
+        
+        let lastBonusTime = parseInt(localStorage.getItem('cyber_nexus_last_bonus_v205')) || 0;
+        const bonusCooldownTime = 30 * 60 * 1000; // 30 minut v milisekundách
 
         let paddleX = 50;
         let ballX = 50, ballY = 40;
         let ballVX = 1.2, ballVY = 1.4;
 
-        let globalLeaderboards = JSON.parse(localStorage.getItem('cyber_nexus_global_lb_v204')) || {
-            slasher_normal: [
-                { name: "NEXUS_KING", score: 120 },
-                { name: "CYBER_GHOST", score: 85 }
-            ],
-            slasher_hard: [
-                { name: "GLITCH", score: 95 }
-            ],
-            pong: [
-                { name: "PONG_MASTER", score: 150 },
-                { name: "NEON_PRO", score: 100 }
-            ],
-            catch: [
-                { name: "STELLA", score: 180 },
-                { name: "MIA", score: 140 }
-            ]
+        let globalLeaderboards = JSON.parse(localStorage.getItem('cyber_nexus_global_lb_v205')) || {
+            slasher_normal: [],
+            slasher_hard: [],
+            pong: [],
+            catch: []
         };
 
         let savedHandle = localStorage.getItem('cyber_nexus_handle') || '';
@@ -656,12 +714,13 @@
         updateCreditsDisplay();
         updateShopUI();
         renderGlobalLeaderboards();
+        checkBonusTimerInterval();
 
         function updateCreditsDisplay() {
             document.getElementById('navCredits').innerText = credits;
             let shopCredEl = document.getElementById('shopCreditsCount');
             if (shopCredEl) shopCredEl.innerText = credits;
-            localStorage.setItem('cyber_nexus_credits_v204', credits);
+            localStorage.setItem('cyber_nexus_credits_v205', credits);
         }
 
         function updateShopUI() {
@@ -682,6 +741,26 @@
                 btnGolden.innerText = 'INSTALLED // OWNED';
                 btnGolden.disabled = true;
             }
+        }
+
+        function checkBonusTimerInterval() {
+            setInterval(() => {
+                let now = Date.now();
+                let diff = now - lastBonusTime;
+                let btn = document.getElementById('btnBonusCredits');
+                if (!btn || upgrades.bonusOwned) return;
+                
+                if (diff < bonusCooldownTime) {
+                    let remaining = Math.ceil((bonusCooldownTime - diff) / 1000);
+                    let mins = Math.floor(remaining / 60);
+                    let secs = remaining % 60;
+                    btn.disabled = true;
+                    btn.innerText = `READY IN ${mins}:${secs < 10 ? '0' : ''}${secs}`;
+                } else {
+                    btn.disabled = false;
+                    btn.innerText = 'CLAIM FREE';
+                }
+            }, 1000);
         }
 
         function validateAndSetUser() {
@@ -706,41 +785,31 @@
 
         function buyItem(item, cost) {
             if (item === 'credits') {
-                if (bonusCooldown) {
-                    showToast('Emergency funds reloading... Please wait 2 seconds!', 'pink');
+                let now = Date.now();
+                let diff = now - lastBonusTime;
+                if (diff < bonusCooldownTime) {
+                    showToast('Bonus kredity jsou stále na cooldownu (30 min)!', 'pink');
                     return;
                 }
                 credits += 100;
+                lastBonusTime = now;
+                localStorage.setItem('cyber_nexus_last_bonus_v205', lastBonusTime);
                 updateCreditsDisplay();
-                showToast('Claimed +100 Bonus Credits successfully!', 'gold');
-                
-                bonusCooldown = true;
-                let bonusBtn = document.getElementById('btnBonusCredits');
-                if (bonusBtn) {
-                    bonusBtn.disabled = true;
-                    bonusBtn.innerText = 'RELOADING... (2s)';
-                    setTimeout(() => {
-                        bonusCooldown = false;
-                        if (bonusBtn) {
-                            bonusBtn.disabled = false;
-                            bonusBtn.innerText = 'CLAIM FREE';
-                        }
-                    }, 2000);
-                }
+                showToast('Získáno +100 bonusových kreditů!', 'gold');
                 return;
             }
             if (upgrades[item]) {
-                showToast('You already own this cyber upgrade!', 'pink');
+                showToast('Tento upgrade již vlastníš!', 'pink');
                 return;
             }
             if (credits >= cost) {
                 credits -= cost;
                 upgrades[item] = true;
-                localStorage.setItem('cyber_nexus_upgrades_v204', JSON.stringify(upgrades));
+                localStorage.setItem('cyber_nexus_upgrades_v205', JSON.stringify(upgrades));
                 updateShopUI();
-                showToast('Upgrade successfully acquired and installed!', 'gold');
+                showToast('Vylepšení úspěšně nainstalováno!', 'gold');
             } else {
-                showToast('Insufficient operational credits, operative!', 'pink');
+                showToast('Nedostatek kreditů, operative!', 'pink');
             }
         }
 
@@ -765,6 +834,14 @@
             document.getElementById('hubScreen').style.display = 'none';
             document.getElementById('modeScreen').style.display = 'none';
             document.getElementById('arcadeArena').style.display = 'grid';
+
+            // Přepínání holčičího motivu
+            const wrapper = document.getElementById('appWrapper');
+            if (gameType === 'catch') {
+                wrapper.classList.add('girly-theme');
+            } else {
+                wrapper.classList.remove('girly-theme');
+            }
             
             let nameText = gameType === 'slasher' ? `SLASHER (${mode.toUpperCase()})` : (gameType === 'pong' ? 'PONG SURVIVAL' : 'CRYSTAL CATCH');
             document.getElementById('hudGameName').innerText = nameText;
@@ -774,6 +851,7 @@
 
         function returnToHub() {
             stopSession();
+            document.getElementById('appWrapper').classList.remove('girly-theme');
             document.getElementById('gameOverOverlay').style.display = 'none';
             document.getElementById('arcadeArena').style.display = 'none';
             document.getElementById('hubScreen').style.display = 'flex';
@@ -905,7 +983,7 @@
 
                 let addVal = upgrades.multiplier ? 3 : 2;
                 score += addVal;
-                showPopup(clientX, clientY, `+${addVal}`, '#d946ef');
+                showPopup(clientX, clientY, `+${addVal}`, '#ff3399');
                 document.getElementById('hudScore').innerText = score;
                 item.remove();
             };
@@ -1033,7 +1111,7 @@
             }
             list.sort((a, b) => b.score - a.score);
             globalLeaderboards[key] = list.slice(0, 6);
-            localStorage.setItem('cyber_nexus_global_lb_v204', JSON.stringify(globalLeaderboards));
+            localStorage.setItem('cyber_nexus_global_lb_v205', JSON.stringify(globalLeaderboards));
         }
 
         function switchLbTab(tabKey) {
