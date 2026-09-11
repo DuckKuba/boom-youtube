@@ -3,255 +3,290 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CYBER_SLASHER_NET // v10.0</title>
+    <title>CYBER_ARCADE_HUB // v12.0</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body {
-            background-color: #010103;
+            background-color: #020104;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             font-family: 'Courier New', Courier, monospace;
             overflow: hidden;
-            color: #00ff66;
+            color: #00ffcc;
             user-select: none;
             touch-action: manipulation;
         }
 
-        /* Matrix / Hacker Canvas Background */
         #matrixCanvas {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: 1;
-            opacity: 0.25;
+            opacity: 0.2;
             pointer-events: none;
         }
 
         .scanlines {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
-            background-size: 100% 3px, 4px 100%;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.3) 50%), linear-gradient(90deg, rgba(255, 0, 85, 0.02), rgba(0, 255, 204, 0.01), rgba(120, 0, 255, 0.02));
+            background-size: 100% 4px, 4px 100%;
             z-index: 2;
             pointer-events: none;
         }
 
-        .app-container {
+        .app-wrapper {
             position: relative;
             z-index: 10;
-            background: rgba(2, 5, 10, 0.92);
-            border: 1px solid #00ff66;
-            border-radius: 6px;
+            background: rgba(4, 3, 10, 0.96);
+            border: 2px solid #00ffcc;
+            border-radius: 12px;
             width: 96vw;
-            max-width: 980px;
+            max-width: 1000px;
             height: 94vh;
-            max-height: 720px;
+            max-height: 740px;
             display: grid;
-            grid-template-columns: 1fr 350px;
-            box-shadow: 0 0 30px rgba(0, 255, 102, 0.15), inset 0 0 15px rgba(0, 255, 102, 0.05);
+            grid-template-rows: auto 1fr;
+            box-shadow: 0 0 40px rgba(0, 255, 204, 0.25), inset 0 0 20px rgba(0, 255, 204, 0.05);
             overflow: hidden;
         }
 
-        .game-main {
-            display: flex;
-            flex-direction: column;
-            border-right: 1px solid rgba(0, 255, 102, 0.3);
-            position: relative;
-        }
-
-        .game-header {
-            background: rgba(0, 10, 5, 0.95);
-            padding: 10px 15px;
-            border-bottom: 1px solid rgba(0, 255, 102, 0.3);
+        .top-nav {
+            background: rgba(0, 5, 12, 0.95);
+            padding: 12px 20px;
+            border-bottom: 2px solid rgba(0, 255, 204, 0.3);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 11px;
-            text-transform: uppercase;
-        }
-        .stat-group span { color: #fff; font-weight: bold; text-shadow: 0 0 6px #00ff66; }
-
-        .game-board {
-            position: relative;
-            flex: 1;
-            cursor: crosshair;
-            background: radial-gradient(circle, rgba(0,20,10,0.6) 0%, rgba(1,2,5,0.98) 100%);
-            overflow: hidden;
-        }
-
-        /* Sidebar & Live Cloud Leaderboard */
-        .sidebar {
-            background: rgba(3, 8, 5, 0.96);
-            display: flex;
-            flex-direction: column;
-            padding: 12px;
-            gap: 8px;
-            overflow-y: auto;
-        }
-        .sidebar h2 {
             font-size: 12px;
-            color: #00ff66;
-            letter-spacing: 2px;
-            border-bottom: 1px dashed rgba(0,255,102,0.4);
-            padding-bottom: 4px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            letter-spacing: 1px;
         }
-        .sync-dot {
-            width: 8px; height: 8px; background: #00ff66; border-radius: 50%;
-            box-shadow: 0 0 8px #00ff66; animation: blink 1.5s infinite;
-        }
-        @keyframes blink { 0%, 100% { opacity: 0.3; } 50% { opacity: 1; } }
+        .nav-title { color: #ff0055; font-weight: bold; text-shadow: 0 0 8px #ff0055; }
+        .nav-stats span { color: #fff; text-shadow: 0 0 6px #00ffcc; }
 
-        .lb-section-title {
-            font-size: 10px;
-            color: #00cc55;
-            margin-top: 2px;
-            text-transform: uppercase;
-        }
-        .leaderboard-list {
-            display: flex;
-            flex-direction: column;
-            gap: 3px;
-            font-size: 11px;
-            max-height: 95px;
-            overflow-y: auto;
-            padding-right: 2px;
-        }
-        .leaderboard-list::-webkit-scrollbar { width: 3px; }
-        .leaderboard-list::-webkit-scrollbar-thumb { background: #00ff66; }
-
-        .lb-item {
-            background: rgba(0, 20, 10, 0.7);
-            border-left: 2px solid #00ff66;
-            padding: 4px 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: #ccc;
-        }
-        .lb-item.me { background: rgba(0, 255, 102, 0.15); color: #fff; font-weight: bold; }
-        .lb-item span:last-child { color: #00ff66; }
-
-        /* Hacker Targets / Nodes */
-        .target {
-            position: absolute;
-            width: 50px;
-            height: 50px;
-            border-radius: 4px;
-            background: rgba(0, 255, 102, 0.1);
-            border: 1px solid #00ff66;
-            box-shadow: 0 0 12px rgba(0, 255, 102, 0.4);
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            font-size: 10px;
-            font-weight: bold;
-            color: #00ff66;
-            animation: nodeSpawn 0.2s ease-out;
-            transform: translate(-50%, -50%);
-        }
-        .target::before { content: 'SYS_'; font-size: 7px; opacity: 0.6; }
-        @keyframes nodeSpawn { 0% { transform: translate(-50%, -50%) scale(0); } 100% { transform: translate(-50%, -50%) scale(1); } }
-
-        .target.bomb {
-            background: rgba(255, 0, 60, 0.15);
-            border-color: #ff003c;
-            color: #ff003c;
-            box-shadow: 0 0 12px rgba(255, 0, 60, 0.5);
-        }
-        .target.bomb::before { content: 'MALWARE'; font-size: 6px; }
-
-        .target.golden {
-            background: rgba(255, 204, 0, 0.15);
-            border-color: #ffcc00;
-            color: #ffcc00;
-            box-shadow: 0 0 15px rgba(255, 204, 0, 0.6);
-        }
-        .target.golden::before { content: 'ROOT'; }
-
-        /* Overlay & Menus */
-        .overlay {
+        /* Hub Screen: Game Selector */
+        .hub-screen {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(1, 3, 6, 0.96);
-            z-index: 30;
+            background: rgba(2, 2, 6, 0.98);
+            z-index: 50;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            gap: 12px;
-            padding: 20px;
+            gap: 20px;
+            padding: 25px;
             text-align: center;
         }
-        h1 { font-size: 20px; color: #00ff66; text-shadow: 0 0 12px rgba(0,255,102,0.6); letter-spacing: 2px; }
+        .hub-title { font-size: 26px; color: #00ffcc; text-shadow: 0 0 15px rgba(0,255,204,0.6); letter-spacing: 3px; }
         
+        .auth-box {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            align-items: center;
+        }
         .input-box {
             background: #000;
-            border: 1px solid #00ff66;
-            color: #00ff66;
+            border: 2px solid #00ffcc;
+            color: #00ffcc;
             padding: 10px;
             font-family: 'Courier New', Courier, monospace;
             font-size: 14px;
             outline: none;
             width: 240px;
             text-align: center;
-            box-shadow: inset 0 0 8px rgba(0,255,102,0.2);
+            border-radius: 6px;
         }
-        .error-msg { color: #ff003c; font-size: 11px; height: 14px; font-weight: bold; }
+        .error-msg { color: #ff0055; font-size: 11px; height: 14px; font-weight: bold; }
 
-        .mode-selector { display: flex; gap: 6px; width: 100%; max-width: 260px; }
-        .mode-btn {
-            flex: 1;
-            background: transparent;
-            border: 1px solid rgba(0,255,102,0.4);
-            color: #00ff66;
-            padding: 8px;
+        .game-grid {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .game-card {
+            background: rgba(10, 5, 20, 0.8);
+            border: 2px solid rgba(0, 255, 204, 0.4);
+            border-radius: 10px;
+            width: 240px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
             cursor: pointer;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 10px;
-            font-weight: bold;
-            transition: 0.2s;
+            transition: all 0.3s;
         }
-        .mode-btn.active, .mode-btn:hover { background: #00ff66; color: #000; box-shadow: 0 0 10px #00ff66; }
-
-        .main-btn {
-            background: #00ff66;
+        .game-card:hover {
+            border-color: #ff0055;
+            box-shadow: 0 0 25px rgba(255, 0, 85, 0.4);
+            transform: translateY(-4px);
+        }
+        .game-icon {
+            font-size: 36px;
+            background: rgba(0,255,204,0.1);
+            width: 70px; height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px dashed #00ffcc;
+            box-shadow: 0 0 10px rgba(0,255,204,0.3);
+        }
+        .game-card h3 { font-size: 14px; color: #fff; letter-spacing: 1px; }
+        .game-card p { font-size: 10px; color: #88aacc; line-height: 1.3; }
+        .card-btn {
+            background: #00ffcc;
             color: #000;
             border: none;
-            padding: 10px 28px;
+            padding: 8px 16px;
             font-family: 'Courier New', Courier, monospace;
-            font-size: 14px;
+            font-weight: bold;
+            font-size: 11px;
+            border-radius: 4px;
+            cursor: pointer;
+            width: 100%;
+        }
+        .game-card:hover .card-btn { background: #ff0055; color: #fff; }
+
+        /* Main Game Arena Layout */
+        .arcade-arena {
+            display: none;
+            grid-template-columns: 1fr 300px;
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        .game-canvas-area {
+            position: relative;
+            background: radial-gradient(circle, rgba(10,5,25,0.7) 0%, rgba(2,1,4,0.98) 100%);
+            display: flex;
+            flex-direction: column;
+            cursor: crosshair;
+            overflow: hidden;
+        }
+        .game-hud {
+            background: rgba(0,0,0,0.8);
+            padding: 8px 15px;
+            border-bottom: 1px solid rgba(0,255,204,0.2);
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+        }
+        .game-hud span { color: #ff0055; font-weight: bold; }
+
+        /* Local Pure Leaderboard Sidebar (Clean, No Fake NPCs) */
+        .sidebar-lb {
+            background: rgba(2, 4, 10, 0.98);
+            border-left: 2px solid rgba(0, 255, 204, 0.3);
+            display: flex;
+            flex-direction: column;
+            padding: 12px;
+            gap: 8px;
+            overflow-y: auto;
+        }
+        .sidebar-lb h3 {
+            font-size: 12px;
+            color: #ff0055;
+            border-bottom: 1px dashed rgba(255,0,85,0.4);
+            padding-bottom: 5px;
+            letter-spacing: 1px;
+        }
+        .lb-list {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            font-size: 11px;
+            max-height: 240px;
+            overflow-y: auto;
+        }
+        .lb-row {
+            background: rgba(0,255,204,0.06);
+            border: 1px solid rgba(0,255,204,0.2);
+            padding: 6px 8px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            color: #fff;
+        }
+        .lb-row.me { background: rgba(255,0,85,0.15); border-color: #ff0055; font-weight: bold; }
+        .lb-row span:last-child { color: #00ffcc; }
+
+        .back-hub-btn {
+            background: transparent;
+            border: 1px solid #ff0055;
+            color: #ff0055;
+            padding: 8px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 11px;
+            cursor: pointer;
+            margin-top: auto;
+            border-radius: 4px;
+            transition: 0.2s;
+        }
+        .back-hub-btn:hover { background: #ff0055; color: #fff; }
+
+        /* Dynamic Nodes / Targets */
+        .arcade-node {
+            position: absolute;
+            width: 48px; height: 48px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 10px;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 0 15px rgba(0,255,102,0.4);
-            transition: 0.2s;
-            text-transform: uppercase;
+            animation: popIn 0.2s ease-out;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 15px currentColor;
         }
-        .main-btn:hover { background: #fff; box-shadow: 0 0 20px #fff; }
+        @keyframes popIn { 0% { transform: translate(-50%, -50%) scale(0); } 100% { transform: translate(-50%, -50%) scale(1); } }
 
-        .alert-popup {
+        /* Node Types */
+        .node-plus { background: #00ffcc; color: #000; border: 2px solid #fff; }
+        .node-golden { background: #ffcc00; color: #000; border: 2px solid #fff; }
+        .node-minus { background: #ff0055; color: #fff; border: 2px solid #00ffcc; }
+        .node-div { background: #9900ff; color: #fff; border: 2px solid #ffcc00; }
+        .node-bomb { background: #222; color: #ff0055; border: 2px solid #ff0055; }
+
+        .popup-msg {
             position: absolute;
             font-weight: bold;
-            font-size: 12px;
+            font-size: 13px;
             pointer-events: none;
             animation: floatUp 0.5s ease-out forwards;
-            z-index: 40;
+            z-index: 60;
             text-shadow: 0 0 6px #000;
         }
         @keyframes floatUp {
             0% { opacity: 1; transform: translate(-50%, -50%) scale(0.8); }
-            100% { opacity: 0; transform: translate(-50%, -50px) scale(1.2); }
+            100% { opacity: 0; transform: translate(-50%, -60px) scale(1.2); }
+        }
+
+        .gameover-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(2, 2, 8, 0.94);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            z-index: 70;
+            text-align: center;
         }
 
         @media (max-width: 768px) {
-            .app-container { width: 100vw; height: 100vh; max-height: none; border-radius: 0; border: none; grid-template-columns: 1fr; grid-template-rows: 1fr auto; }
-            .sidebar { max-height: 140px; border-top: 1px solid rgba(0,255,102,0.3); padding: 8px; gap: 4px; }
-            .leaderboard-list { max-height: 50px; }
+            .arcade-arena { grid-template-columns: 1fr; grid-template-rows: 1fr auto; }
+            .sidebar-lb { max-height: 150px; }
+            .game-grid { flex-direction: column; align-items: center; }
+            .game-card { width: 100%; max-width: 280px; }
         }
     </style>
 </head>
@@ -260,63 +295,82 @@
     <canvas id="matrixCanvas"></canvas>
     <div class="scanlines"></div>
 
-    <div class="app-container">
-        <div class="game-main">
-            <div class="game-header">
-                <div class="stat-group">USER: <span id="uiName">ANON</span></div>
-                <div class="stat-group">COMBO: <span id="uiCombo">0x</span></div>
-                <div class="stat-group">SCORE: <span id="uiScore">0</span></div>
-                <div class="stat-group">TIME: <span id="uiTime">30</span>s</div>
-            </div>
-            <div class="game-board" id="gameBoard"></div>
+    <div class="app-wrapper">
+        <div class="top-nav">
+            <div class="nav-title">// CYBER_ARCADE</div>
+            <div class="nav-stats">OPERATIVE: <span id="navUser">ANON</span></div>
         </div>
 
-        <div class="sidebar">
-            <h2>// CLOUD_NET_DB <div class="sync-dot" title="Global Cloud Sync Active"></div></h2>
+        <!-- HUB SELECTION SCREEN -->
+        <div class="hub-screen" id="hubScreen">
+            <h1 class="hub-title">CHOOSE YOUR PROTOCOL</h1>
             
-            <div class="lb-section-title">> EASY PROTOCOL (45s)</div>
-            <div class="leaderboard-list" id="lbEasy"></div>
+            <div class="auth-box">
+                <input type="text" id="playerName" class="input-box" placeholder="ENTER HANDLE..." maxlength="12">
+                <div class="error-msg" id="errorMsg"></div>
+            </div>
 
-            <div class="lb-section-title">> MEDIUM PROTOCOL (30s)</div>
-            <div class="leaderboard-list" id="lbMedium"></div>
+            <div class="game-grid">
+                <!-- Game 1: Cyber Slasher -->
+                <div class="game-card" onclick="launchGame('slasher')">
+                    <div class="game-icon">⚡</div>
+                    <h3>CYBER SLASHER</h3>
+                    <p>Fast-paced node cutting action. Tap system items, avoid destructive malware & negative dividers!</p>
+                    <button class="card-btn">PLAY SLASHER</button>
+                </div>
 
-            <div class="lb-section-title">> HARD PROTOCOL (20s)</div>
-            <div class="leaderboard-list" id="lbHard"></div>
+                <!-- Game 2: Neon Grid Catcher (New Game) -->
+                <div class="game-card" onclick="launchGame('gridcatcher')">
+                    <div class="game-icon">🛡️</div>
+                    <h3>GRID CATCHER</h3>
+                    <p>Defend the core grid matrix against corrupted memory blocks and glitch multipliers!</p>
+                    <button class="card-btn">PLAY GRID</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ARCADE ARENA (Renders active game) -->
+        <div class="arcade-arena" id="arcadeArena">
+            <div class="game-canvas-area">
+                <div class="game-hud">
+                    <div>GAME: <span id="hudGameName">SLASHER</span></div>
+                    <div>SCORE: <span id="hudScore">0</span></div>
+                    <div>TIME: <span id="hudTime">30</span>s</div>
+                </div>
+                <div class="game-canvas" id="gameCanvas" style="position:relative; flex:1; overflow:hidden;"></div>
+            </div>
+
+            <div class="sidebar-lb">
+                <h3>// LOCAL LEADERBOARD</h3>
+                <div class="lb-list" id="localLbList"></div>
+                <button class="back-hub-btn" onclick="returnToHub()">« QUIT TO HUB</button>
+            </div>
         </div>
     </div>
 
-    <div class="overlay" id="startScreen">
-        <h1>// SYSTEM OVERRIDE v10.0 //</h1>
-        <p style="font-size:10px; color:#88cc99; max-width:320px; line-height: 1.4;">Enter your unique handle. Names are locked globally. Destroy green sys nodes, grab root golden nodes, avoid red malware firewalls!</p>
-        <input type="text" id="playerName" class="input-box" placeholder="ENTER HANDLE..." maxlength="12">
-        <div class="error-msg" id="errorMsg"></div>
-        
-        <div class="mode-selector">
-            <button class="mode-btn active" onclick="setDifficulty('easy', this)">EASY</button>
-            <button class="mode-btn" onclick="setDifficulty('medium', this)">MED</button>
-            <button class="mode-btn" onclick="setDifficulty('hard', this)">HARD</button>
-        </div>
-
-        <button class="main-btn" onclick="initGame()">INITIALIZE HACK</button>
+    <!-- GAME OVER SCREEN -->
+    <div class="gameover-overlay" id="gameOverOverlay">
+        <h1 style="color:#ff0055; font-size:22px;">// MISSION TERMINATED //</h1>
+        <p style="font-size:12px; color:#aaa;" id="goDetails">Score: 0</p>
+        <button class="card-btn" style="width:200px; padding:10px;" onclick="restartActiveGame()">RE-ENGAGE</button>
+        <button class="back-hub-btn" style="width:200px;" onclick="returnToHub()">BACK TO HUB</button>
     </div>
 
     <script>
-        // Matrix Background Animation
+        // Matrix Background
         const canvas = document.getElementById('matrixCanvas');
         const ctx = canvas.getContext('2d');
         function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        const chars = '01ABCDEF_SYSTEM_ROOT_HACK_EXPLOIT';
+        const chars = '01ABCDEF_ARCADE_GRID_HACK';
         const fontSize = 12;
-        let columns = canvas.width / fontSize;
-        let drops = Array(Math.floor(columns)).fill(1);
-
-        function drawMatrix() {
-            ctx.fillStyle = 'rgba(1, 3, 6, 0.12)';
+        let drops = Array(Math.floor(canvas.width / fontSize)).fill(1);
+        setInterval(() => {
+            ctx.fillStyle = 'rgba(2, 1, 4, 0.15)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#00ff66';
+            ctx.fillStyle = '#00ffcc';
             ctx.font = fontSize + 'px monospace';
             for (let i = 0; i < drops.length; i++) {
                 let text = chars.charAt(Math.floor(Math.random() * chars.length));
@@ -324,263 +378,213 @@
                 if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
                 drops[i]++;
             }
-        }
-        setInterval(drawMatrix, 40);
+        }, 40);
 
-        // Game Configuration & Global Sync Simulation via JSONBin / Public API / Shared Fallback Backend
-        // Aby žebříček fungoval spolehlivě i na novém zařízení, využíváme veřejný JSONBin endpoint nebo robustní fallback sdíleného úložiště.
-        const BIN_ID = '65e3810cdc53115485ea4f89'; // Veřejný cloud slot pro testování
-        
-        let currentMode = 'medium';
-        let spawnIntervalTime = 1000; 
-        let gameDuration = 30;
-        let score = 0;
-        let combo = 0;
-        let timeLeft = 30;
+        // Core App State
+        let activeGame = null;
         let playerName = '';
-        let isPlaying = false;
-        let gameTimer = null;
-        let spawnerTimer = null;
+        let score = 0;
+        let timeLeft = 30;
+        let gameInterval = null;
+        let spawnerInterval = null;
+        let activeNodes = [];
 
-        let savedName = localStorage.getItem('cyber_net_handle') || '';
-        if (savedName) document.getElementById('playerName').value = savedName;
-
-        // Výchozí cloudové úložiště databází
-        let leaderboards = {
-            easy: [ {name: 'NEO', score: 42}, {name: 'TRINITY', score: 35} ],
-            medium: [ {name: 'MORPHEUS', score: 58}, {name: 'CYPHER', score: 40} ],
-            hard: [ {name: 'AGENT', score: 70}, {name: 'GHOST', score: 50} ]
+        // Leaderboards (čistě reálné skóre reálných hráčů, žádní falešní boti)
+        let localLeaderboards = JSON.parse(localStorage.getItem('cyber_pure_lb_v12')) || {
+            slasher: [],
+            gridcatcher: []
         };
 
-        // Načtení reálného globálního žebříčku z volně přístupného úložiště
-        async function fetchGlobalLeaderboard() {
-            try {
-                let res = await fetch(`https://api.jsonbin.io/v3/b/65e3810cdc53115485ea4f89/latest`, {
-                    headers: { 'X-Access-Key': '$2a$10$7v23x...mock' } // Zajištění fallbacku
-                });
-                if(res.ok) {
-                    let data = await res.json();
-                    if(data && data.record) leaderboards = data.record;
-                }
-            } catch(e) {
-                // Lokální fallback záloha pokud síť selže
-                let local = localStorage.getItem('cyber_global_fallback_v10');
-                if(local) leaderboards = JSON.parse(local);
+        let savedHandle = localStorage.getItem('cyber_active_handle') || '';
+        if (savedHandle) document.getElementById('playerName').value = savedHandle;
+
+        function validateAndSetUser() {
+            let val = document.getElementById('playerName').value.trim().toUpperCase();
+            let err = document.getElementById('errorMsg');
+            if (!val) {
+                err.innerText = 'HANDLE REQUIRED!';
+                return false;
             }
-            renderAllLeaderboards();
+            if (val.length < 2) {
+                err.innerText = 'MIN 2 CHARACTERS!';
+                return false;
+            }
+            err.innerText = '';
+            playerName = val;
+            localStorage.setItem('cyber_active_handle', playerName);
+            document.getElementById('navUser').innerText = playerName;
+            return true;
         }
 
-        async function saveGlobalLeaderboard() {
-            localStorage.setItem('cyber_global_fallback_v10', JSON.stringify(leaderboards));
-            renderAllLeaderboards();
-            try {
-                await fetch(`https://api.jsonbin.io/v3/b/65e3810cdc53115485ea4f89`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(leaderboards)
-                });
-            } catch(e) {}
+        function launchGame(gameType) {
+            if (!validateAndSetUser()) return;
+            activeGame = gameType;
+            
+            document.getElementById('hubScreen').style.display = 'none';
+            document.getElementById('arcadeArena').style.display = 'grid';
+            document.getElementById('hudGameName').innerText = gameType === 'slasher' ? 'CYBER SLASHER' : 'GRID CATCHER';
+
+            startSession();
         }
 
-        fetchGlobalLeaderboard();
-        setInterval(fetchGlobalLeaderboard, 8000); // Pravidelná cloudová synchronizace každých 8 sekund
-
-        function setDifficulty(mode, btn) {
-            document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            currentMode = mode;
-            if (mode === 'easy') { spawnIntervalTime = 1600; gameDuration = 45; }
-            else if (mode === 'medium') { spawnIntervalTime = 1000; gameDuration = 30; }
-            else if (mode === 'hard') { spawnIntervalTime = 650; gameDuration = 20; }
+        function returnToHub() {
+            stopSession();
+            document.getElementById('gameOverOverlay').style.display = 'none';
+            document.getElementById('arcadeArena').style.display = 'none';
+            document.getElementById('hubScreen').style.display = 'flex';
         }
 
-        // Ověření, zda jméno již neexistuje v globální síti (zabrání použití cizího jména)
-        function isNameTakenGlobally(name) {
-            for (let m in leaderboards) {
-                for (let entry of leaderboards[m]) {
-                    if (entry.name === name) return true;
-                }
-            }
-            return false;
-        }
-
-        function initGame() {
-            let inputVal = document.getElementById('playerName').value.trim().toUpperCase();
-            let errBox = document.getElementById('errorMsg');
-
-            if (!inputVal) {
-                errBox.innerText = 'ERROR: HANDLE REQUIRED!';
-                return;
-            }
-
-            if (inputVal.length < 2) {
-                errBox.innerText = 'ERROR: MIN 2 CHARS!';
-                return;
-            }
-
-            // Pokud jméno ještě není uloženo jako moje vlastní a zároveň už v databázi existuje -> blokace
-            if (inputVal !== savedName && isNameTakenGlobally(inputVal)) {
-                errBox.innerText = 'ACCESS DENIED: HANDLE ALREADY REGISTERED!';
-                return;
-            }
-
-            errBox.innerText = '';
-            playerName = inputVal;
-            localStorage.setItem('cyber_net_handle', playerName);
-
-            document.getElementById('uiName').innerText = playerName;
-            document.getElementById('startScreen').style.display = 'none';
-            startActualGame();
-        }
-
-        function startActualGame() {
+        function startSession() {
             score = 0;
-            combo = 0;
-            timeLeft = gameDuration;
-            isPlaying = true;
-            document.getElementById('uiScore').innerText = score;
-            document.getElementById('uiCombo').innerText = combo + 'x';
-            document.getElementById('uiTime').innerText = timeLeft;
-            document.getElementById('gameBoard').innerHTML = '';
+            timeLeft = 30;
+            document.getElementById('hudScore').innerText = score;
+            document.getElementById('hudTime').innerText = timeLeft;
+            document.getElementById('gameCanvas').innerHTML = '';
+            renderLeaderboard();
 
-            gameTimer = setInterval(() => {
+            gameInterval = setInterval(() => {
                 timeLeft--;
-                document.getElementById('uiTime').innerText = timeLeft;
-                if (timeLeft <= 0) endGame();
+                document.getElementById('hudTime').innerText = timeLeft;
+                if (timeLeft <= 0) endSession();
             }, 1000);
 
-            spawnerTimer = setInterval(spawnNode, spawnIntervalTime);
+            let spawnSpeed = activeGame === 'slasher' ? 900 : 700;
+            spawnerInterval = setInterval(spawnNodeItem, spawnSpeed);
         }
 
-        function spawnNode() {
-            if (!isPlaying) return;
-            const board = document.getElementById('gameBoard');
+        function stopSession() {
+            clearInterval(gameInterval);
+            clearInterval(spawnerInterval);
+            document.getElementById('gameCanvas').innerHTML = '';
+        }
+
+        // Vytváření rozmanitých pozitivních i negativních tlačítek / uzlů
+        function spawnNodeItem() {
+            const board = document.getElementById('gameCanvas');
+            if (!board) return;
             const node = document.createElement('div');
 
             let rand = Math.random();
-            let type = 'normal';
-            let pts = 1;
+            let type = 'plus';
+            let label = '+1';
+            let val = 1;
 
-            if (rand < 0.20) {
-                type = 'bomb'; // Malware firewall (trest)
-            } else if (rand < 0.35) {
-                type = 'golden'; // Root access (bonus)
-                pts = 5;
+            if (activeGame === 'slasher') {
+                if (rand < 0.25) { type = 'minus'; label = '-3'; val = -3; }
+                else if (rand < 0.40) { type = 'div'; label = '÷2'; val = 'div2'; }
+                else if (rand < 0.52) { type = 'bomb'; label = 'MALWARE'; val = 'reset'; }
+                else if (rand < 0.65) { type = 'golden'; label = '+5'; val = 5; }
+                else { type = 'plus'; label = '+1'; val = 1; }
+            } else {
+                // Grid Catcher rules
+                if (rand < 0.30) { type = 'minus'; label = '-5'; val = -5; }
+                else if (rand < 0.45) { type = 'div'; label = '÷2'; val = 'div2'; }
+                else if (rand < 0.60) { type = 'golden'; label = '+10'; val = 10; }
+                else { type = 'plus'; label = '+2'; val = 2; }
             }
 
-            node.className = `target ${type}`;
-            node.innerText = type === 'bomb' ? '-3' : (type === 'golden' ? '+5' : '+1');
+            node.className = `arcade-node node-${type}`;
+            node.innerText = label;
 
-            let maxX = board.clientWidth - 55;
-            let maxY = board.clientHeight - 55;
-            let x = Math.floor(Math.random() * maxX) + 25;
-            let y = Math.floor(Math.random() * maxY) + 25;
+            let maxX = board.clientWidth - 60;
+            let maxY = board.clientHeight - 60;
+            let x = Math.floor(Math.random() * maxX) + 30;
+            let y = Math.floor(Math.random() * maxY) + 30;
 
             node.style.left = x + 'px';
             node.style.top = y + 'px';
 
-            const handleAction = (e) => {
+            const triggerAction = (e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 let clientX = e.clientX || (e.touches && e.touches[0].clientX);
                 let clientY = e.clientY || (e.touches && e.touches[0].clientY);
 
-                if (type === 'bomb') {
-                    combo = 0;
-                    score = Math.max(0, score - 3);
-                    showAlert(clientX, clientY, 'FIREWALL HIT (-3)', '#ff003c');
+                if (val === 'div2') {
+                    score = Math.floor(score / 2);
+                    showPopup(clientX, clientY, '÷2 HALVED!', '#9900ff');
+                } else if (val === 'reset') {
+                    score = 0;
+                    showPopup(clientX, clientY, 'SYSTEM WIPED!', '#ff0055');
                 } else {
-                    combo++;
-                    let gain = pts * Math.min(combo, 5);
-                    score += gain;
-                    showAlert(clientX, clientY, `+${gain} [${combo}x]`, type === 'golden' ? '#ffcc00' : '#00ff66');
+                    score += val;
+                    if (score < 0) score = 0;
+                    showPopup(clientX, clientY, val > 0 ? `+${val}` : `${val}`, val > 0 ? '#00ffcc' : '#ff0055');
                 }
 
-                document.getElementById('uiScore').innerText = score;
-                document.getElementById('uiCombo').innerText = combo + 'x';
+                document.getElementById('hudScore').innerText = score;
                 node.remove();
             };
 
-            node.addEventListener('mousedown', handleAction);
-            node.addEventListener('touchstart', handleAction);
+            node.addEventListener('mousedown', triggerAction);
+            node.addEventListener('touchstart', triggerAction);
             board.appendChild(node);
 
-            // Rychlejší mizení node prvků pro vyšší dynamiku a zábavu (1.2s)
+            let lifetime = activeGame === 'slasher' ? 1100 : 900;
             setTimeout(() => {
-                if (node.parentElement) {
-                    node.remove();
-                    if(type === 'normal') combo = 0; // Ztráta komba při mineutí
-                    document.getElementById('uiCombo').innerText = combo + 'x';
-                }
-            }, 1200);
+                if (node.parentElement) node.remove();
+            }, lifetime);
         }
 
-        function showAlert(x, y, text, color) {
+        function showPopup(x, y, text, color) {
             if (!x || !y) return;
-            let alertEl = document.createElement('div');
-            alertEl.className = 'alert-popup';
-            alertEl.innerText = text;
-            alertEl.style.color = color;
-            alertEl.style.left = x + 'px';
-            alertEl.style.top = y + 'px';
-            document.body.appendChild(alertEl);
-            setTimeout(() => alertEl.remove(), 500);
+            let el = document.createElement('div');
+            el.className = 'popup-msg';
+            el.innerText = text;
+            el.style.color = color;
+            el.style.left = x + 'px';
+            el.style.top = y + 'px';
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 500);
         }
 
-        function endGame() {
-            isPlaying = false;
-            clearInterval(gameTimer);
-            clearInterval(spawnerTimer);
-            document.getElementById('gameBoard').innerHTML = '';
+        function endSession() {
+            stopSession();
+            saveScore(activeGame, playerName, score);
+            renderLeaderboard();
 
-            saveScoreToCloud(currentMode, playerName, score);
-
-            let screen = document.getElementById('startScreen');
-            screen.innerHTML = `
-                <h1>// UPLOAD COMPLETE //</h1>
-                <p style="font-size:11px; color:#88cc99; line-height: 1.5;">HANDLE: <b style="color:#fff;">${playerName}</b><br>PROTOCOL: <b>${currentMode.toUpperCase()}</b><br>FINAL SCORE: <b style="color:#00ff66; font-size:16px;">${score}</b></p>
-                <button class="main-btn" onclick="resetToMenu()">RE-ENGAGE</button>
-            `;
-            screen.style.display = 'flex';
+            document.getElementById('goDetails').innerText = `Operative: ${playerName} | Final Score: ${score}`;
+            document.getElementById('gameOverOverlay').style.display = 'flex';
         }
 
-        function saveScoreToCloud(mode, name, sc) {
-            if (!leaderboards[mode]) leaderboards[mode] = [];
-            let existingIndex = leaderboards[mode].findIndex(entry => entry.name === name);
-            if (existingIndex !== -1) {
-                if (sc > leaderboards[mode][existingIndex].score) leaderboards[mode][existingIndex].score = sc;
+        function restartActiveGame() {
+            document.getElementById('gameOverOverlay').style.display = 'none';
+            startSession();
+        }
+
+        function saveScore(gameKey, name, finalScore) {
+            if (!localLeaderboards[gameKey]) localLeaderboards[gameKey] = [];
+            let list = localLeaderboards[gameKey];
+
+            let idx = list.findIndex(item => item.name === name);
+            if (idx !== -1) {
+                if (finalScore > list[idx].score) list[idx].score = finalScore;
             } else {
-                leaderboards[mode].push({ name, score: sc });
+                list.push({ name, score: finalScore });
             }
-            leaderboards[mode].sort((a, b) => b.score - a.score);
-            leaderboards[mode] = leaderboards[mode].slice(0, 5);
-            saveGlobalLeaderboard();
+
+            list.sort((a, b) => b.score - a.score);
+            localLeaderboards[gameKey] = list.slice(0, 5); // Top 5
+            localStorage.setItem('cyber_pure_lb_v12', JSON.stringify(localLeaderboards));
         }
 
-        function renderAllLeaderboards() {
-            ['easy', 'medium', 'hard'].forEach(mode => {
-                const container = document.getElementById('lb' + mode.charAt(0).toUpperCase() + mode.slice(1));
-                if (!container) return;
-                container.innerHTML = '';
-                let list = leaderboards[mode] || [];
-                
-                if (list.length === 0) {
-                    container.innerHTML = '<div style="color:#446655; font-size:10px; padding:3px;">No data uplinked</div>';
-                    return;
-                }
+        function renderLeaderboard() {
+            const container = document.getElementById('localLbList');
+            container.innerHTML = '';
+            let list = localLeaderboards[activeGame] || [];
 
-                list.forEach((entry, idx) => {
-                    let item = document.createElement('div');
-                    let isMe = (entry.name === playerName);
-                    item.className = `lb-item ${isMe ? 'me' : ''}`;
-                    item.innerHTML = `<span>#${idx+1} ${entry.name}</span><span>${entry.score}</span>`;
-                    container.appendChild(item);
-                });
+            if (list.length === 0) {
+                container.innerHTML = '<div style="color:#556; font-size:10px; padding:6px;">No records stored yet.</div>';
+                return;
+            }
+
+            list.forEach((entry, idx) => {
+                let row = document.createElement('div');
+                let isMe = (entry.name === playerName);
+                row.className = `lb-row ${isMe ? 'me' : ''}`;
+                row.innerHTML = `<span>#${idx+1} ${entry.name}</span><span>${entry.score}</span>`;
+                container.appendChild(row);
             });
-        }
-
-        function resetToMenu() {
-            location.reload();
         }
     </script>
 </body>
