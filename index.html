@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CYBERPUNK NEON SLASHER v2.0</title>
+    <title>CYBERPUNK NEON SLASHER v4.1</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
@@ -36,12 +36,12 @@
             background: rgba(10, 10, 18, 0.95);
             border: 2px solid #ff0055;
             border-radius: 16px;
-            width: 850px;
+            width: 900px;
             max-width: 96vw;
-            height: 580px;
+            height: 600px;
             display: grid;
-            grid-template-columns: 1fr 280px;
-            box-shadow: 0 0 50px rgba(255, 0, 85, 0.4), inset 0 0 20px rgba(0,255,136,0.05);
+            grid-template-columns: 1fr 310px;
+            box-shadow: 0 0 50px rgba(255, 0, 85, 0.4);
             overflow: hidden;
         }
         .game-main {
@@ -58,7 +58,6 @@
             justify-content: space-between;
             align-items: center;
             font-size: 13px;
-            letter-spacing: 1px;
         }
         .stat-group span { color: #00ff88; font-weight: bold; }
         .game-board {
@@ -72,36 +71,43 @@
             background: rgba(5, 5, 10, 0.98);
             display: flex;
             flex-direction: column;
-            padding: 20px;
-            gap: 15px;
+            padding: 15px;
+            gap: 10px;
+            overflow-y: auto;
         }
         .sidebar h2 {
-            font-size: 14px;
+            font-size: 13px;
             color: #ff3366;
             letter-spacing: 2px;
             border-bottom: 1px solid rgba(255,0,85,0.3);
-            padding-bottom: 8px;
+            padding-bottom: 6px;
+            margin-top: 5px;
+        }
+        .lb-section-title {
+            font-size: 11px;
+            color: #00ff88;
+            margin-top: 4px;
+            text-transform: uppercase;
         }
         .leaderboard-list {
-            flex: 1;
-            overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 8px;
-            font-size: 12px;
+            gap: 4px;
+            font-size: 11px;
+            max-height: 110px;
+            overflow-y: auto;
         }
         .lb-item {
             background: rgba(20,20,30,0.6);
             border: 1px solid rgba(255,0,85,0.2);
-            padding: 8px 10px;
-            border-radius: 6px;
+            padding: 5px 8px;
+            border-radius: 4px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
         .lb-item span:last-child { color: #00ff88; font-weight: bold; }
         
-        /* Cíle */
         .target {
             position: absolute;
             width: 48px;
@@ -125,17 +131,16 @@
             box-shadow: 0 0 20px #ffe600;
             color: #000;
         }
-        .target.bonus-plus {
-            background: radial-gradient(circle, #00ff88 0%, #008844 100%);
-            box-shadow: 0 0 20px #00ff88;
-            color: #000;
+        .target.bonus-val {
+            background: radial-gradient(circle, #ff0055 0%, #880022 100%);
+            box-shadow: 0 0 20px #ff0055;
+            color: #fff;
         }
         @keyframes spawnPop {
             0% { transform: translate(-50%, -50%) scale(0); }
             100% { transform: translate(-50%, -50%) scale(1); }
         }
 
-        /* Modální obrazovky */
         .overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -145,49 +150,59 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            gap: 20px;
+            gap: 15px;
             padding: 30px;
             text-align: center;
         }
-        h1 { font-size: 24px; color: #ff3366; text-shadow: 0 0 15px rgba(255,0,85,0.6); letter-spacing: 3px; }
+        h1 { font-size: 22px; color: #ff3366; text-shadow: 0 0 15px rgba(255,0,85,0.6); letter-spacing: 2px; }
         .input-box {
             background: #000;
             border: 2px solid #ff0055;
             color: #00ff88;
-            padding: 12px;
+            padding: 10px;
             font-family: 'Consolas', monospace;
-            font-size: 16px;
+            font-size: 15px;
             border-radius: 6px;
             outline: none;
-            width: 260px;
+            width: 240px;
             text-align: center;
+        }
+        .error-msg {
+            color: #ff0055;
+            font-size: 11px;
+            height: 14px;
+            font-weight: bold;
         }
         .mode-selector {
             display: flex;
-            gap: 10px;
+            gap: 8px;
+            flex-direction: column;
+            align-items: center;
         }
+        .mode-row { display: flex; gap: 8px; }
         .mode-btn {
             background: rgba(255,0,85,0.1);
             border: 1px solid #ff0055;
             color: #fff;
-            padding: 8px 16px;
+            padding: 6px 12px;
             border-radius: 6px;
             cursor: pointer;
             font-family: 'Consolas', monospace;
+            font-size: 11px;
             font-weight: bold;
             transition: 0.2s;
         }
         .mode-btn.active, .mode-btn:hover {
             background: #ff0055;
-            box-shadow: 0 0 15px #ff0055;
+            box-shadow: 0 0 12px #ff0055;
         }
         .main-btn {
             background: #ff0055;
             color: #fff;
             border: none;
-            padding: 12px 35px;
+            padding: 10px 30px;
             font-family: 'Consolas', monospace;
-            font-size: 16px;
+            font-size: 15px;
             font-weight: bold;
             border-radius: 8px;
             cursor: pointer;
@@ -218,68 +233,116 @@
         <div class="game-main">
             <div class="game-header">
                 <div class="stat-group">OPERATIVE: <span id="uiName">GUEST</span></div>
-                <div class="stat-group">MODE: <span id="uiMode">MEDIUM</span></div>
+                <div class="stat-group">MODE: <span id="uiMode">EASY</span> (<span id="uiTimeLimit">45</span>s)</div>
                 <div class="stat-group">SCORE: <span id="uiScore">0</span></div>
-                <div class="stat-group">TIME: <span id="uiTime">30</span>s</div>
+                <div class="stat-group">TIME: <span id="uiTime">45</span>s</div>
             </div>
-
             <div class="game-board" id="gameBoard"></div>
         </div>
 
         <div class="sidebar">
-            <h2>// LEADERBOARD //</h2>
-            <div class="leaderboard-list" id="lbContainer"></div>
+            <h2>// GLOBAL LEADERBOARDS //</h2>
+            
+            <div class="lb-section-title">⚡ EASY MODE (45s)</div>
+            <div class="leaderboard-list" id="lbEasy"></div>
+
+            <div class="lb-section-title">🔥 MEDIUM MODE (30s)</div>
+            <div class="leaderboard-list" id="lbMedium"></div>
+
+            <div class="lb-section-title">☠️ HARD MODE (20s)</div>
+            <div class="leaderboard-list" id="lbHard"></div>
         </div>
     </div>
 
-    <!-- Start / Setup Overlay -->
     <div class="overlay" id="startScreen">
-        <h1>// CYBER SLASHER v2.0 //</h1>
-        <p style="font-size:12px; color:#aaa; max-width:350px;">Zadej své kódové jméno, zvol obtížnost a zlikviduj co nejvíce neonových uzlů. Pozor na vzácné bonusy!</p>
-        <input type="text" id="playerName" class="input-box" placeholder="ENTER CODENAME..." maxlength="12">
+        <h1>// CYBER SLASHER v4.1 //</h1>
+        <p style="font-size:11px; color:#aaa; max-width:340px;">Enter your codename and choose difficulty. Names must be unique across the network. Easy has longer duration and diverse bonus frequencies!</p>
+        <input type="text" id="playerName" class="input-box" placeholder="CODENAME..." maxlength="12">
+        <div class="error-msg" id="errorMsg"></div>
         
         <div class="mode-selector">
-            <button class="mode-btn" onclick="setDifficulty('easy', this)">EASY (1.5s)</button>
-            <button class="mode-btn active" onclick="setDifficulty('medium', this)">MEDIUM (1.0s)</button>
-            <button class="mode-btn" onclick="setDifficulty('hard', this)">HARD (0.5s)</button>
+            <div class="mode-row">
+                <button class="mode-btn active" onclick="setDifficulty('easy', this)">EASY (45s | 2.0s)</button>
+                <button class="mode-btn" onclick="setDifficulty('medium', this)">MEDIUM (30s | 1.0s)</button>
+            </div>
+            <button class="mode-btn" onclick="setDifficulty('hard', this)" style="width:100%;">HARD (20s | 0.5s)</button>
         </div>
 
         <button class="main-btn" onclick="initGame()">INITIALIZE</button>
     </div>
 
     <script>
-        let currentMode = 'medium';
-        let spawnIntervalTime = 1000; // Medium výchozí
+        let currentMode = 'easy';
+        let spawnIntervalTime = 2000; 
+        let gameDuration = 45;
         let score = 0;
-        let timeLeft = 30;
-        let playerName = 'GUEST';
+        let timeLeft = 45;
+        let playerName = '';
         let isPlaying = false;
         let gameTimer = null;
         let spawnerTimer = null;
 
-        let leaderboards = JSON.parse(localStorage.getItem('cyber_lb_v2')) || {
-            easy: [{name: 'CYBER_PUNK', score: 45}, {name: 'NEON_X', score: 32}],
-            medium: [{name: 'GLITCH', score: 58}, {name: 'ZERO', score: 41}],
-            hard: [{name: 'SYNTH', score: 74}, {name: 'VEX', score: 62}]
+        let savedName = localStorage.getItem('cyber_saved_name') || '';
+        if (savedName) {
+            document.getElementById('playerName').value = savedName;
+        }
+
+        // Žebříčky kompletně vyčištěny od výchozích robotů (začínají prázdné)
+        let leaderboards = JSON.parse(localStorage.getItem('cyber_lb_v4')) || {
+            easy: [],
+            medium: [],
+            hard: []
         };
 
-        renderLeaderboard();
+        renderAllLeaderboards();
 
         function setDifficulty(mode, btn) {
             document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             currentMode = mode;
 
-            if (mode === 'easy') spawnIntervalTime = 1500;       // pomalejší o 1.5s (celkem 2.5s interval nebo nastaveno dle logiky)
-            else if (mode === 'medium') spawnIntervalTime = 1000;  // základ
-            else if (mode === 'hard') spawnIntervalTime = 500;     // o 0.5s rychlejší než medium
+            if (mode === 'easy') {
+                spawnIntervalTime = 2000; 
+                gameDuration = 45;        
+            } else if (mode === 'medium') {
+                spawnIntervalTime = 1000; 
+                gameDuration = 30;
+            } else if (mode === 'hard') {
+                spawnIntervalTime = 500;  
+                gameDuration = 20;
+            }
+        }
+
+        function isNameTaken(name) {
+            for (let m in leaderboards) {
+                for (let entry of leaderboards[m]) {
+                    if (entry.name === name) return true;
+                }
+            }
+            return false;
         }
 
         function initGame() {
-            let inputVal = document.getElementById('playerName').value.trim();
-            playerName = inputVal !== '' ? inputVal.toUpperCase() : 'ANONYMOUS';
+            let inputVal = document.getElementById('playerName').value.trim().toUpperCase();
+            let errBox = document.getElementById('errorMsg');
+
+            if (!inputVal) {
+                errBox.innerText = 'ERROR: CODENAME REQUIRED!';
+                return;
+            }
+
+            if (inputVal !== savedName && isNameTaken(inputVal)) {
+                errBox.innerText = 'ERROR: CODENAME ALREADY TAKEN!';
+                return;
+            }
+
+            errBox.innerText = '';
+            playerName = inputVal;
+            localStorage.setItem('cyber_saved_name', playerName);
+
             document.getElementById('uiName').innerText = playerName;
             document.getElementById('uiMode').innerText = currentMode.toUpperCase();
+            document.getElementById('uiTimeLimit').innerText = gameDuration;
 
             document.getElementById('startScreen').style.display = 'none';
             startActualGame();
@@ -287,7 +350,7 @@
 
         function startActualGame() {
             score = 0;
-            timeLeft = 30;
+            timeLeft = gameDuration;
             isPlaying = true;
             document.getElementById('uiScore').innerText = score;
             document.getElementById('uiTime').innerText = timeLeft;
@@ -309,21 +372,35 @@
             const board = document.getElementById('gameBoard');
             const node = document.createElement('div');
 
-            // Šance na bonusy (velmi malá šance)
             let rand = Math.random();
             let type = 'normal';
             let label = '';
+            let pointsVal = 1;
 
-            if (rand < 0.08) {
-                type = 'bonus-double';
-                label = '2X';
-            } else if (rand < 0.16) {
-                type = 'bonus-plus';
-                label = '+10';
+            let bonusThreshold = currentMode === 'easy' ? 0.25 : (currentMode === 'medium' ? 0.40 : 0.60);
+
+            if (rand < bonusThreshold) {
+                let subRand = Math.random();
+                if (subRand < 0.35) {
+                    type = 'bonus-double';
+                    label = '2X';
+                } else if (subRand < 0.70) {
+                    type = 'bonus-val';
+                    pointsVal = 10;
+                    label = '+10';
+                } else {
+                    type = 'bonus-val';
+                    pointsVal = 5;
+                    label = '+5';
+                }
+            } else {
+                type = 'bonus-val';
+                pointsVal = 1;
+                label = '+1';
             }
 
             node.className = `target ${type}`;
-            node.innerText = label;
+            node.innerText = label !== '+1' ? label : '';
 
             let maxX = board.clientWidth - 60;
             let maxY = board.clientHeight - 60;
@@ -335,29 +412,25 @@
 
             node.onmousedown = (e) => {
                 e.stopPropagation();
-                let pointsGained = 1;
+                let finalGain = pointsVal;
 
                 if (type === 'bonus-double') {
-                    pointsGained *= 2;
+                    score *= 2;
                     showAlert(e.clientX, e.clientY, '×2 MULTIPLIER!', '#ffe600');
-                } else if (type === 'bonus-plus') {
-                    pointsGained += 10;
-                    showAlert(e.clientX, e.clientY, '+10 SECRETS!', '#00ff88');
                 } else {
-                    showAlert(e.clientX, e.clientY, '+1', '#00ffff');
+                    score += finalGain;
+                    showAlert(e.clientX, e.clientY, `+${finalGain}`, '#00ff88');
                 }
 
-                score += pointsGained;
                 document.getElementById('uiScore').innerText = score;
                 node.remove();
             };
 
             board.appendChild(node);
 
-            // Uzol po chvíli zmizí, pokud na něj nikdo neklikne
             setTimeout(() => {
                 if (node.parentElement) node.remove();
-            }, spawnIntervalTime * 1.2);
+            }, spawnIntervalTime * 1.5);
         }
 
         function showAlert(x, y, text, color) {
@@ -377,14 +450,13 @@
             clearInterval(spawnerTimer);
             document.getElementById('gameBoard').innerHTML = '';
 
-            // Uložení do leaderboardu pro daný mód
             saveToLeaderboard(currentMode, playerName, score);
-            renderLeaderboard();
+            renderAllLeaderboards();
 
             let screen = document.getElementById('startScreen');
             screen.innerHTML = `
                 <h1>// MISSION COMPLETE //</h1>
-                <p style="font-size:13px; color:#aaa;">Operative: <b style="color:#00ff88;">${playerName}</b><br>Mode: <b>${currentMode.toUpperCase()}</b><br>Final Score: <b style="color:#ff0055; font-size:18px;">${score}</b></p>
+                <p style="font-size:12px; color:#aaa;">Operative: <b style="color:#00ff88;">${playerName}</b><br>Mode: <b>${currentMode.toUpperCase()}</b><br>Score: <b style="color:#ff0055; font-size:18px;">${score}</b></p>
                 <button class="main-btn" onclick="resetToMenu()">PLAY AGAIN</button>
             `;
             screen.style.display = 'flex';
@@ -392,28 +464,38 @@
 
         function saveToLeaderboard(mode, name, sc) {
             if (!leaderboards[mode]) leaderboards[mode] = [];
-            leaderboards[mode].push({ name, score: sc });
-            leaderboards[mode].sort((a, b) => b.score - a.score);
-            leaderboards[mode] = leaderboards[mode].slice(0, 5); // Necháme top 5
-            localStorage.setItem('cyber_lb_v2', JSON.stringify(leaderboards));
-        }
-
-        function renderLeaderboard() {
-            const container = document.getElementById('lbContainer');
-            container.innerHTML = '';
-
-            // Zobrazíme žebříček pro aktuálně vybraný nebo spuštěný mód, případně smíšený. Tady uděláme tabulku pro aktuální mód:
-            let list = leaderboards[currentMode] || [];
-            if (list.length === 0) {
-                container.innerHTML = '<div style="color:#555; text-align:center; font-size:11px; margin-top:20px;">NO RECORDS YET</div>';
-                return;
+            
+            let existingIndex = leaderboards[mode].findIndex(entry => entry.name === name);
+            if (existingIndex !== -1) {
+                if (sc > leaderboards[mode][existingIndex].score) {
+                    leaderboards[mode][existingIndex].score = sc;
+                }
+            } else {
+                leaderboards[mode].push({ name, score: sc });
             }
 
-            list.forEach((entry, idx) => {
-                let item = document.createElement('div');
-                item.className = 'lb-item';
-                item.innerHTML = `<span>#${idx+1} ${entry.name}</span><span>${entry.score} pts</span>`;
-                container.appendChild(item);
+            leaderboards[mode].sort((a, b) => b.score - a.score);
+            leaderboards[mode] = leaderboards[mode].slice(0, 4); 
+            localStorage.setItem('cyber_lb_v4', JSON.stringify(leaderboards));
+        }
+
+        function renderAllLeaderboards() {
+            ['easy', 'medium', 'hard'].forEach(mode => {
+                const container = document.getElementById('lb' + mode.charAt(0).toUpperCase() + mode.slice(1));
+                container.innerHTML = '';
+                let list = leaderboards[mode] || [];
+                
+                if (list.length === 0) {
+                    container.innerHTML = '<div style="color:#555; font-size:10px; padding:4px;">No records yet</div>';
+                    return;
+                }
+
+                list.forEach((entry, idx) => {
+                    let item = document.createElement('div');
+                    item.className = 'lb-item';
+                    item.innerHTML = `<span>#${idx+1} ${entry.name}</span><span>${entry.score}</span>`;
+                    container.appendChild(item);
+                });
             });
         }
 
