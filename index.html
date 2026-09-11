@@ -3,20 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BOOM Launcher</title>
+    <title>CYBER HACK: The Terminal Game</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             background-color: #030308;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
             font-family: 'Consolas', monospace;
             overflow: hidden;
-            color: #ffffff;
-            user-select: none;
+            color: #00ff88;
         }
         .bg-space {
             position: absolute;
@@ -26,105 +24,148 @@
             background-size: cover;
             background-position: center;
             z-index: 1;
+            filter: brightness(0.6) contrast(1.2);
         }
-        .cyber-card {
+        .terminal-box {
             position: relative;
             z-index: 10;
-            background: rgba(12, 12, 20, 0.88);
+            background: rgba(12, 12, 20, 0.92);
             border: 3px solid #ff0055;
-            border-radius: 20px;
+            border-radius: 15px;
             padding: 30px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            box-shadow: 0 0 45px rgba(255, 0, 85, 0.6);
-            width: 520px;
+            width: 450px;
             max-width: 90vw;
+            box-shadow: 0 0 40px rgba(255, 0, 85, 0.5);
         }
-        .header-title {
-            font-size: 16px;
-            letter-spacing: 3px;
+        h1 {
+            font-size: 18px;
             color: #ff3366;
-            margin-bottom: 20px;
-            font-weight: bold;
+            text-align: center;
+            margin-bottom: 15px;
+            letter-spacing: 2px;
         }
-        #launchBtn {
-            width: 120px;
-            height: 120px;
-            border-radius: 50%;
-            background: radial-gradient(circle, #ff0055 0%, #660022 100%);
-            color: #fff;
-            font-weight: 900;
-            font-size: 20px;
-            border: 4px solid #ff6699;
-            cursor: pointer;
-            box-shadow: 0 0 30px rgba(255, 0, 85, 0.8);
-        }
-        #launchBtn:hover { transform: scale(1.05); }
-        .url-section {
-            width: 100%;
-            margin-top: 20px;
-            background: rgba(0,0,0,0.6);
-            padding: 10px;
-            border-radius: 8px;
-            border: 1px solid rgba(255, 0, 85, 0.3);
-        }
-        .url-input {
-            width: 100%;
+        .screen {
             background: #000;
-            border: 1px solid #ff0055;
-            border-radius: 5px;
-            color: #00ff88;
-            font-size: 12px;
-            padding: 8px;
-            outline: none;
-            margin-top: 5px;
+            border: 1px solid #00ff88;
+            padding: 15px;
+            border-radius: 6px;
+            height: 120px;
+            overflow-y: auto;
+            font-size: 13px;
+            margin-bottom: 15px;
+            box-shadow: inset 0 0 10px rgba(0,255,136,0.2);
         }
-        .status-bar { margin-top: 15px; font-size: 12px; color: #00ff88; font-weight: bold; }
+        .input-group {
+            display: flex;
+            gap: 10px;
+        }
+        input {
+            flex: 1;
+            background: #000;
+            border: 2px solid #ff0055;
+            color: #fff;
+            padding: 10px;
+            font-family: 'Consolas', monospace;
+            font-size: 16px;
+            border-radius: 5px;
+            outline: none;
+        }
+        button {
+            background: #ff0055;
+            color: #fff;
+            border: none;
+            padding: 0 20px;
+            font-weight: bold;
+            font-family: 'Consolas', monospace;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        button:hover {
+            background: #ff3366;
+            box-shadow: 0 0 15px #ff0055;
+        }
+        .stats {
+            margin-top: 12px;
+            font-size: 11px;
+            color: #aaa;
+            display: flex;
+            justify-content: space-between;
+        }
     </style>
 </head>
 <body>
 
     <div class="bg-space"></div>
 
-    <div class="cyber-card">
-        <div class="header-title">// BOOM LAUNCHER PC //</div>
-
-        <button id="launchBtn" onclick="launchScript()">BOOM</button>
-
-        <div class="url-section">
-            <span style="font-size:10px; color:#aaa;">TARGET GIST SCRIPT URL:</span>
-            <input type="text" id="scriptUrl" class="url-input" value="https://gist.githubusercontent.com/DuckKuba/127740b1b9f9f3fdb924b98a90a431e1/raw/62401b0baa3d1b2722c6d2981554f18207784843/duckbrowser.js">
+    <div class="terminal-box">
+        <h1>// SYSTEM OVERRIDE //</h1>
+        <div class="screen" id="terminalScreen">
+            [System initialized...]
+            [Mainframe firewall active.]
+            [Guess the 2-digit security code (1 - 50).]
+        </div>
+        
+        <div class="input-group">
+            <input type="number" id="userGuess" placeholder="???" min="1" max="50">
+            <button onclick="checkGuess()">HACK</button>
         </div>
 
-        <div class="status-bar" id="statusText">SYSTEM READY</div>
+        <div class="stats">
+            <span id="attempts">Attempts: 0</span>
+            <span style="color:#ff0055; cursor:pointer;" onclick="resetGame()">[REBOOT]</span>
+        </div>
     </div>
 
     <script>
-        function launchScript() {
-            let url = document.getElementById('scriptUrl').value.trim();
-            let status = document.getElementById('statusText');
+        let secretNumber = Math.floor(Math.random() * 50) + 1;
+        let attemptCount = 0;
+        const screen = document.getElementById('terminalScreen');
 
-            status.innerText = 'LOADING SCRIPT...';
-            status.style.color = '#ffcc00';
-
-            try {
-                let s = document.createElement('script');
-                s.src = url;
-                s.onload = () => {
-                    status.innerText = 'SUCCESSFULLY EXECUTED!';
-                    status.style.color = '#00ff88';
-                };
-                s.onerror = () => {
-                    status.innerText = 'ERROR: FAILED TO LOAD (CORS/BLOCKED)';
-                    status.style.color = '#ff0055';
-                };
-                document.head.appendChild(s);
-            } catch(e) {
-                status.innerText = 'ERROR: ' + e.message;
-                status.style.color = '#ff0055';
-            }
+        function log(text, color = '#00ff88') {
+            screen.innerHTML += `<div style="color:${color}; margin-top:4px;">> ${text}</div>`;
+            screen.scrollTop = screen.scrollHeight;
         }
+
+        function checkGuess() {
+            let input = document.getElementById('userGuess');
+            let val = parseInt(input.value);
+            
+            if (!val || val < 1 || val > 50) {
+                log('ERROR: Enter number 1-50!', '#ff0055');
+                return;
+            }
+
+            attemptCount++;
+            document.getElementById('attempts').innerText = `Attempts: ${attemptCount}`;
+
+            if (val === secretNumber) {
+                log(`ACCESS GRANTED! Code was ${secret secretNumber}.`, '#00ff88');
+                log('FIREWALL BYPASSED. YOU WIN!', '#00ff88');
+                document.querySelector('.terminal-box').style.borderColor = '#00ff88';
+                document.querySelector('.terminal-box').style.boxShadow = '0 0 40px rgba(0,255,136,0.6)';
+            } else if (val < secretNumber) {
+                log(`Code ${val} is TOO LOW.`, '#ffcc00');
+            } else {
+                log(`Code ${val} is TOO HIGH.`, '#ffcc00');
+            }
+
+            input.value = '';
+            input.focus();
+        }
+
+        function resetGame() {
+            secretNumber = Math.floor(Math.random() * 50) + 1;
+            attemptCount = 0;
+            document.getElementById('attempts').innerText = `Attempts: 0`;
+            screen.innerHTML = '[System rebooted... New code generated.]';
+            document.querySelector('.terminal-box').style.borderColor = '#ff0055';
+            document.querySelector('.terminal-box').style.boxShadow = '0 0 40px rgba(255, 0, 85, 0.5)';
+        }
+
+        document.getElementById('userGuess').addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') checkGuess();
+        });
     </script>
 </body>
 </html>
