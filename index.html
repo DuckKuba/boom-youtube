@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CYBER_ARCADE_HUB // v12.0</title>
+    <title>CYBER_NEXUS_ARCADE // v15.0</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body {
-            background-color: #020104;
+            background-color: #020005;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -23,14 +23,14 @@
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: 1;
-            opacity: 0.2;
+            opacity: 0.15;
             pointer-events: none;
         }
 
         .scanlines {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.3) 50%), linear-gradient(90deg, rgba(255, 0, 85, 0.02), rgba(0, 255, 204, 0.01), rgba(120, 0, 255, 0.02));
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.35) 50%), linear-gradient(90deg, rgba(255, 0, 128, 0.02), rgba(0, 255, 204, 0.01), rgba(0, 100, 255, 0.02));
             background-size: 100% 4px, 4px 100%;
             z-index: 2;
             pointer-events: none;
@@ -39,47 +39,47 @@
         .app-wrapper {
             position: relative;
             z-index: 10;
-            background: rgba(4, 3, 10, 0.96);
+            background: rgba(5, 4, 14, 0.97);
             border: 2px solid #00ffcc;
-            border-radius: 12px;
+            border-radius: 16px;
             width: 96vw;
-            max-width: 1000px;
+            max-width: 1050px;
             height: 94vh;
-            max-height: 740px;
+            max-height: 750px;
             display: grid;
             grid-template-rows: auto 1fr;
-            box-shadow: 0 0 40px rgba(0, 255, 204, 0.25), inset 0 0 20px rgba(0, 255, 204, 0.05);
+            box-shadow: 0 0 50px rgba(0, 255, 204, 0.3), inset 0 0 25px rgba(0, 255, 204, 0.06);
             overflow: hidden;
         }
 
         .top-nav {
-            background: rgba(0, 5, 12, 0.95);
-            padding: 12px 20px;
-            border-bottom: 2px solid rgba(0, 255, 204, 0.3);
+            background: rgba(0, 8, 18, 0.95);
+            padding: 14px 22px;
+            border-bottom: 2px solid rgba(0, 255, 204, 0.35);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 12px;
+            font-size: 13px;
             letter-spacing: 1px;
         }
-        .nav-title { color: #ff0055; font-weight: bold; text-shadow: 0 0 8px #ff0055; }
-        .nav-stats span { color: #fff; text-shadow: 0 0 6px #00ffcc; }
+        .nav-title { color: #ff007f; font-weight: bold; text-shadow: 0 0 10px #ff007f; }
+        .nav-stats span { color: #fff; text-shadow: 0 0 8px #00ffcc; }
 
-        /* Hub Screen: Game Selector */
+        /* HUB SCREEN: Game Selector */
         .hub-screen {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(2, 2, 6, 0.98);
+            background: rgba(2, 2, 8, 0.99);
             z-index: 50;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            gap: 20px;
-            padding: 25px;
+            gap: 24px;
+            padding: 30px;
             text-align: center;
         }
-        .hub-title { font-size: 26px; color: #00ffcc; text-shadow: 0 0 15px rgba(0,255,204,0.6); letter-spacing: 3px; }
+        .hub-title { font-size: 28px; color: #00ffcc; text-shadow: 0 0 20px rgba(0,255,204,0.7); letter-spacing: 3px; }
         
         .auth-box {
             display: flex;
@@ -91,152 +91,179 @@
             background: #000;
             border: 2px solid #00ffcc;
             color: #00ffcc;
-            padding: 10px;
+            padding: 12px;
             font-family: 'Courier New', Courier, monospace;
-            font-size: 14px;
+            font-size: 15px;
             outline: none;
-            width: 240px;
+            width: 260px;
             text-align: center;
-            border-radius: 6px;
+            border-radius: 8px;
+            box-shadow: inset 0 0 10px rgba(0,255,204,0.2);
         }
-        .error-msg { color: #ff0055; font-size: 11px; height: 14px; font-weight: bold; }
+        .error-msg { color: #ff007f; font-size: 11px; height: 14px; font-weight: bold; }
 
         .game-grid {
             display: flex;
-            gap: 20px;
+            gap: 25px;
             justify-content: center;
             flex-wrap: wrap;
-            margin-top: 10px;
+            margin-top: 5px;
         }
         .game-card {
-            background: rgba(10, 5, 20, 0.8);
+            background: linear-gradient(135deg, rgba(12, 8, 28, 0.9) 0%, rgba(4, 2, 10, 0.95) 100%);
             border: 2px solid rgba(0, 255, 204, 0.4);
-            border-radius: 10px;
-            width: 240px;
-            padding: 20px;
+            border-radius: 12px;
+            width: 280px;
+            padding: 24px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 12px;
+            gap: 15px;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         .game-card:hover {
-            border-color: #ff0055;
-            box-shadow: 0 0 25px rgba(255, 0, 85, 0.4);
-            transform: translateY(-4px);
+            border-color: #ff007f;
+            box-shadow: 0 0 30px rgba(255, 0, 127, 0.4);
+            transform: translateY(-6px);
         }
         .game-icon {
-            font-size: 36px;
-            background: rgba(0,255,204,0.1);
-            width: 70px; height: 70px;
+            font-size: 40px;
+            background: rgba(0,255,204,0.08);
+            width: 80px; height: 80px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             border: 1px dashed #00ffcc;
-            box-shadow: 0 0 10px rgba(0,255,204,0.3);
+            box-shadow: 0 0 15px rgba(0,255,204,0.3);
         }
-        .game-card h3 { font-size: 14px; color: #fff; letter-spacing: 1px; }
-        .game-card p { font-size: 10px; color: #88aacc; line-height: 1.3; }
+        .game-card h3 { font-size: 15px; color: #fff; letter-spacing: 1px; }
+        .game-card p { font-size: 11px; color: #88aacc; line-height: 1.4; }
         .card-btn {
             background: #00ffcc;
             color: #000;
             border: none;
-            padding: 8px 16px;
+            padding: 10px 20px;
             font-family: 'Courier New', Courier, monospace;
             font-weight: bold;
-            font-size: 11px;
-            border-radius: 4px;
+            font-size: 12px;
+            border-radius: 6px;
             cursor: pointer;
             width: 100%;
+            transition: 0.2s;
         }
-        .game-card:hover .card-btn { background: #ff0055; color: #fff; }
+        .game-card:hover .card-btn { background: #ff007f; color: #fff; box-shadow: 0 0 15px #ff007f; }
 
-        /* Main Game Arena Layout */
+        /* ARCADE ARENA */
         .arcade-arena {
             display: none;
-            grid-template-columns: 1fr 300px;
+            grid-template-columns: 1fr 320px;
             width: 100%;
             height: 100%;
             position: relative;
         }
         .game-canvas-area {
             position: relative;
-            background: radial-gradient(circle, rgba(10,5,25,0.7) 0%, rgba(2,1,4,0.98) 100%);
+            background: radial-gradient(circle, rgba(15,8,32,0.8) 0%, rgba(2,1,5,0.99) 100%);
             display: flex;
             flex-direction: column;
             cursor: crosshair;
             overflow: hidden;
         }
         .game-hud {
-            background: rgba(0,0,0,0.8);
-            padding: 8px 15px;
-            border-bottom: 1px solid rgba(0,255,204,0.2);
+            background: rgba(0,0,0,0.85);
+            padding: 10px 18px;
+            border-bottom: 1px solid rgba(0,255,204,0.25);
             display: flex;
             justify-content: space-between;
-            font-size: 11px;
+            font-size: 12px;
         }
-        .game-hud span { color: #ff0055; font-weight: bold; }
+        .game-hud span { color: #ff007f; font-weight: bold; }
 
-        /* Local Pure Leaderboard Sidebar (Clean, No Fake NPCs) */
+        /* SIDEBAR LEADERBOARD */
         .sidebar-lb {
-            background: rgba(2, 4, 10, 0.98);
+            background: rgba(2, 5, 12, 0.98);
             border-left: 2px solid rgba(0, 255, 204, 0.3);
             display: flex;
             flex-direction: column;
-            padding: 12px;
-            gap: 8px;
+            padding: 15px;
+            gap: 10px;
             overflow-y: auto;
         }
         .sidebar-lb h3 {
-            font-size: 12px;
-            color: #ff0055;
-            border-bottom: 1px dashed rgba(255,0,85,0.4);
-            padding-bottom: 5px;
+            font-size: 13px;
+            color: #ff007f;
+            border-bottom: 1px dashed rgba(255,0,127,0.4);
+            padding-bottom: 6px;
             letter-spacing: 1px;
         }
         .lb-list {
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 5px;
             font-size: 11px;
-            max-height: 240px;
+            max-height: 260px;
             overflow-y: auto;
         }
         .lb-row {
-            background: rgba(0,255,204,0.06);
+            background: rgba(0,255,204,0.05);
             border: 1px solid rgba(0,255,204,0.2);
-            padding: 6px 8px;
-            border-radius: 4px;
+            padding: 7px 10px;
+            border-radius: 6px;
             display: flex;
             justify-content: space-between;
             color: #fff;
         }
-        .lb-row.me { background: rgba(255,0,85,0.15); border-color: #ff0055; font-weight: bold; }
+        .lb-row.me { background: rgba(255,0,127,0.18); border-color: #ff007f; font-weight: bold; }
         .lb-row span:last-child { color: #00ffcc; }
 
         .back-hub-btn {
             background: transparent;
-            border: 1px solid #ff0055;
-            color: #ff0055;
-            padding: 8px;
+            border: 1px solid #ff007f;
+            color: #ff007f;
+            padding: 10px;
             font-family: 'Courier New', Courier, monospace;
             font-weight: bold;
-            font-size: 11px;
+            font-size: 12px;
             cursor: pointer;
             margin-top: auto;
-            border-radius: 4px;
+            border-radius: 6px;
             transition: 0.2s;
         }
-        .back-hub-btn:hover { background: #ff0055; color: #fff; }
+        .back-hub-btn:hover { background: #ff007f; color: #fff; box-shadow: 0 0 15px #ff007f; }
 
-        /* Dynamic Nodes / Targets */
+        /* GAME ELEMENTS (SLASHER & MEMORY HACKER) */
         .arcade-node {
             position: absolute;
-            width: 48px; height: 48px;
+            width: 54px; height: 54px;
             border-radius: 50%;
             display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            animation: popIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 18px currentColor;
+            transition: transform 0.1s;
+        }
+        .arcade-node:active { transform: translate(-50%, -50%) scale(0.85); }
+        @keyframes popIn { 0% { transform: translate(-50%, -50%) scale(0); } 100% { transform: translate(-50%, -50%) scale(1); } }
+
+        /* Slasher Nodes */
+        .node-plus { background: #00ffcc; color: #000; border: 2px solid #fff; }
+        .node-golden { background: #ffcc00; color: #000; border: 2px solid #fff; }
+        .node-minus { background: #ff007f; color: #fff; border: 2px solid #00ffcc; }
+
+        /* Memory Hacker (Game 2) Special Tiles */
+        .memory-tile {
+            position: absolute;
+            width: 60px; height: 60px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             font-size: 10px;
@@ -244,49 +271,50 @@
             cursor: pointer;
             animation: popIn 0.2s ease-out;
             transform: translate(-50%, -50%);
-            box-shadow: 0 0 15px currentColor;
+            border: 2px solid #00ffcc;
+            background: rgba(0, 255, 204, 0.12);
+            color: #00ffcc;
+            box-shadow: 0 0 15px rgba(0,255,204,0.4);
         }
-        @keyframes popIn { 0% { transform: translate(-50%, -50%) scale(0); } 100% { transform: translate(-50%, -50%) scale(1); } }
-
-        /* Node Types */
-        .node-plus { background: #00ffcc; color: #000; border: 2px solid #fff; }
-        .node-golden { background: #ffcc00; color: #000; border: 2px solid #fff; }
-        .node-minus { background: #ff0055; color: #fff; border: 2px solid #00ffcc; }
-        .node-div { background: #9900ff; color: #fff; border: 2px solid #ffcc00; }
-        .node-bomb { background: #222; color: #ff0055; border: 2px solid #ff0055; }
+        .memory-tile.corrupted {
+            border-color: #ff007f;
+            background: rgba(255, 0, 127, 0.15);
+            color: #ff007f;
+            box-shadow: 0 0 15px rgba(255,0,127,0.4);
+        }
 
         .popup-msg {
             position: absolute;
             font-weight: bold;
-            font-size: 13px;
+            font-size: 14px;
             pointer-events: none;
-            animation: floatUp 0.5s ease-out forwards;
+            animation: floatUp 0.6s ease-out forwards;
             z-index: 60;
-            text-shadow: 0 0 6px #000;
+            text-shadow: 0 0 8px #000;
         }
         @keyframes floatUp {
             0% { opacity: 1; transform: translate(-50%, -50%) scale(0.8); }
-            100% { opacity: 0; transform: translate(-50%, -60px) scale(1.2); }
+            100% { opacity: 0; transform: translate(-50%, -70px) scale(1.3); }
         }
 
         .gameover-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(2, 2, 8, 0.94);
+            background: rgba(2, 2, 8, 0.96);
             display: none;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            gap: 15px;
+            gap: 18px;
             z-index: 70;
             text-align: center;
         }
 
         @media (max-width: 768px) {
             .arcade-arena { grid-template-columns: 1fr; grid-template-rows: 1fr auto; }
-            .sidebar-lb { max-height: 150px; }
+            .sidebar-lb { max-height: 160px; }
             .game-grid { flex-direction: column; align-items: center; }
-            .game-card { width: 100%; max-width: 280px; }
+            .game-card { width: 100%; max-width: 300px; }
         }
     </style>
 </head>
@@ -297,13 +325,13 @@
 
     <div class="app-wrapper">
         <div class="top-nav">
-            <div class="nav-title">// CYBER_ARCADE</div>
+            <div class="nav-title">// CYBER_NEXUS</div>
             <div class="nav-stats">OPERATIVE: <span id="navUser">ANON</span></div>
         </div>
 
         <!-- HUB SELECTION SCREEN -->
         <div class="hub-screen" id="hubScreen">
-            <h1 class="hub-title">CHOOSE YOUR PROTOCOL</h1>
+            <h1 class="hub-title">CHOOSE PROTOCOL</h1>
             
             <div class="auth-box">
                 <input type="text" id="playerName" class="input-box" placeholder="ENTER HANDLE..." maxlength="12">
@@ -311,31 +339,31 @@
             </div>
 
             <div class="game-grid">
-                <!-- Game 1: Cyber Slasher -->
+                <!-- Game 1: Full Cyber Slasher -->
                 <div class="game-card" onclick="launchGame('slasher')">
                     <div class="game-icon">⚡</div>
                     <h3>CYBER SLASHER</h3>
-                    <p>Fast-paced node cutting action. Tap system items, avoid destructive malware & negative dividers!</p>
+                    <p>Standard high-speed node slicing action. Pure reflex test with rare golden nodes and minimal negative penalties.</p>
                     <button class="card-btn">PLAY SLASHER</button>
                 </div>
 
-                <!-- Game 2: Neon Grid Catcher (New Game) -->
-                <div class="game-card" onclick="launchGame('gridcatcher')">
-                    <div class="game-icon">🛡️</div>
-                    <h3>GRID CATCHER</h3>
-                    <p>Defend the core grid matrix against corrupted memory blocks and glitch multipliers!</p>
-                    <button class="card-btn">PLAY GRID</button>
+                <!-- Game 2: Brand New Game: Memory Hacker -->
+                <div class="game-card" onclick="launchGame('memory')">
+                    <div class="game-icon">🧩</div>
+                    <h3>MEMORY HACKER</h3>
+                    <p>Brand new unique game! Memorize the sequence of glowing neon data blocks before they encrypt and vanish!</p>
+                    <button class="card-btn">PLAY MEMORY</button>
                 </div>
             </div>
         </div>
 
-        <!-- ARCADE ARENA (Renders active game) -->
+        <!-- ARCADE ARENA -->
         <div class="arcade-arena" id="arcadeArena">
             <div class="game-canvas-area">
                 <div class="game-hud">
-                    <div>GAME: <span id="hudGameName">SLASHER</span></div>
+                    <div>PROTOCOL: <span id="hudGameName">SLASHER</span></div>
                     <div>SCORE: <span id="hudScore">0</span></div>
-                    <div>TIME: <span id="hudTime">30</span>s</div>
+                    <div>TIME: <span id="hudTime">35</span>s</div>
                 </div>
                 <div class="game-canvas" id="gameCanvas" style="position:relative; flex:1; overflow:hidden;"></div>
             </div>
@@ -350,25 +378,25 @@
 
     <!-- GAME OVER SCREEN -->
     <div class="gameover-overlay" id="gameOverOverlay">
-        <h1 style="color:#ff0055; font-size:22px;">// MISSION TERMINATED //</h1>
-        <p style="font-size:12px; color:#aaa;" id="goDetails">Score: 0</p>
-        <button class="card-btn" style="width:200px; padding:10px;" onclick="restartActiveGame()">RE-ENGAGE</button>
-        <button class="back-hub-btn" style="width:200px;" onclick="returnToHub()">BACK TO HUB</button>
+        <h1 style="color:#ff007f; font-size:24px;">// SESSION COMPLETE //</h1>
+        <p style="font-size:13px; color:#aaa;" id="goDetails">Score: 0</p>
+        <button class="card-btn" style="width:220px; padding:12px;" onclick="restartActiveGame()">RE-ENGAGE</button>
+        <button class="back-hub-btn" style="width:220px;" onclick="returnToHub()">BACK TO HUB</button>
     </div>
 
     <script>
-        // Matrix Background
+        // Matrix Canvas Background
         const canvas = document.getElementById('matrixCanvas');
         const ctx = canvas.getContext('2d');
         function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        const chars = '01ABCDEF_ARCADE_GRID_HACK';
+        const chars = '01ABCDEF_NEXUS_SYSTEM_SECURE';
         const fontSize = 12;
         let drops = Array(Math.floor(canvas.width / fontSize)).fill(1);
         setInterval(() => {
-            ctx.fillStyle = 'rgba(2, 1, 4, 0.15)';
+            ctx.fillStyle = 'rgba(2, 0, 8, 0.15)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = '#00ffcc';
             ctx.font = fontSize + 'px monospace';
@@ -380,22 +408,25 @@
             }
         }, 40);
 
-        // Core App State
+        // Core State
         let activeGame = null;
         let playerName = '';
         let score = 0;
-        let timeLeft = 30;
+        let timeLeft = 35;
         let gameInterval = null;
         let spawnerInterval = null;
-        let activeNodes = [];
 
-        // Leaderboards (čistě reálné skóre reálných hráčů, žádní falešní boti)
-        let localLeaderboards = JSON.parse(localStorage.getItem('cyber_pure_lb_v12')) || {
+        // Memory Hacker Specific State
+        let memorySequence = [];
+        let playerStep = 0;
+        let isShowingSequence = false;
+
+        let localLeaderboards = JSON.parse(localStorage.getItem('cyber_nexus_lb_v15')) || {
             slasher: [],
-            gridcatcher: []
+            memory: []
         };
 
-        let savedHandle = localStorage.getItem('cyber_active_handle') || '';
+        let savedHandle = localStorage.getItem('cyber_nexus_handle') || '';
         if (savedHandle) document.getElementById('playerName').value = savedHandle;
 
         function validateAndSetUser() {
@@ -411,7 +442,7 @@
             }
             err.innerText = '';
             playerName = val;
-            localStorage.setItem('cyber_active_handle', playerName);
+            localStorage.setItem('cyber_nexus_handle', playerName);
             document.getElementById('navUser').innerText = playerName;
             return true;
         }
@@ -422,7 +453,7 @@
             
             document.getElementById('hubScreen').style.display = 'none';
             document.getElementById('arcadeArena').style.display = 'grid';
-            document.getElementById('hudGameName').innerText = gameType === 'slasher' ? 'CYBER SLASHER' : 'GRID CATCHER';
+            document.getElementById('hudGameName').innerText = gameType === 'slasher' ? 'CYBER SLASHER' : 'MEMORY HACKER';
 
             startSession();
         }
@@ -436,7 +467,7 @@
 
         function startSession() {
             score = 0;
-            timeLeft = 30;
+            timeLeft = activeGame === 'slasher' ? 35 : 45;
             document.getElementById('hudScore').innerText = score;
             document.getElementById('hudTime').innerText = timeLeft;
             document.getElementById('gameCanvas').innerHTML = '';
@@ -448,8 +479,11 @@
                 if (timeLeft <= 0) endSession();
             }, 1000);
 
-            let spawnSpeed = activeGame === 'slasher' ? 900 : 700;
-            spawnerInterval = setInterval(spawnNodeItem, spawnSpeed);
+            if (activeGame === 'slasher') {
+                spawnerInterval = setInterval(spawnSlasherNode, 850);
+            } else {
+                startMemoryRound();
+            }
         }
 
         function stopSession() {
@@ -458,8 +492,8 @@
             document.getElementById('gameCanvas').innerHTML = '';
         }
 
-        // Vytváření rozmanitých pozitivních i negativních tlačítek / uzlů
-        function spawnNodeItem() {
+        // --- GAME 1: CYBER SLASHER (Vylepšená, minimální šance na negativní prvek) ---
+        function spawnSlasherNode() {
             const board = document.getElementById('gameCanvas');
             if (!board) return;
             const node = document.createElement('div');
@@ -469,27 +503,28 @@
             let label = '+1';
             let val = 1;
 
-            if (activeGame === 'slasher') {
-                if (rand < 0.25) { type = 'minus'; label = '-3'; val = -3; }
-                else if (rand < 0.40) { type = 'div'; label = '÷2'; val = 'div2'; }
-                else if (rand < 0.52) { type = 'bomb'; label = 'MALWARE'; val = 'reset'; }
-                else if (rand < 0.65) { type = 'golden'; label = '+5'; val = 5; }
-                else { type = 'plus'; label = '+1'; val = 1; }
+            // Výrazně snížena šance na negativní prvek (pouze 12% šance na -2 body)
+            if (rand < 0.12) {
+                type = 'minus';
+                label = '-2';
+                val = -2;
+            } else if (rand < 0.28) {
+                type = 'golden';
+                label = '+5';
+                val = 5;
             } else {
-                // Grid Catcher rules
-                if (rand < 0.30) { type = 'minus'; label = '-5'; val = -5; }
-                else if (rand < 0.45) { type = 'div'; label = '÷2'; val = 'div2'; }
-                else if (rand < 0.60) { type = 'golden'; label = '+10'; val = 10; }
-                else { type = 'plus'; label = '+2'; val = 2; }
+                type = 'plus';
+                label = '+1';
+                val = 1;
             }
 
             node.className = `arcade-node node-${type}`;
             node.innerText = label;
 
-            let maxX = board.clientWidth - 60;
-            let maxY = board.clientHeight - 60;
-            let x = Math.floor(Math.random() * maxX) + 30;
-            let y = Math.floor(Math.random() * maxY) + 30;
+            let maxX = board.clientWidth - 70;
+            let maxY = board.clientHeight - 70;
+            let x = Math.floor(Math.random() * maxX) + 35;
+            let y = Math.floor(Math.random() * maxY) + 35;
 
             node.style.left = x + 'px';
             node.style.top = y + 'px';
@@ -500,17 +535,9 @@
                 let clientX = e.clientX || (e.touches && e.touches[0].clientX);
                 let clientY = e.clientY || (e.touches && e.touches[0].clientY);
 
-                if (val === 'div2') {
-                    score = Math.floor(score / 2);
-                    showPopup(clientX, clientY, '÷2 HALVED!', '#9900ff');
-                } else if (val === 'reset') {
-                    score = 0;
-                    showPopup(clientX, clientY, 'SYSTEM WIPED!', '#ff0055');
-                } else {
-                    score += val;
-                    if (score < 0) score = 0;
-                    showPopup(clientX, clientY, val > 0 ? `+${val}` : `${val}`, val > 0 ? '#00ffcc' : '#ff0055');
-                }
+                score += val;
+                if (score < 0) score = 0;
+                showPopup(clientX, clientY, val > 0 ? `+${val}` : `${val}`, val > 0 ? '#00ffcc' : '#ff007f');
 
                 document.getElementById('hudScore').innerText = score;
                 node.remove();
@@ -520,22 +547,105 @@
             node.addEventListener('touchstart', triggerAction);
             board.appendChild(node);
 
-            let lifetime = activeGame === 'slasher' ? 1100 : 900;
             setTimeout(() => {
                 if (node.parentElement) node.remove();
-            }, lifetime);
+            }, 1250);
         }
 
-        function showPopup(x, y, text, color) {
-            if (!x || !y) return;
-            let el = document.createElement('div');
-            el.className = 'popup-msg';
-            el.innerText = text;
-            el.style.color = color;
-            el.style.left = x + 'px';
-            el.style.top = y + 'px';
-            document.body.appendChild(el);
-            setTimeout(() => el.remove(), 500);
+        // --- GAME 2: NOVÁ HRA - MEMORY HACKER ---
+        // Hráč dostane mřížku uzlů. Systém rozsvítí sekvenci, kterou musí hráč zopakovat.
+        let memoryTiles = [];
+        function startMemoryRound() {
+            const board = document.getElementById('gameCanvas');
+            board.innerHTML = '';
+            memorySequence = [];
+            playerStep = 0;
+            isShowingSequence = true;
+
+            // Vytvoříme 4 pozice (čtverec)
+            memoryTiles = [];
+            let coords = [
+                {x: board.clientWidth * 0.35, y: board.clientHeight * 0.35, id: 0},
+                {x: board.clientWidth * 0.65, y: board.clientHeight * 0.35, id: 1},
+                {x: board.clientWidth * 0.35, y: board.clientHeight * 0.65, id: 2},
+                {x: board.clientWidth * 0.65, y: board.clientHeight * 0.65, id: 3}
+            ];
+
+            coords.forEach(c => {
+                let tile = document.createElement('div');
+                tile.className = 'memory-tile';
+                tile.style.left = c.x + 'px';
+                tile.style.top = c.y + 'px';
+                tile.innerText = `NODE #${c.id+1}`;
+                tile.dataset.id = c.id;
+
+                tile.addEventListener('mousedown', (e) => handleMemoryClick(e, c.id));
+                tile.addEventListener('touchstart', (e) => handleMemoryClick(e, c.id));
+
+                board.appendChild(tile);
+                memoryTiles.push(tile);
+            });
+
+            nextMemoryLevel();
+        }
+
+        function nextMemoryLevel() {
+            playerStep = 0;
+            isShowingSequence = true;
+            memorySequence.push(Math.floor(Math.random() * 4));
+
+            let i = 0;
+            let interval = setInterval(() => {
+                if (i >= memorySequence.length) {
+                    clearInterval(interval);
+                    isShowingSequence = false;
+                    return;
+                }
+                let targetId = memorySequence[i];
+                flashTile(targetId);
+                i++;
+            }, 700);
+        }
+
+        function flashTile(id) {
+            let tile = memoryTiles.find(t => parseInt(t.dataset.id) === id);
+            if (!tile) return;
+            tile.style.background = '#ff007f';
+            tile.style.borderColor = '#fff';
+            tile.style.boxShadow = '0 0 25px #ff007f';
+            setTimeout(() => {
+                tile.style.background = '';
+                tile.style.borderColor = '';
+                tile.style.boxShadow = '';
+            }, 400);
+        }
+
+        function handleMemoryClick(e, id) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (isShowingSequence) return;
+
+            let clientX = e.clientX || (e.touches && e.touches[0].clientX);
+            let clientY = e.clientY || (e.touches && e.touches[0].clientY);
+
+            if (id === memorySequence[playerStep]) {
+                flashTile(id);
+                playerStep++;
+                showPopup(clientX, clientY, '+2', '#00ffcc');
+                score += 2;
+                document.getElementById('hudScore').innerText = score;
+
+                if (playerStep >= memorySequence.length) {
+                    setTimeout(nextMemoryLevel, 800);
+                }
+            } else {
+                // Špatný krok
+                showPopup(clientX, clientY, 'CORRUPTED!', '#ff007f');
+                score = Math.max(0, score - 3);
+                document.getElementById('hudScore').innerText = score;
+                isShowingSequence = true;
+                setTimeout(nextMemoryLevel, 1000);
+            }
         }
 
         function endSession() {
@@ -564,8 +674,8 @@
             }
 
             list.sort((a, b) => b.score - a.score);
-            localLeaderboards[gameKey] = list.slice(0, 5); // Top 5
-            localStorage.setItem('cyber_pure_lb_v12', JSON.stringify(localLeaderboards));
+            localLeaderboards[gameKey] = list.slice(0, 5);
+            localStorage.setItem('cyber_nexus_lb_v15', JSON.stringify(localLeaderboards));
         }
 
         function renderLeaderboard() {
