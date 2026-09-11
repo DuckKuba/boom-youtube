@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>CYBER_NEXUS_ARCADE // v207.0 MOBILE ELITE</title>
+    <title>CYBER_NEXUS_ARCADE // v207.1 MOBILE FIX</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         
@@ -28,7 +28,7 @@
             overflow: hidden;
             color: var(--neon-cyan);
             user-select: none;
-            touch-action: none;
+            touch-action: manipulation; /* Opraveno: Povoluje standardní dotykovou interakci s UI */
         }
 
         #matrixCanvas {
@@ -226,7 +226,7 @@
             background: var(--neon-cyan);
             color: #000;
             border: none;
-            padding: 10px;
+            padding: 12px;
             font-family: 'Courier New', Courier, monospace;
             font-weight: bold;
             font-size: 11px;
@@ -234,6 +234,7 @@
             cursor: pointer;
             width: 100%;
             text-align: center;
+            touch-action: manipulation;
         }
         .shop-btn { background: var(--neon-gold); }
         .pink-btn { background: var(--neon-pink); color: #fff; }
@@ -305,7 +306,7 @@
             flex-direction: column;
             cursor: crosshair;
             overflow: hidden;
-            touch-action: none;
+            touch-action: none; /* U her chceme plnou kontrolu nad dotykem */
             flex: 1;
         }
         .game-hud {
@@ -336,10 +337,11 @@
             color: var(--neon-cyan);
             font-family: 'Courier New', Courier, monospace;
             font-size: 9px;
-            padding: 5px 2px;
+            padding: 8px 2px;
             cursor: pointer;
             border-radius: 4px;
             text-align: center;
+            touch-action: manipulation;
         }
         .lb-tab-btn.active { background: var(--neon-cyan); color: #000; font-weight: bold; }
         .lb-list { display: flex; flex-direction: column; gap: 4px; font-size: 10px; max-height: 180px; overflow-y: auto; }
@@ -359,7 +361,7 @@
             background: transparent;
             border: 1px solid var(--neon-pink);
             color: var(--neon-pink);
-            padding: 10px;
+            padding: 12px;
             font-family: 'Courier New', Courier, monospace;
             font-weight: bold;
             font-size: 11px;
@@ -367,6 +369,7 @@
             margin-top: auto;
             border-radius: 6px;
             text-align: center;
+            touch-action: manipulation;
         }
 
         .arcade-node {
@@ -581,8 +584,8 @@
         <div class="screen mode-screen" id="modeScreen">
             <h1 class="screen-title" style="font-size:18px;">SELECT SLASHER MODE</h1>
             <div style="display:flex; flex-direction:column; gap:12px; width:260px;">
-                <button class="card-btn" style="padding:12px;" onclick="launchGame('slasher', 'normal')">NORMAL MODE</button>
-                <button class="card-btn" style="padding:12px; background:var(--neon-gold); color:#000;" onclick="launchGame('slasher', 'hard')">HARD (HIGH CHAOS)</button>
+                <button class="card-btn" onclick="launchGame('slasher', 'normal')">NORMAL MODE</button>
+                <button class="card-btn shop-btn" onclick="launchGame('slasher', 'hard')">HARD (HIGH CHAOS)</button>
                 <button class="back-hub-btn" onclick="closeSlasherModes()">« BACK</button>
             </div>
         </div>
@@ -618,8 +621,8 @@
             <h1>// MISSION OVER //</h1>
             <p id="goDetails">Score: 0</p>
             <div class="gameover-actions">
-                <button class="card-btn" style="padding:12px;" onclick="restartActiveGame()">RE-ENGAGE</button>
-                <button class="card-btn shop-btn" style="padding:12px;" onclick="returnToHubFromGO()">HUB</button>
+                <button class="card-btn" onclick="restartActiveGame()">RE-ENGAGE</button>
+                <button class="card-btn shop-btn" onclick="returnToHubFromGO()">HUB</button>
             </div>
         </div>
     </div>
@@ -883,7 +886,6 @@
             document.getElementById('gameCanvas').innerHTML = '';
         }
 
-        // Plynulé "swipování" prstem po obrazovce pro ničení objektů
         function setupSwipeMechanic(type) {
             const board = document.getElementById('gameCanvas');
             const checkTouch = (e) => {
@@ -1105,7 +1107,6 @@
             startSession();
         }
 
-        // Leaderboard pro každého uživatele zvlášť
         function saveGlobalScore(key, name, finalScore) {
             if (!globalLeaderboards[key]) globalLeaderboards[key] = {};
             let userBest = globalLeaderboards[key][name] || 0;
