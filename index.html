@@ -6,7 +6,6 @@
     <title>BOOM Launcher</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
-
         body {
             background-color: #030308;
             display: flex;
@@ -19,7 +18,6 @@
             color: #ffffff;
             user-select: none;
         }
-
         .bg-space {
             position: absolute;
             width: 140%;
@@ -28,82 +26,13 @@
             background-size: cover;
             background-position: center;
             z-index: 1;
-            animation: moveSpace 30s infinite alternate ease-in-out;
-            filter: brightness(0.85) contrast(1.1);
         }
-
-        @keyframes moveSpace {
-            0% { transform: scale(1) translate(0, 0) rotate(0deg); }
-            50% { transform: scale(1.12) translate(-2%, -2%) rotate(1.5deg); }
-            100% { transform: scale(1.05) translate(2%, 2%) rotate(-1.5deg); }
-        }
-
-        .browser-tabs {
-            position: relative;
-            z-index: 10;
-            width: 520px;
-            max-width: 90vw;
-            display: flex;
-            gap: 6px;
-            margin-bottom: 8px;
-            overflow-x: auto;
-            padding-bottom: 4px;
-        }
-
-        .tab-item {
-            background: rgba(18, 18, 28, 0.85);
-            border: 1px solid rgba(255, 0, 85, 0.4);
-            border-bottom: none;
-            padding: 6px 10px;
-            border-radius: 8px 8px 0 0;
-            font-size: 11px;
-            cursor: pointer;
-            color: #aaa;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            white-space: nowrap;
-            transition: all 0.2s;
-        }
-
-        .tab-item.active {
-            background: rgba(12, 12, 20, 0.92);
-            border-color: #ff0055;
-            color: #00ff88;
-            font-weight: bold;
-            box-shadow: 0 -2px 10px rgba(255, 0, 85, 0.3);
-        }
-
-        .tab-item:hover { color: #fff; }
-
-        .tab-close {
-            font-size: 10px;
-            color: #ff3366;
-            margin-left: 4px;
-            padding: 0 3px;
-            border-radius: 3px;
-        }
-        .tab-close:hover { background: rgba(255,0,85,0.3); color: #fff; }
-
-        .add-tab-btn {
-            background: rgba(255, 0, 85, 0.2);
-            border: 1px dashed #ff0055;
-            color: #ff0055;
-            padding: 6px 10px;
-            border-radius: 8px 8px 0 0;
-            cursor: pointer;
-            font-size: 11px;
-            font-weight: bold;
-        }
-
-        .add-tab-btn:hover { background: rgba(255, 0, 85, 0.4); color: #fff; }
-
         .cyber-card {
             position: relative;
             z-index: 10;
             background: rgba(12, 12, 20, 0.88);
             border: 3px solid #ff0055;
-            border-radius: 0 20px 20px 20px;
+            border-radius: 20px;
             padding: 30px;
             display: flex;
             flex-direction: column;
@@ -111,46 +40,14 @@
             box-shadow: 0 0 45px rgba(255, 0, 85, 0.6);
             width: 520px;
             max-width: 90vw;
-            backdrop-filter: blur(6px);
         }
-
         .header-title {
             font-size: 16px;
             letter-spacing: 3px;
             color: #ff3366;
             margin-bottom: 20px;
             font-weight: bold;
-            text-align: center;
-            text-shadow: 0 0 10px rgba(255, 0, 85, 0.5);
-            width: 100%;
         }
-
-        .audio-controls {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            background: rgba(0, 0, 0, 0.75);
-            padding: 3px 6px;
-            border-radius: 6px;
-            border: 1px solid rgba(255, 0, 85, 0.4);
-            z-index: 20;
-        }
-
-        .mute-btn { cursor: pointer; font-size: 12px; background: none; border: none; color: #fff; outline: none; }
-        .volume-slider { width: 40px; height: 3px; accent-color: #ff0055; cursor: pointer; }
-
-        .stage-area {
-            position: relative;
-            width: 100%;
-            height: 140px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
         #launchBtn {
             width: 120px;
             height: 120px;
@@ -162,451 +59,71 @@
             border: 4px solid #ff6699;
             cursor: pointer;
             box-shadow: 0 0 30px rgba(255, 0, 85, 0.8);
-            z-index: 2;
         }
-
         #launchBtn:hover { transform: scale(1.05); }
-
-        #rocketElement {
-            position: absolute;
-            font-size: 70px;
-            display: none;
-            z-index: 10;
-        }
-
-        .rocket-launch {
-            display: block !important;
-            animation: flyUp 1.8s ease-in forwards;
-        }
-
-        @keyframes flyUp {
-            0% { transform: translateY(0) scale(0.8); opacity: 1; }
-            20% { transform: translateY(10px) scale(1.1); }
-            100% { transform: translateY(-600px) scale(0.4); opacity: 0; }
-        }
-
-        #parachuteBadge {
-            position: absolute;
-            top: -200px;
-            display: none;
-            flex-direction: column;
-            align-items: center;
-            z-index: 8;
-        }
-
-        .parachute-drop {
-            display: flex !important;
-            animation: dropDown 1.2s ease-out forwards;
-        }
-
-        @keyframes dropDown {
-            0% { top: -200px; transform: scale(0.5); }
-            100% { top: 10px; transform: scale(1); }
-        }
-
-        .logo-box {
-            width: 70px; height: 70px;
-            background: #111;
-            border: 3px solid #ff3366;
-            border-radius: 12px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 0 20px #ff0055;
-        }
-
-        .logo-box img { width: 40px; height: 40px; object-fit: contain; }
-
         .url-section {
             width: 100%;
-            margin-top: 15px;
+            margin-top: 20px;
             background: rgba(0,0,0,0.6);
             padding: 10px;
             border-radius: 8px;
             border: 1px solid rgba(255, 0, 85, 0.3);
         }
-
-        .url-label {
-            font-size: 10px;
-            color: #aaa;
-            margin-bottom: 5px;
-            display: flex;
-            justify-content: space-between;
-        }
-
-        .url-box { display: flex; gap: 6px; }
-
         .url-input {
-            flex: 1;
+            width: 100%;
             background: #000;
             border: 1px solid #ff0055;
             border-radius: 5px;
             color: #00ff88;
             font-size: 12px;
-            padding: 6px 10px;
+            padding: 8px;
             outline: none;
+            margin-top: 5px;
         }
-
-        .url-btn {
-            background: #ff0055;
-            border: none;
-            border-radius: 5px;
-            color: white;
-            font-weight: bold;
-            font-size: 11px;
-            padding: 0 12px;
-            cursor: pointer;
-        }
-
-        .status-bar { margin-top: 12px; font-size: 12px; color: #00ff88; font-weight: bold; }
-
-        #modalOverlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); z-index: 100; display: none;
-            justify-content: center; align-items: center; backdrop-filter: blur(4px);
-        }
-        .modal-box {
-            background: #0c0c14; border: 2px solid #ff0055; border-radius: 12px;
-            padding: 20px; width: 420px; text-align: center; box-shadow: 0 0 30px rgba(255,0,85,0.5);
-        }
-        .modal-title { font-size: 14px; color: #ff3366; margin-bottom: 12px; font-weight: bold; }
-        .modal-list { display: flex; flex-direction: column; gap: 8px; max-height: 220px; overflow-y: auto; margin-bottom: 15px; }
-        .modal-script-item {
-            background: #161622; border: 1px solid rgba(255,0,85,0.3); color: #fff;
-            padding: 10px; border-radius: 6px; text-align: left; display: flex; flex-direction: column; gap: 6px;
-        }
-        .modal-script-actions { display: flex; gap: 8px; margin-top: 4px; }
-        .modal-action-btn {
-            background: #ff0055; border: none; color: #fff; font-size: 11px; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; flex: 1; text-align: center;
-        }
-        .modal-action-btn.page { background: #00cc66; }
-        .modal-cancel { background: #333; border: none; color: #aaa; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
+        .status-bar { margin-top: 15px; font-size: 12px; color: #00ff88; font-weight: bold; }
     </style>
 </head>
 <body>
 
     <div class="bg-space"></div>
 
-    <div id="modalOverlay">
-        <div class="modal-box">
-            <div class="modal-title">// SELECT EXECUTION MODE //</div>
-            <div class="modal-list" id="modalScriptList"></div>
-            <button class="modal-cancel" onclick="closeModal()">CANCEL</button>
-        </div>
-    </div>
-
-    <div class="browser-tabs" id="tabsContainer">
-        <button class="add-tab-btn" onclick="addNewTab()">+ Tab</button>
-    </div>
-
     <div class="cyber-card">
-        <div class="audio-controls">
-            <button class="mute-btn" id="muteBtn" onclick="toggleMute()">🔊</button>
-            <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.01" value="0.8" oninput="changeVolume(this.value)">
-        </div>
+        <div class="header-title">// BOOM LAUNCHER PC //</div>
 
-        <div class="header-title">// BOOM CONTROL //</div>
-
-        <div class="stage-area">
-            <button id="launchBtn" onclick="launchSequence()">BOOM</button>
-            <div id="rocketElement">🚀</div>
-
-            <div id="parachuteBadge">
-                <span style="font-size:16px;">🪂</span>
-                <div class="logo-box">
-                    <img id="targetFavicon" src="" alt="Target">
-                </div>
-            </div>
-        </div>
+        <button id="launchBtn" onclick="launchScript()">BOOM</button>
 
         <div class="url-section">
-            <span class="url-label">
-                <span id="activeTabName">TARGET URL / SCRIPT:</span>
-            </span>
-            <div class="url-box">
-                <input type="text" id="targetInput" class="url-input" placeholder="https://youtube.com or javascript:...">
-                <button class="url-btn" onclick="saveUrl()">SAVE</button>
-            </div>
+            <span style="font-size:10px; color:#aaa;">TARGET GIST SCRIPT URL:</span>
+            <input type="text" id="scriptUrl" class="url-input" value="https://gist.githubusercontent.com/DuckKuba/127740b1b9f9f3fdb924b98a90a431e1/raw/62401b0baa3d1b2722c6d2981554f18207784843/duckbrowser.js">
         </div>
 
         <div class="status-bar" id="statusText">SYSTEM READY</div>
     </div>
 
     <script>
-        let audioCtx = null;
-        let isMuted = localStorage.getItem('boom_muted') === 'true';
-        let currentVol = parseFloat(localStorage.getItem('boom_volume') || '0.8');
+        function launchScript() {
+            let url = document.getElementById('scriptUrl').value.trim();
+            let status = document.getElementById('statusText');
 
-        if (isMuted) currentVol = 0;
-
-        let tabs = JSON.parse(localStorage.getItem('boom_tabs')) || [
-            { name: 'YouTube', url: 'https://www.youtube.com', fixed: true },
-            { name: 'Google', url: 'https://www.google.com', fixed: true }
-        ];
-        
-        let activeTabIdx = parseInt(localStorage.getItem('boom_active_tab') || '0');
-        if (activeTabIdx >= tabs.length) activeTabIdx = 0;
-
-        const slider = document.getElementById('volumeSlider');
-        const muteBtn = document.getElementById('muteBtn');
-        slider.value = isMuted ? 0 : currentVol;
-        muteBtn.innerText = (isMuted || currentVol === 0) ? '🔇' : '🔊';
-
-        renderTabs();
-        loadActiveTab();
-
-        function renderTabs() {
-            const container = document.getElementById('tabsContainer');
-            container.innerHTML = '';
-            
-            tabs.forEach((tab, index) => {
-                let btn = document.createElement('div');
-                btn.className = `tab-item ${index === activeTabIdx ? 'active' : ''}`;
-                
-                let nameSpan = document.createElement('span');
-                nameSpan.innerText = tab.name;
-                nameSpan.onclick = () => switchTab(index);
-                btn.appendChild(nameSpan);
-
-                if (!tab.fixed) {
-                    let closeBtn = document.createElement('span');
-                    closeBtn.className = 'tab-close';
-                    closeBtn.innerHTML = '×';
-                    closeBtn.title = 'Delete tab';
-                    closeBtn.onclick = (e) => {
-                        e.stopPropagation();
-                        deleteTab(index);
-                    };
-                    btn.appendChild(closeBtn);
-                }
-
-                container.appendChild(btn);
-            });
-
-            let addBtn = document.createElement('button');
-            addBtn.className = 'add-tab-btn';
-            addBtn.innerHTML = '+ Tab';
-            addBtn.onclick = addNewTab;
-            container.appendChild(addBtn);
-        }
-
-        function switchTab(index) {
-            activeTabIdx = index;
-            localStorage.setItem('boom_active_tab', activeTabIdx);
-            renderTabs();
-            loadActiveTab();
-        }
-
-        function loadActiveTab() {
-            let tab = tabs[activeTabIdx];
-            document.getElementById('targetInput').value = tab.url;
-            document.getElementById('activeTabName').innerText = `TAB: ${tab.name.toUpperCase()}`;
-            updateFavicon(tab.url);
-        }
-
-        function addNewTab() {
-            let name = prompt("Enter new tab name:", "My Script / Web");
-            if (!name) return;
-            let url = prompt("Enter URL address or javascript: script:", "https://");
-            if (!url) return;
-
-            tabs.push({ name, url, fixed: false });
-            localStorage.setItem('boom_tabs', JSON.stringify(tabs));
-            switchTab(tabs.length - 1);
-        }
-
-        function deleteTab(index) {
-            if (tabs[index].fixed) {
-                alert("You cannot delete fixed tabs!");
-                return;
-            }
-            tabs.splice(index, 1);
-            localStorage.setItem('boom_tabs', JSON.stringify(tabs));
-            if (activeTabIdx >= tabs.length) {
-                activeTabIdx = tabs.length - 1;
-            }
-            localStorage.setItem('boom_active_tab', activeTabIdx);
-            renderTabs();
-            loadActiveTab();
-        }
-
-        function initAudio() {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-        }
-
-        document.body.addEventListener('click', initAudio, { once: true });
-
-        function toggleMute() {
-            isMuted = !isMuted;
-            localStorage.setItem('boom_muted', isMuted);
-            if (isMuted) { slider.value = 0; muteBtn.innerText = '🔇'; }
-            else { currentVol = parseFloat(localStorage.getItem('boom_last_vol') || '0.8'); slider.value = currentVol; muteBtn.innerText = '🔊'; }
-        }
-
-        function changeVolume(val) {
-            currentVol = parseFloat(val);
-            if (currentVol > 0) {
-                isMuted = false; localStorage.setItem('boom_muted', 'false');
-                localStorage.setItem('boom_last_vol', currentVol); muteBtn.innerText = '🔊';
-            } else {
-                isMuted = true; localStorage.setItem('boom_muted', 'true'); muteBtn.innerText = '🔇';
-            }
-            localStorage.setItem('boom_volume', currentVol);
-        }
-
-        function playSound() {
-            initAudio();
-            if (!audioCtx) return;
-            const vol = isMuted ? 0 : currentVol;
-            if (vol <= 0) return;
-
-            const bufferSize = audioCtx.sampleRate * 1.8;
-            const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
-            const data = buffer.getChannelData(0);
-            for (let i = 0; i < bufferSize; i++) { data[i] = Math.random() * 2 - 1; }
-
-            const noise = audioCtx.createBufferSource();
-            noise.buffer = buffer;
-            const filter = audioCtx.createBiquadFilter();
-            filter.type = 'lowpass';
-            filter.frequency.setValueAtTime(900, audioCtx.currentTime);
-            filter.frequency.linearRampToValueAtTime(120, audioCtx.currentTime + 1.5);
-
-            const gain = audioCtx.createGain();
-            gain.gain.setValueAtTime(vol * 0.6, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.5);
-
-            noise.connect(filter); filter.connect(gain); gain.connect(audioCtx.destination);
-            noise.start();
-        }
-
-        function updateFavicon(url) {
-            try {
-                if (url.startsWith('javascript:')) {
-                    document.getElementById('targetFavicon').src = 'https://www.google.com/s2/favicons?domain=javascript.info&sz=128';
-                    return;
-                }
-            } catch(e) {}
-            try {
-                const domain = new URL(url).hostname;
-                document.getElementById('targetFavicon').src = `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
-            } catch(e) {
-                document.getElementById('targetFavicon').src = `https://www.google.com/s2/favicons?domain=youtube.com&sz=128`;
-            }
-        }
-
-        function saveUrl() {
-            let input = document.getElementById('targetInput').value.trim();
-            tabs[activeTabIdx].url = input || 'https://www.youtube.com';
-            localStorage.setItem('boom_tabs', JSON.stringify(tabs));
-            document.getElementById('targetInput').value = tabs[activeTabIdx].url;
-            updateFavicon(tabs[activeTabIdx].url);
-
-            document.getElementById('statusText').innerText = 'SAVED TO TAB!';
-            setTimeout(() => { document.getElementById('statusText').innerText = 'SYSTEM READY'; }, 1500);
-        }
-
-        async function launchSequence() {
-            playSound();
-            const rocket = document.getElementById('rocketElement');
-            const badge = document.getElementById('parachuteBadge');
-            const status = document.getElementById('statusText');
-
-            status.innerText = 'LAUNCHING...';
-            status.style.color = '#ff0055';
-
-            rocket.classList.add('rocket-launch');
-            await new Promise(r => setTimeout(r, 1600));
-
-            status.innerText = 'LANDING...';
+            status.innerText = 'LOADING SCRIPT...';
             status.style.color = '#ffcc00';
-            badge.classList.add('parachute-drop');
-            await new Promise(r => setTimeout(r, 1200));
 
-            let currentUrl = tabs[activeTabIdx].url;
-
-            if (currentUrl.startsWith('javascript:')) {
-                openScriptSelectorModal(currentUrl, tabs[activeTabIdx].name);
-            } else {
-                if (window.opener && !window.opener.closed) {
-                    window.opener.location.href = currentUrl;
-                } else {
-                    window.open(currentUrl, '_blank');
-                }
-                window.close();
-            }
-        }
-
-        function openScriptSelectorModal(jsUrl, tabName) {
-            let modal = document.getElementById('modalOverlay');
-            let list = document.getElementById('modalScriptList');
-            list.innerHTML = '';
-
-            let item = document.createElement('div');
-            item.className = 'modal-script-item';
-            item.innerHTML = `
-                <div>📁 <b>${tabName}</b></div>
-                <div style="font-size:9px; color:#aaa; word-break:break-all;">${jsUrl.substring(0, 50)}...</div>
-                <div class="modal-script-actions">
-                    <button class="modal-action-btn page" onclick="executeWithCustomUI('${jsUrl.replace(/'/g, "\\'")}', 'page')">Open Page + UI</button>
-                    <button class="modal-action-btn" onclick="executeWithCustomUI('${jsUrl.replace(/'/g, "\\'")}', 'bookmark')">Bookmarklet Copy</button>
-                </div>
-            `;
-            list.appendChild(item);
-
-            modal.style.display = 'flex';
-        }
-
-        function closeModal() {
-            document.getElementById('modalOverlay').style.display = 'none';
-            document.getElementById('statusText').innerText = 'SYSTEM READY';
-            document.getElementById('rocketElement').classList.remove('rocket-launch');
-            document.getElementById('parachuteBadge').classList.remove('parachute-drop');
-        }
-
-        function executeWithCustomUI(jsUrl, mode) {
-            let match = jsUrl.match(/fetch\('([^']+)'\)/);
-            let scriptSrc = match ? match[1] : 'https://gist.githubusercontent.com/DuckKuba/127740b1b9f9f3fdb924b98a90a431e1/raw/62401b0baa3d1b2722c6d2981554f18207784843/duckbrowser.js';
-
-            // PC-friendly injektáž skriptu (přímé vytvoření tagu namísto restriktivního eval)
-            let wrappedScript = `(function(){
-                if(document.getElementById('boom-custom-ui')) return;
-                let div = document.createElement('div');
-                div.id = 'boom-custom-ui';
-                div.style.cssText = 'position:fixed;bottom:20px;right:20px;z-index:999999;background:#0c0c14;border:2px solid #ff0055;color:#fff;padding:15px;border-radius:10px;font-family:monospace;box-shadow:0 0 20px rgba(255,0,85,0.5);width:300px;';
-                div.innerHTML = '<div style="color:#ff3366;font-weight:bold;margin-bottom:8px;display:flex;justify-content:space-between;"><span>// BOOM UI PANEL //</span><span style="cursor:pointer;" onclick="this.parentElement.parentElement.remove()">×</span></div><div style="font-size:11px;color:#00ff88;margin-bottom:10px;">Ready to load script!</div><button id="boom-run-btn" style="background:#ff0055;border:none;color:#fff;padding:6px 12px;border-radius:4px;cursor:pointer;font-weight:bold;width:100%;">LOAD & RUN SCRIPT</button>';
-                document.body.appendChild(div);
-                document.getElementById('boom-run-btn').onclick = function(){
-                    let s = document.createElement('script');
-                    s.src = '${scriptSrc}';
-                    s.onload = () => { this.innerText = 'LOADED & EXECUTED!'; this.style.background = '#00cc66'; };
-                    s.onerror = () => { alert('Failed to load external script. Check CORS/CSP policy of this site.'); };
-                    (document.head || document.documentElement).appendChild(s);
+            try {
+                let s = document.createElement('script');
+                s.src = url;
+                s.onload = () => {
+                    status.innerText = 'SUCCESSFULLY EXECUTED!';
+                    status.style.color = '#00ff88';
                 };
-            })();`;
-
-            if (mode === 'page') {
-                // Na PC otevíráme target jako about:blank a rovnou do něj bezpečně injektujeme prvek
-                let win = window.open('about:blank', '_blank');
-                if (win) {
-                    setTimeout(() => {
-                        try {
-                            let scriptEl = win.document.createElement('script');
-                            scriptEl.textContent = wrappedScript;
-                            win.document.body.appendChild(scriptEl);
-                        } catch(e) {
-                            // Fallback, pokud prohlížeč about:blank blokuje, zkusíme vypsat kód pro bookmarklet
-                            alert("PC browser blocked direct injection into about:blank. Use 'Bookmarklet Copy' instead!");
-                        }
-                    }, 600);
-                }
-            } else {
-                navigator.clipboard.writeText("javascript:" + wrappedScript).then(() => {
-                    alert("Bookmarklet copied! Create a new bookmark on PC, paste this code, and click it on any website.");
-                });
+                s.onerror = () => {
+                    status.innerText = 'ERROR: FAILED TO LOAD (CORS/BLOCKED)';
+                    status.style.color = '#ff0055';
+                };
+                document.head.appendChild(s);
+            } catch(e) {
+                status.innerText = 'ERROR: ' + e.message;
+                status.style.color = '#ff0055';
             }
-            window.close();
         }
     </script>
 </body>
