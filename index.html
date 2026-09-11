@@ -1,17 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="cs">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CYBER_NEXUS_ARCADE // v50.0 ULTIMATE</title>
+    <title>CYBER_NEXUS_ARCADE // v100.0 PRO EDITION</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         :root {
             --neon-cyan: #00ffcc;
             --neon-pink: #ff007f;
             --neon-gold: #ffcc00;
-            --bg-dark: #010003;
-            --panel-bg: rgba(4, 3, 14, 0.98);
+            --neon-purple: #9d00ff;
+            --bg-dark: #020005;
+            --panel-bg: rgba(4, 2, 14, 0.98);
         }
 
         body {
@@ -31,14 +32,14 @@
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: 1;
-            opacity: 0.18;
+            opacity: 0.15;
             pointer-events: none;
         }
 
         .scanlines {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.45) 50%), linear-gradient(90deg, rgba(255, 0, 128, 0.03), rgba(0, 255, 204, 0.015), rgba(0, 100, 255, 0.03));
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%), linear-gradient(90deg, rgba(255, 0, 128, 0.02), rgba(0, 255, 204, 0.01), rgba(0, 100, 255, 0.02));
             background-size: 100% 4px, 4px 100%;
             z-index: 2;
             pointer-events: none;
@@ -51,19 +52,19 @@
             border: 2px solid var(--neon-cyan);
             border-radius: 20px;
             width: 98vw;
-            max-width: 1200px;
+            max-width: 1250px;
             height: 96vh;
-            max-height: 820px;
+            max-height: 850px;
             display: grid;
             grid-template-rows: auto 1fr;
-            box-shadow: 0 0 70px rgba(0, 255, 204, 0.4), inset 0 0 30px rgba(0, 255, 204, 0.08);
+            box-shadow: 0 0 80px rgba(0, 255, 204, 0.35), inset 0 0 30px rgba(0, 255, 204, 0.06);
             overflow: hidden;
         }
 
         .top-nav {
-            background: rgba(0, 6, 18, 0.98);
+            background: rgba(0, 5, 15, 0.98);
             padding: 14px 24px;
-            border-bottom: 2px solid rgba(0, 255, 204, 0.45);
+            border-bottom: 2px solid rgba(0, 255, 204, 0.4);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -73,6 +74,7 @@
         .nav-title { color: var(--neon-pink); font-weight: bold; text-shadow: 0 0 12px var(--neon-pink); }
         .nav-stats { display: flex; gap: 20px; }
         .nav-stats span { color: #fff; text-shadow: 0 0 8px var(--neon-cyan); }
+        .credit-badge { color: var(--neon-gold) !important; text-shadow: 0 0 10px var(--neon-gold) !important; }
 
         /* HUB SCREEN */
         .hub-screen {
@@ -84,12 +86,12 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            gap: 24px;
-            padding: 30px;
+            gap: 22px;
+            padding: 25px;
             text-align: center;
             overflow-y: auto;
         }
-        .hub-title { font-size: 30px; color: var(--neon-cyan); text-shadow: 0 0 25px rgba(0,255,204,0.8); letter-spacing: 4px; }
+        .hub-title { font-size: 28px; color: var(--neon-cyan); text-shadow: 0 0 25px rgba(0,255,204,0.7); letter-spacing: 3px; }
         
         .auth-box {
             display: flex;
@@ -114,7 +116,7 @@
 
         .game-grid {
             display: flex;
-            gap: 25px;
+            gap: 20px;
             justify-content: center;
             flex-wrap: wrap;
         }
@@ -122,38 +124,39 @@
             background: linear-gradient(135deg, rgba(16, 10, 38, 0.95) 0%, rgba(4, 2, 12, 0.98) 100%);
             border: 2px solid rgba(0, 255, 204, 0.4);
             border-radius: 16px;
-            width: 300px;
-            padding: 26px;
+            width: 270px;
+            padding: 22px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 16px;
+            gap: 14px;
             cursor: pointer;
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
         .game-card:hover {
             border-color: var(--neon-pink);
-            box-shadow: 0 0 40px rgba(255, 0, 127, 0.5);
-            transform: translateY(-8px);
+            box-shadow: 0 0 35px rgba(255, 0, 127, 0.4);
+            transform: translateY(-6px);
         }
         .game-icon {
-            font-size: 42px;
+            font-size: 38px;
             background: rgba(0,255,204,0.1);
-            width: 80px; height: 80px;
+            width: 70px; height: 70px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             border: 1px dashed var(--neon-cyan);
-            box-shadow: 0 0 15px rgba(0,255,204,0.3);
+            box-shadow: 0 0 12px rgba(0,255,204,0.3);
         }
-        .game-card h3 { font-size: 16px; color: #fff; letter-spacing: 1.5px; }
-        .game-card p { font-size: 11px; color: #88aacc; line-height: 1.5; }
+        .game-card h3 { font-size: 15px; color: #fff; letter-spacing: 1.5px; }
+        .game-card p { font-size: 11px; color: #88aacc; line-height: 1.4; }
+        
         .card-btn {
             background: var(--neon-cyan);
             color: #000;
             border: none;
-            padding: 12px;
+            padding: 11px;
             font-family: 'Courier New', Courier, monospace;
             font-weight: bold;
             font-size: 12px;
@@ -162,7 +165,43 @@
             width: 100%;
             transition: 0.2s;
         }
-        .game-card:hover .card-btn { background: var(--neon-pink); color: #fff; box-shadow: 0 0 15px var(--neon-pink); }
+        .card-btn:hover { background: var(--neon-pink); color: #fff; box-shadow: 0 0 15px var(--neon-pink); }
+        .shop-btn { background: var(--neon-gold); color: #000; }
+        .shop-btn:hover { background: var(--neon-cyan); color: #000; box-shadow: 0 0 15px var(--neon-cyan); }
+
+        /* SHOP SCREEN */
+        .shop-screen {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(2, 2, 8, 0.98);
+            z-index: 55;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+        }
+        .shop-items {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .shop-card {
+            background: rgba(10, 5, 25, 0.95);
+            border: 2px solid var(--neon-gold);
+            border-radius: 12px;
+            width: 240px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            text-align: center;
+        }
+        .shop-card h4 { color: var(--neon-gold); font-size: 13px; }
+        .shop-card p { font-size: 10px; color: #aaa; }
 
         /* MODE SELECTOR */
         .mode-screen {
@@ -221,12 +260,32 @@
             padding-bottom: 6px;
             letter-spacing: 1px;
         }
+        .lb-tabs {
+            display: flex;
+            gap: 6px;
+        }
+        .lb-tab-btn {
+            flex: 1;
+            background: rgba(0,255,204,0.1);
+            border: 1px solid rgba(0,255,204,0.3);
+            color: var(--neon-cyan);
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 10px;
+            padding: 6px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        .lb-tab-btn.active {
+            background: var(--neon-cyan);
+            color: #000;
+            font-weight: bold;
+        }
         .lb-list {
             display: flex;
             flex-direction: column;
             gap: 6px;
             font-size: 11px;
-            max-height: 320px;
+            max-height: 280px;
             overflow-y: auto;
         }
         .lb-row {
@@ -256,7 +315,7 @@
         }
         .back-hub-btn:hover { background: var(--neon-pink); color: #fff; box-shadow: 0 0 15px var(--neon-pink); }
 
-        /* GAME 1: CYBER SLASHER ELEMENTS */
+        /* GAME ELEMENTS */
         .arcade-node {
             position: absolute;
             width: 54px; height: 54px;
@@ -278,13 +337,12 @@
         .node-golden { background: var(--neon-gold); color: #000; border: 2px solid #fff; }
         .node-minus { background: var(--neon-pink); color: #fff; border: 2px solid var(--neon-cyan); }
 
-        /* GAME 2: BRAND NEW NEON PONG SURVIVAL ELEMENTS (Skvělé na mobil i PC) */
         .pong-paddle {
             position: absolute;
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%);
-            width: 100px; height: 16px;
+            width: 110px; height: 16px;
             background: var(--neon-cyan);
             border-radius: 8px;
             box-shadow: 0 0 20px var(--neon-cyan);
@@ -315,24 +373,47 @@
             100% { opacity: 0; transform: translate(-50%, -65px) scale(1.3); }
         }
 
+        /* PERFEKTNĚ VYSLADĚNÝ GAME OVER OVERLAY (Sjednocená tlačítka pod sebou) */
         .gameover-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(2, 2, 8, 0.97);
+            background: rgba(2, 2, 8, 0.98);
             display: none;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            gap: 18px;
+            gap: 16px;
             z-index: 70;
             text-align: center;
+            padding: 20px;
+        }
+        .gameover-box {
+            background: rgba(10, 5, 25, 0.95);
+            border: 2px solid var(--neon-pink);
+            border-radius: 16px;
+            padding: 30px 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 0 40px rgba(255,0,127,0.3);
+            max-width: 400px;
+            width: 100%;
+        }
+        .gameover-box h1 { color: var(--neon-pink); font-size: 22px; letter-spacing: 2px; }
+        .gameover-box p { font-size: 12px; color: #fff; }
+        .gameover-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            width: 100%;
         }
 
         @media (max-width: 768px) {
             .arcade-arena { grid-template-columns: 1fr; grid-template-rows: 1fr auto; }
-            .sidebar-lb { max-height: 160px; }
+            .sidebar-lb { max-height: 180px; }
             .game-grid { flex-direction: column; align-items: center; }
-            .game-card { width: 100%; max-width: 300px; }
+            .game-card { width: 100%; max-width: 280px; }
         }
     </style>
 </head>
@@ -343,16 +424,16 @@
 
     <div class="app-wrapper">
         <div class="top-nav">
-            <div class="nav-title">// CYBER_NEXUS</div>
+            <div class="nav-title">// CYBER_NEXUS_PRO</div>
             <div class="nav-stats">
                 <div>OPERATIVE: <span id="navUser">ANON</span></div>
-                <div>CREDITS: <span id="navCredits">100</span></div>
+                <div>CREDITS: <span id="navCredits" class="credit-badge">100</span></div>
             </div>
         </div>
 
         <!-- HUB SCREEN -->
         <div class="hub-screen" id="hubScreen">
-            <h1 class="hub-title">CHOOSE PROTOCOL</h1>
+            <h1 class="hub-title">CYBER ARCADE HUB</h1>
             
             <div class="auth-box">
                 <input type="text" id="playerName" class="input-box" placeholder="ENTER HANDLE..." maxlength="12">
@@ -364,24 +445,56 @@
                 <div class="game-card" onclick="openSlasherModes()">
                     <div class="game-icon">⚡</div>
                     <h3>CYBER SLASHER</h3>
-                    <p>High-speed neon node slicing with multi-spawning mechanics and adjustable difficulty modes.</p>
+                    <p>High-speed neon node slicing with multi-spawning mechanics and adjustable difficulty.</p>
                     <button class="card-btn">SELECT SLASHER</button>
                 </div>
 
-                <!-- Game 2: Brand New Neon Pong Survival -->
+                <!-- Game 2: Neon Pong Survival -->
                 <div class="game-card" onclick="launchGame('pong', 'normal')">
                     <div class="game-icon">🏓</div>
                     <h3>NEON PONG SURVIVAL</h3>
-                    <p>Brand new physics survival game! Bounce the glowing data ball with your paddle to survive the grid.</p>
+                    <p>Physics survival game. Bounce the glowing data ball with your paddle to survive.</p>
                     <button class="card-btn">PLAY PONG</button>
                 </div>
+
+                <!-- Shop Card -->
+                <div class="game-card" style="border-color: var(--neon-gold);" onclick="openShop()">
+                    <div class="game-icon" style="border-color: var(--neon-gold); color:var(--neon-gold);">💎</div>
+                    <h3>CYBER SHOP</h3>
+                    <p>Spend your hard-earned credits on power-ups, bonuses, and special core upgrades.</p>
+                    <button class="card-btn shop-btn">OPEN SHOP</button>
+                </div>
             </div>
+        </div>
+
+        <!-- SHOP SCREEN -->
+        <div class="shop-screen" id="shopScreen">
+            <h1 class="hub-title" style="font-size:24px; color:var(--neon-gold);">// CYBER CORE SHOP</h1>
+            <p style="font-size:12px; color:#aaa;">Enhance your arcade capabilities with earned credits.</p>
+            <div class="shop-items">
+                <div class="shop-card">
+                    <h4>+50 BONUS CREDITS</h4>
+                    <p>Instant injection of operational funds.</p>
+                    <button class="card-btn shop-btn" onclick="buyItem('credits', 50, 0)">CLAIM FREE</button>
+                </div>
+                <div class="shop-card">
+                    <h4>PADDLE BOOST</h4>
+                    <p>Wider paddle size in Pong mode (+20% width).</p>
+                    <button class="card-btn shop-btn" onclick="buyItem('paddle', 150)">BUY (150 CR)</button>
+                </div>
+                <div class="shop-card">
+                    <h4>SCORE MULTIPLIER</h4>
+                    <p>Permanent +20% score multiplier in all games.</p>
+                    <button class="card-btn shop-btn" onclick="buyItem('multiplier', 300)">BUY (300 CR)</button>
+                </div>
+            </div>
+            <button class="back-hub-btn" style="width:260px;" onclick="closeShop()">« BACK TO HUB</button>
         </div>
 
         <!-- MODE SELECTOR -->
         <div class="mode-screen" id="modeScreen">
             <h1 class="hub-title" style="font-size:24px;">SELECT SLASHER MODE</h1>
-            <div style="display:flex; flex-direction:column; gap:16px; width:280px;">
+            <div style="display:flex; flex-direction:column; gap:14px; width:280px;">
                 <button class="card-btn" style="padding:14px;" onclick="launchGame('slasher', 'normal')">NORMAL (Multi-Spawn)</button>
                 <button class="card-btn" style="padding:14px; background:var(--neon-gold); color:#000;" onclick="launchGame('slasher', 'hard')">HARD (High Chaos)</button>
                 <button class="back-hub-btn" onclick="closeSlasherModes()">« BACK</button>
@@ -400,34 +513,43 @@
             </div>
 
             <div class="sidebar-lb">
-                <h3>// LIVE LEADERBOARD</h3>
-                <div class="lb-list" id="localLbList"></div>
+                <h3>// GLOBAL LEADERBOARDS</h3>
+                <div class="lb-tabs">
+                    <button class="lb-tab-btn active" id="tabSlasherNormal" onclick="switchLbTab('slasher_normal')">S-NORM</button>
+                    <button class="lb-tab-btn" id="tabSlasherHard" onclick="switchLbTab('slasher_hard')">S-HARD</button>
+                    <button class="lb-tab-btn" id="tabPong" onclick="switchLbTab('pong')">PONG</button>
+                </div>
+                <div class="lb-list" id="globalLbList"></div>
                 <button class="back-hub-btn" onclick="returnToHub()">« QUIT TO HUB</button>
             </div>
         </div>
     </div>
 
-    <!-- GAME OVER -->
+    <!-- GAME OVER OVERLAY (Perfektně uspořádaná tlačítka pod sebou) -->
     <div class="gameover-overlay" id="gameOverOverlay">
-        <h1 style="color:var(--neon-pink); font-size:24px;">// MISSION TERMINATED //</h1>
-        <p style="font-size:13px; color:#aaa;" id="goDetails">Score: 0</p>
-        <button class="card-btn" style="width:220px; padding:12px;" onclick="restartActiveGame()">RE-ENGAGE</button>
-        <button class="back-hub-btn" style="width:220px;" onclick="returnToHub()">BACK TO HUB</button>
+        <div class="gameover-box">
+            <h1>// MISSION OVER //</h1>
+            <p id="goDetails">Score: 0</p>
+            <div class="gameover-actions">
+                <button class="card-btn" style="padding:13px;" onclick="restartActiveGame()">RE-ENGAGE</button>
+                <button class="card-btn shop-btn" style="padding:13px;" onclick="returnToHubFromGO()">RETURN TO HUB</button>
+            </div>
+        </div>
     </div>
 
     <script>
-        // Matrix Canvas Background Engine
+        // Matrix Canvas Engine
         const canvas = document.getElementById('matrixCanvas');
         const ctx = canvas.getContext('2d');
         function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        const chars = '01ABCDEF_NEXUS_SYSTEM_SECURE_CYBER';
+        const chars = '01ABCDEF_NEXUS_SYSTEM_SECURE_CYBER_PRO';
         const fontSize = 12;
         let drops = Array(Math.floor(canvas.width / fontSize)).fill(1);
         setInterval(() => {
-            ctx.fillStyle = 'rgba(1, 0, 3, 0.15)';
+            ctx.fillStyle = 'rgba(2, 0, 5, 0.15)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = '#00ffcc';
             ctx.font = fontSize + 'px monospace';
@@ -439,27 +561,39 @@
             }
         }, 40);
 
-        // Core App Variables
+        // Core App State & Upgrades
         let activeGame = null;
         let activeMode = 'normal';
         let playerName = '';
-        let credits = parseInt(localStorage.getItem('cyber_nexus_credits')) || 100;
+        let credits = parseInt(localStorage.getItem('cyber_nexus_credits')) || 150;
+        let upgrades = JSON.parse(localStorage.getItem('cyber_nexus_upgrades')) || { paddle: false, multiplier: false };
         let score = 0;
         let timeLeft = 40;
         let gameInterval = null;
         let loopInterval = null;
         let physicsInterval = null;
+        let currentLbTab = 'slasher_normal';
 
-        // Pong Game Variables
-        let paddleX = 50; // percentage
+        // Pong State
+        let paddleX = 50;
         let ballX = 50, ballY = 40;
         let ballVX = 2.5, ballVY = 3.0;
 
-        // Robust Local Leaderboard Storage Fix (Ošetřené klíče a ukládání)
-        let localLeaderboards = JSON.parse(localStorage.getItem('cyber_nexus_lb_v50')) || {
-            slasher_normal: [],
-            slasher_hard: [],
-            pong: []
+        // Robust Local Leaderboard Storage Fix
+        let globalLeaderboards = JSON.parse(localStorage.getItem('cyber_nexus_global_lb_v100')) || {
+            slasher_normal: [
+                { name: 'NEXUS_X', score: 42 },
+                { name: 'CYBER_QUEEN', score: 35 },
+                { name: 'GLITCH', score: 28 }
+            ],
+            slasher_hard: [
+                { name: 'ZERO', score: 55 },
+                { name: 'SYNTH', score: 40 }
+            ],
+            pong: [
+                { name: 'PONG_GOD', score: 75 },
+                { name: 'NEON_BALL', score: 50 }
+            ]
         };
 
         let savedHandle = localStorage.getItem('cyber_nexus_handle') || '';
@@ -468,7 +602,12 @@
             playerName = savedHandle;
             document.getElementById('navUser').innerText = playerName;
         }
-        document.getElementById('navCredits').innerText = credits;
+        updateCreditsDisplay();
+
+        function updateCreditsDisplay() {
+            document.getElementById('navCredits').innerText = credits;
+            localStorage.setItem('cyber_nexus_credits', credits);
+        }
 
         function validateAndSetUser() {
             let val = document.getElementById('playerName').value.trim().toUpperCase();
@@ -480,6 +619,31 @@
             localStorage.setItem('cyber_nexus_handle', playerName);
             document.getElementById('navUser').innerText = playerName;
             return true;
+        }
+
+        function openShop() {
+            document.getElementById('shopScreen').style.display = 'flex';
+        }
+        function closeShop() {
+            document.getElementById('shopScreen').style.display = 'none';
+        }
+
+        function buyItem(item, cost) {
+            if (item === 'credits') {
+                credits += 50;
+                updateCreditsDisplay();
+                alert('Claimed +50 Free Credits!');
+                return;
+            }
+            if (credits >= cost) {
+                credits -= cost;
+                upgrades[item] = true;
+                localStorage.setItem('cyber_nexus_upgrades', JSON.stringify(upgrades));
+                updateCreditsDisplay();
+                alert('Upgrade successfully acquired and activated!');
+            } else {
+                alert('Insufficient credits, operative!');
+            }
         }
 
         function openSlasherModes() {
@@ -496,6 +660,7 @@
             }
             activeGame = gameType;
             activeMode = mode;
+            currentLbTab = gameType === 'slasher' ? `slasher_${mode}` : 'pong';
             
             document.getElementById('hubScreen').style.display = 'none';
             document.getElementById('modeScreen').style.display = 'none';
@@ -512,7 +677,12 @@
             document.getElementById('gameOverOverlay').style.display = 'none';
             document.getElementById('arcadeArena').style.display = 'none';
             document.getElementById('hubScreen').style.display = 'flex';
-            document.getElementById('navCredits').innerText = credits;
+            updateCreditsDisplay();
+        }
+
+        function returnToHubFromGO() {
+            document.getElementById('gameOverOverlay').style.display = 'none';
+            returnToHub();
         }
 
         function startSession() {
@@ -521,7 +691,7 @@
             document.getElementById('hudScore').innerText = score;
             document.getElementById('hudTime').innerText = timeLeft;
             document.getElementById('gameCanvas').innerHTML = '';
-            renderLeaderboard();
+            renderGlobalLeaderboards();
 
             gameInterval = setInterval(() => {
                 timeLeft--;
@@ -530,7 +700,7 @@
             }, 1000);
 
             if (activeGame === 'slasher') {
-                let speed = activeMode === 'hard' ? 650 : 800;
+                let speed = activeMode === 'hard' ? 600 : 750;
                 loopInterval = setInterval(spawnMultipleSlasherNodes, speed);
             } else {
                 initPongSurvival();
@@ -562,12 +732,12 @@
             let val = 1;
 
             if (activeMode === 'hard') {
-                if (rand < 0.20) { type = 'minus'; label = '-3'; val = -3; }
-                else if (rand < 0.40) { type = 'golden'; label = '+5'; val = 5; }
+                if (rand < 0.22) { type = 'minus'; label = '-3'; val = -3; }
+                else if (rand < 0.42) { type = 'golden'; label = '+5'; val = 5; }
                 else { type = 'plus'; label = '+1'; val = 1; }
             } else {
-                if (rand < 0.08) { type = 'minus'; label = '-2'; val = -2; }
-                else if (rand < 0.30) { type = 'golden'; label = '+5'; val = 5; }
+                if (rand < 0.10) { type = 'minus'; label = '-2'; val = -2; }
+                else if (rand < 0.32) { type = 'golden'; label = '+5'; val = 5; }
                 else { type = 'plus'; label = '+1'; val = 1; }
             }
 
@@ -588,9 +758,12 @@
                 let clientX = e.clientX || (e.touches && e.touches[0].clientX);
                 let clientY = e.clientY || (e.touches && e.touches[0].clientY);
 
-                score += val;
+                let finalVal = val;
+                if (upgrades.multiplier && val > 0) finalVal = Math.ceil(val * 1.2);
+
+                score += finalVal;
                 if (score < 0) score = 0;
-                showPopup(clientX, clientY, val > 0 ? `+${val}` : `${val}`, val > 0 ? '#00ffcc' : '#ff007f');
+                showPopup(clientX, clientY, finalVal > 0 ? `+${finalVal}` : `${finalVal}`, finalVal > 0 ? '#00ffcc' : '#ff007f');
 
                 document.getElementById('hudScore').innerText = score;
                 node.remove();
@@ -600,22 +773,23 @@
             node.addEventListener('touchstart', trigger);
             board.appendChild(node);
 
-            let lifetime = activeMode === 'hard' ? 850 : 1100;
+            let lifetime = activeMode === 'hard' ? 800 : 1050;
             setTimeout(() => { if (node.parentElement) node.remove(); }, lifetime);
         }
 
-        // --- GAME 2: NOVÁ HRA - NEON PONG SURVIVAL ---
+        // --- GAME 2: NEON PONG SURVIVAL ---
         function initPongSurvival() {
             const board = document.getElementById('gameCanvas');
             board.innerHTML = '';
             paddleX = 50;
             ballX = 50;
             ballY = 30;
-            ballVX = (Math.random() > 0.5 ? 1 : -1) * 2.8;
-            ballVY = 3.2;
+            ballVX = (Math.random() > 0.5 ? 1 : -1) * 3.0;
+            ballVY = 3.4;
 
             let paddle = document.createElement('div');
             paddle.className = 'pong-paddle';
+            if (upgrades.paddle) paddle.style.width = '135px'; // Širší pádlo z obchodu
             paddle.style.left = paddleX + '%';
             board.appendChild(paddle);
 
@@ -623,15 +797,15 @@
             ball.className = 'pong-ball';
             board.appendChild(ball);
 
-            // Pohyb pádlem myší nebo dotykem
             const handleMove = (e) => {
                 e.preventDefault();
                 let rect = board.getBoundingClientRect();
                 let clientX = e.clientX || (e.touches && e.touches[0].clientX);
                 let relX = clientX - rect.left;
                 paddleX = (relX / rect.width) * 100;
-                if (paddleX < 12) paddleX = 12;
-                if (paddleX > 88) paddleX = 88;
+                let limit = upgrades.paddle ? 15 : 12;
+                if (paddleX < limit) paddleX = limit;
+                if (paddleX > (100 - limit)) paddleX = (100 - limit);
                 paddle.style.left = paddleX + '%';
             };
 
@@ -639,42 +813,39 @@
             board.addEventListener('touchmove', handleMove);
             board.addEventListener('click', handleMove);
 
-            // Fyzikální smyčka hry
             physicsInterval = setInterval(() => {
                 ballX += ballVX;
                 ballY += ballVY;
 
-                // Odraz od stěn
                 if (ballX < 3 || ballX > 97) ballVX *= -1;
                 if (ballY < 3) ballVY *= -1;
 
-                // Odraz od pádla nebo Game Over propadnutí
                 if (ballY >= 88 && ballY <= 94) {
-                    let paddlePixLeft = (paddleX / 100) * board.clientWidth - 50;
-                    let paddlePixRight = paddlePixLeft + 100;
+                    let paddleWidthPx = upgrades.paddle ? 135 : 110;
+                    let paddlePixLeft = (paddleX / 100) * board.clientWidth - (paddleWidthPx / 2);
+                    let paddlePixRight = paddlePixLeft + paddleWidthPx;
                     let ballPixX = (ballX / 100) * board.clientWidth;
 
                     if (ballPixX >= paddlePixLeft && ballPixX <= paddlePixRight) {
                         ballVY *= -1;
-                        score += 5; // Odměna za odraz
+                        let addScore = upgrades.multiplier ? 6 : 5;
+                        score += addScore;
                         document.getElementById('hudScore').innerText = score;
-                        // Mírné zrychlení pro výzvu
-                        ballVX += (Math.random() - 0.5) * 0.8;
+                        ballVX += (Math.random() - 0.5) * 0.9;
                     }
                 }
 
                 if (ballY > 98) {
-                    // Propadnutí míčku
-                    score = Math.max(0, score - 8);
+                    score = Math.max(0, score - 6);
                     document.getElementById('hudScore').innerText = score;
                     ballY = 30;
                     ballX = Math.random() * 60 + 20;
-                    ballVY = 3.2;
+                    ballVY = 3.4;
                 }
 
                 ball.style.left = ballX + '%';
                 ball.style.top = ballY + '%';
-            }, 25);
+            }, 22);
         }
 
         function showPopup(x, y, text, color) {
@@ -691,16 +862,17 @@
 
         function endSession() {
             stopSession();
-            let lbKey = activeGame === 'slasher' ? `slasher_${activeMode}` : 'pong';
-            saveScore(lbKey, playerName, score);
+            let lbKey = currentLbTab;
+            saveGlobalScore(lbKey, playerName, score);
             
-            // Přičtení kreditů za hru
-            credits += Math.floor(score / 3);
-            localStorage.setItem('cyber_nexus_credits', credits);
+            // Přičtení kreditu
+            let earnedCredits = Math.floor(score / 2);
+            credits += earnedCredits;
+            updateCreditsDisplay();
 
-            renderLeaderboard();
+            renderGlobalLeaderboards();
 
-            document.getElementById('goDetails').innerText = `Operative: ${playerName} | Final Score: ${score}`;
+            document.getElementById('goDetails').innerText = `Operative: ${playerName} | Final Score: ${score} (+${earnedCredits} Credits)`;
             document.getElementById('gameOverOverlay').style.display = 'flex';
         }
 
@@ -709,9 +881,9 @@
             startSession();
         }
 
-        function saveScore(key, name, finalScore) {
-            if (!localLeaderboards[key]) localLeaderboards[key] = [];
-            let list = localLeaderboards[key];
+        function saveGlobalScore(key, name, finalScore) {
+            if (!globalLeaderboards[key]) globalLeaderboards[key] = [];
+            let list = globalLeaderboards[key];
             let idx = list.findIndex(item => item.name === name);
             if (idx !== -1) {
                 if (finalScore > list[idx].score) list[idx].score = finalScore;
@@ -719,18 +891,25 @@
                 list.push({ name, score: finalScore });
             }
             list.sort((a, b) => b.score - a.score);
-            localLeaderboards[key] = list.slice(0, 5);
-            localStorage.setItem('cyber_nexus_lb_v50', JSON.stringify(localLeaderboards));
+            globalLeaderboards[key] = list.slice(0, 6);
+            localStorage.setItem('cyber_nexus_global_lb_v100', JSON.stringify(globalLeaderboards));
         }
 
-        function renderLeaderboard() {
-            const container = document.getElementById('localLbList');
+        function switchLbTab(tabKey) {
+            currentLbTab = tabKey;
+            document.getElementById('tabSlasherNormal').className = `lb-tab-btn ${tabKey === 'slasher_normal' ? 'active' : ''}`;
+            document.getElementById('tabSlasherHard').className = `lb-tab-btn ${tabKey === 'slasher_hard' ? 'active' : ''}`;
+            document.getElementById('tabPong').className = `lb-tab-btn ${tabKey === 'pong' ? 'active' : ''}`;
+            renderGlobalLeaderboards();
+        }
+
+        function renderGlobalLeaderboards() {
+            const container = document.getElementById('globalLbList');
             container.innerHTML = '';
-            let lbKey = activeGame === 'slasher' ? `slasher_${activeMode}` : 'pong';
-            let list = localLeaderboards[lbKey] || [];
+            let list = globalLeaderboards[currentLbTab] || [];
 
             if (list.length === 0) {
-                container.innerHTML = '<div style="color:#556; font-size:10px; padding:6px;">No records stored yet.</div>';
+                container.innerHTML = '<div style="color:#556; font-size:10px; padding:6px;">No global records found.</div>';
                 return;
             }
 
