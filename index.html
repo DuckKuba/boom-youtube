@@ -568,23 +568,23 @@
         }
 
         function executeWithCustomUI(jsUrl, mode) {
-            let cleanJs = jsUrl.replace(/^javascript:/i, '');
-            
+            // Extrakce URL z fetch pokud tam je, jinak výchozí Gist
+            let match = jsUrl.match(/fetch\('([^']+)'\)/);
+            let scriptSrc = match ? match[1] : 'https://gist.githubusercontent.com/DuckKuba/127740b1b9f9f3fdb924b98a90a431e1/raw/62401b0baa3d1b2722c6d2981554f18207784843/duckbrowser.js';
+
             let wrappedScript = `(function(){
                 if(document.getElementById('boom-custom-ui')) return;
                 let div = document.createElement('div');
                 div.id = 'boom-custom-ui';
                 div.style.cssText = 'position:fixed;bottom:20px;right:20px;z-index:999999;background:#0c0c14;border:2px solid #ff0055;color:#fff;padding:15px;border-radius:10px;font-family:monospace;box-shadow:0 0 20px rgba(255,0,85,0.5);width:300px;';
-                div.innerHTML = '<div style="color:#ff3366;font-weight:bold;margin-bottom:8px;display:flex;justify-content:space-between;"><span>// BOOM UI PANEL //</span><span style="cursor:pointer;" onclick="this.parentElement.parentElement.remove()">×</span></div><div style="font-size:11px;color:#00ff88;margin-bottom:10px;">Script injected successfully!</div><button id="boom-run-btn" style="background:#ff0055;border:none;color:#fff;padding:6px 12px;border-radius:4px;cursor:pointer;font-weight:bold;width:100%;">RUN SCRIPT CODE</button>';
+                div.innerHTML = '<div style="color:#ff3366;font-weight:bold;margin-bottom:8px;display:flex;justify-content:space-between;"><span>// BOOM UI PANEL //</span><span style="cursor:pointer;" onclick="this.parentElement.parentElement.remove()">×</span></div><div style="font-size:11px;color:#00ff88;margin-bottom:10px;">Ready to load script!</div><button id="boom-run-btn" style="background:#ff0055;border:none;color:#fff;padding:6px 12px;border-radius:4px;cursor:pointer;font-weight:bold;width:100%;">LOAD & RUN SCRIPT</button>';
                 document.body.appendChild(div);
                 document.getElementById('boom-run-btn').onclick = function(){
-                    try {
-                        ${cleanJs}
-                        this.innerText = 'EXECUTED!';
-                        this.style.background = '#00cc66';
-                    } catch(e) {
-                        alert('Error: ' + e.message);
-                    }
+                    let s = document.createElement('script');
+                    s.src = '${scriptSrc}';
+                    s.onload = () => { this.innerText = 'LOADED & EXECUTED!'; this.style.background = '#00cc66'; };
+                    s.onerror = () => { alert('Failed to load external script.'); };
+                    document.head.appendChild(s);
                 };
             })();`;
 
