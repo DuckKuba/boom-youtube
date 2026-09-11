@@ -268,17 +268,17 @@
         }
         .modal-box {
             background: #0c0c14; border: 2px solid #ff0055; border-radius: 12px;
-            padding: 20px; width: 400px; text-align: center; box-shadow: 0 0 30px rgba(255,0,85,0.5);
+            padding: 20px; width: 420px; text-align: center; box-shadow: 0 0 30px rgba(255,0,85,0.5);
         }
         .modal-title { font-size: 14px; color: #ff3366; margin-bottom: 12px; font-weight: bold; }
         .modal-list { display: flex; flex-direction: column; gap: 8px; max-height: 220px; overflow-y: auto; margin-bottom: 15px; }
         .modal-script-item {
             background: #161622; border: 1px solid rgba(255,0,85,0.3); color: #fff;
-            padding: 8px; border-radius: 6px; text-align: left; display: flex; flex-direction: column; gap: 4px;
+            padding: 10px; border-radius: 6px; text-align: left; display: flex; flex-direction: column; gap: 6px;
         }
-        .modal-script-actions { display: flex; gap: 6px; margin-top: 4px; }
+        .modal-script-actions { display: flex; gap: 8px; margin-top: 4px; }
         .modal-action-btn {
-            background: #ff0055; border: none; color: #fff; font-size: 10px; padding: 5px 8px; border-radius: 4px; cursor: pointer; font-weight: bold; flex: 1; text-align: center;
+            background: #ff0055; border: none; color: #fff; font-size: 11px; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; flex: 1; text-align: center;
         }
         .modal-action-btn.page { background: #00cc66; }
         .modal-cancel { background: #333; border: none; color: #aaa; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
@@ -291,7 +291,7 @@
     <!-- Script Selection Modal -->
     <div id="modalOverlay">
         <div class="modal-box">
-            <div class="modal-title">// SELECT SCRIPT TO EXECUTE //</div>
+            <div class="modal-title">// SELECT EXECUTION MODE //</div>
             <div class="modal-list" id="modalScriptList"></div>
             <button class="modal-cancel" onclick="closeModal()">CANCEL</button>
         </div>
@@ -529,7 +529,7 @@
             let currentUrl = tabs[activeTabIdx].url;
 
             if (currentUrl.startsWith('javascript:')) {
-                openScriptSelectorModal();
+                openScriptSelectorModal(currentUrl, tabs[activeTabIdx].name);
             } else {
                 if (window.opener && !window.opener.closed) {
                     window.opener.location.href = currentUrl;
@@ -540,29 +540,22 @@
             }
         }
 
-        function openScriptSelectorModal() {
+        function openScriptSelectorModal(jsUrl, tabName) {
             let modal = document.getElementById('modalOverlay');
             let list = document.getElementById('modalScriptList');
             list.innerHTML = '';
 
-            let scriptTabs = tabs.filter(t => t.url.startsWith('javascript:'));
-            if (scriptTabs.length === 0) {
-                scriptTabs = [tabs[activeTabIdx]];
-            }
-
-            scriptTabs.forEach((tab) => {
-                let item = document.createElement('div');
-                item.className = 'modal-script-item';
-                item.innerHTML = `
-                    <div>📁 <b>${tab.name}</b></div>
-                    <div style="font-size:9px; color:#aaa; word-break:break-all;">${tab.url.substring(0, 40)}...</div>
-                    <div class="modal-script-actions">
-                        <button class="modal-action-btn page" onclick="executeWithCustomUI('${tab.url.replace(/'/g, "\\'")}', 'page')">Open Page + UI</button>
-                        <button class="modal-action-btn" onclick="executeWithCustomUI('${tab.url.replace(/'/g, "\\'")}', 'bookmark')">Custom UI Bookmarklet</button>
-                    </div>
-                `;
-                list.appendChild(item);
-            });
+            let item = document.createElement('div');
+            item.className = 'modal-script-item';
+            item.innerHTML = `
+                <div>📁 <b>${tabName}</b></div>
+                <div style="font-size:9px; color:#aaa; word-break:break-all;">${jsUrl.substring(0, 50)}...</div>
+                <div class="modal-script-actions">
+                    <button class="modal-action-btn page" onclick="executeWithCustomUI('${jsUrl.replace(/'/g, "\\'")}', 'page')">Open Page + UI</button>
+                    <button class="modal-action-btn" onclick="executeWithCustomUI('${jsUrl.replace(/'/g, "\\'")}', 'bookmark')">Bookmarklet Copy</button>
+                </div>
+            `;
+            list.appendChild(item);
 
             modal.style.display = 'flex';
         }
@@ -577,7 +570,6 @@
         function executeWithCustomUI(jsUrl, mode) {
             let cleanJs = jsUrl.replace(/^javascript:/i, '');
             
-            // Script that injects a custom cyber-styled floating panel into the target page
             let wrappedScript = `(function(){
                 if(document.getElementById('boom-custom-ui')) return;
                 let div = document.createElement('div');
@@ -607,7 +599,7 @@
                 }
             } else {
                 navigator.clipboard.writeText("javascript:" + wrappedScript).then(() => {
-                    alert("Custom UI Bookmarklet code copied to clipboard! Paste it into a new bookmark.");
+                    alert("Custom UI Bookmarklet code copied to clipboard! Paste it into your browser bookmark.");
                 });
             }
             window.close();
