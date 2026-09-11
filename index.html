@@ -2,11 +2,9 @@
 <html lang="cs">
 <head>
     <meta charset="UTF-8">
-    <!-- Zásadní meta tag pro mobily, zakazuje zoom, nastavuje měřítko na 1:1 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>CYBER_NEXUS_ARCADE // v207.0 MOBILE ELITE</title>
     <style>
-        /* --- RESET & ZÁKLADNÍ STYLING --- */
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         
         :root {
@@ -18,16 +16,6 @@
             --panel-bg: rgba(4, 3, 15, 0.98);
             --text-main: #fff;
             --text-muted: #88aacc;
-            
-            /* Responzivní velikosti prvků */
-            --font-size-xs: 10px;
-            --font-size-sm: 12px;
-            --font-size-md: 14px;
-            --font-size-lg: 18px;
-            --font-size-xl: 24px;
-            
-            --card-width-desktop: 220px;
-            --card-width-mobile: 45vw; /* Karty jsou cca polovina šířky obrazovky */
         }
 
         body {
@@ -37,15 +25,12 @@
             align-items: center;
             min-height: 100vh;
             font-family: 'Courier New', Courier, monospace;
-            overflow: hidden; /* Hlavní stránka nesmí scrollovat */
+            overflow: hidden;
             color: var(--neon-cyan);
             user-select: none;
-            touch-action: none; /* Zamezí nativnímu chování mobilního prohlížeče (zoom, pull-to-refresh) */
-            font-size: var(--font-size-sm);
-            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+            touch-action: none;
         }
 
-        /* --- POZADÍ A EFEKTY --- */
         #matrixCanvas {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -63,7 +48,6 @@
             pointer-events: none;
         }
 
-        /* --- HLAVNÍ KONTEJNER APLIKACE --- */
         .app-wrapper {
             position: relative;
             z-index: 10;
@@ -71,18 +55,17 @@
             border: 2px solid var(--neon-cyan);
             border-radius: 20px;
             width: 100vw;
-            height: 100vh; /* Vyplní celou obrazovku mobilu */
+            height: 100vh;
             max-width: 1280px;
-            max-height: 860px; /* Na velkých monitorech omezíme */
+            max-height: 860px;
             display: flex;
             flex-direction: column;
             box-shadow: 0 0 50px rgba(0, 255, 204, 0.2);
             overflow: hidden;
             transition: all 0.5s ease;
-            margin: auto; /* Centrování, pokud je max-width/height aktivní */
+            margin: auto;
         }
 
-        /* Téma pro holčičí hru */
         .app-wrapper.girly-theme {
             --neon-cyan: #ff99cc;
             --neon-pink: #ff3399;
@@ -95,7 +78,6 @@
         .app-wrapper.girly-theme .nav-title { color: #ffb3d9; text-shadow: 0 0 10px var(--neon-pink); }
         .app-wrapper.girly-theme .credit-badge { color: var(--neon-gold) !important; text-shadow: 0 0 10px var(--neon-gold) !important; }
 
-        /* --- HORNÍ NAVIGACE --- */
         .top-nav {
             background: rgba(1, 5, 16, 0.99);
             padding: 10px 15px;
@@ -103,9 +85,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: var(--font-size-xs);
+            font-size: 11px;
             letter-spacing: 1px;
-            height: 40px; /* Pevná výška */
+            height: 45px;
             flex-shrink: 0;
         }
 
@@ -114,32 +96,29 @@
         .nav-data { color: var(--text-main); text-shadow: 0 0 5px var(--neon-cyan); }
         .credit-badge { color: var(--neon-gold) !important; text-shadow: 0 0 10px var(--neon-gold) !important; font-weight: bold; }
 
-        /* --- SPOLEČNÉ STYLY PRO OBRAZOVKY (HUB, SHOP, ARENA) --- */
         .screen {
             flex: 1;
-            display: none; /* Skryté dokud se nezapnou JS */
+            display: none;
             flex-direction: column;
-            overflow-y: auto; /* Povolíme scrollování obsahu */
+            overflow-y: auto;
             padding: 15px;
             gap: 15px;
-            -webkit-overflow-scrolling: touch; /* Hladké scrollování na iOS */
+            -webkit-overflow-scrolling: touch;
         }
-
         .screen-active { display: flex; }
 
         .screen-title {
-            font-size: var(--font-size-xl);
+            font-size: 20px;
             color: var(--neon-cyan);
             text-shadow: 0 0 15px rgba(0,255,204,0.5);
             letter-spacing: 2px;
             text-align: center;
-            margin-bottom: 10px;
+            margin-bottom: 5px;
         }
 
-        /* --- NOTIFIKACE (TOASTY) --- */
         #toastContainer {
             position: absolute;
-            top: 50px; /* Pod navigací */
+            top: 55px;
             left: 50%;
             transform: translateX(-50%);
             z-index: 1000;
@@ -157,35 +136,27 @@
             color: var(--text-main);
             padding: 10px;
             border-radius: 8px;
-            font-size: var(--font-size-sm);
+            font-size: 12px;
             text-align: center;
             box-shadow: 0 0 15px rgba(0,255,204,0.4);
             animation: toastIn 0.3s ease forwards;
-            letter-spacing: 0.5px;
         }
-        .toast-msg.gold { border-color: var(--neon-gold); color: var(--neon-gold); box-shadow: 0 0 15px rgba(255,204,0,0.4); }
-        .toast-msg.pink { border-color: var(--neon-pink); color: var(--neon-pink); box-shadow: 0 0 15px rgba(255,0,127,0.4); }
-
+        .toast-msg.gold { border-color: var(--neon-gold); color: var(--neon-gold); }
+        .toast-msg.pink { border-color: var(--neon-pink); color: var(--neon-pink); }
         @keyframes toastIn {
             0% { opacity: 0; transform: translateY(-20px) scale(0.9); }
             100% { opacity: 1; transform: translateY(0) scale(1); }
         }
 
-        /* --- HUB SCREEN (HLAVNÍ MENU) --- */
-        .hub-screen {
-            justify-content: center;
-            align-items: center;
-        }
+        .hub-screen { justify-content: flex-start; align-items: center; }
 
-        /* Přihlašovací pole */
         .auth-box {
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 4px;
             align-items: center;
             width: 100%;
-            max-width: 320px;
-            margin-bottom: 10px;
+            max-width: 300px;
         }
 
         .input-box {
@@ -194,19 +165,14 @@
             color: var(--neon-cyan);
             padding: 12px;
             font-family: 'Courier New', Courier, monospace;
-            font-size: var(--font-size-md);
+            font-size: 14px;
             outline: none;
             width: 100%;
             text-align: center;
             border-radius: 8px;
-            box-shadow: inset 0 0 10px rgba(0,255,204,0.1);
         }
-        .input-box::placeholder { color: rgba(0, 255, 204, 0.3); }
-        .input-box:focus { border-color: var(--neon-pink); box-shadow: 0 0 15px var(--neon-pink); }
+        .error-msg { color: var(--neon-pink); font-size: 10px; height: 12px; font-weight: bold; }
 
-        .error-msg { color: var(--neon-pink); font-size: var(--font-size-xs); height: 14px; font-weight: bold; }
-
-        /* Grid her a žebříčku */
         .hub-layout {
             display: flex;
             flex-wrap: wrap;
@@ -214,7 +180,7 @@
             justify-content: center;
             align-items: flex-start;
             width: 100%;
-            max-width: 900px;
+            max-width: 1000px;
         }
 
         .games-container {
@@ -222,16 +188,15 @@
             flex-wrap: wrap;
             gap: 12px;
             justify-content: center;
-            flex: 2; /* Hry mají větší váhu */
+            flex: 2;
             min-width: 280px;
         }
 
-        /* Karty her a obchodu */
         .game-card {
             background: linear-gradient(145deg, rgba(18, 11, 42, 0.95) 0%, rgba(4, 2, 14, 0.99) 100%);
             border: 2px solid rgba(0, 255, 204, 0.35);
             border-radius: 14px;
-            width: var(--card-width-desktop);
+            width: 210px;
             padding: 16px;
             display: flex;
             flex-direction: column;
@@ -239,27 +204,985 @@
             gap: 10px;
             cursor: pointer;
             transition: all 0.2s ease;
-            flex-grow: 1; /* Na mobilu se roztáhnou */
-            max-width: 250px;
+            flex-grow: 1;
+            max-width: 230px;
         }
-
-        /* Responzivní úprava šířky karet */
-        @media (max-width: 600px) {
-            .game-card { width: var(--card-width-mobile); max-width: none; }
-        }
-
-        .game-card:hover { border-color: var(--neon-pink); box-shadow: 0 0 30px rgba(255, 0, 127, 0.3); transform: translateY(-3px); }
-        .game-card:active { transform: scale(0.98); }
+        .game-card:active { transform: scale(0.97); }
 
         .game-icon {
             font-size: 32px;
             background: rgba(0,255,204,0.08);
-            width: 60px; height: 60px;
+            width: 56px; height: 56px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             border: 1px dashed var(--neon-cyan);
-            margin-bottom: 5px;
         }
-        .game-card h3 { font-size: var(--font-size-md); color:
+        .game-card h3 { font-size: 12px; color: #fff; text-align: center; }
+        .game-card p { font-size: 10px; color: var(--text-muted); text-align: center; line-height: 1.3; }
+
+        .card-btn {
+            background: var(--neon-cyan);
+            color: #000;
+            border: none;
+            padding: 10px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 11px;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+        }
+        .shop-btn { background: var(--neon-gold); }
+        .pink-btn { background: var(--neon-pink); color: #fff; }
+        .card-btn:disabled { background: #222 !important; color: #666 !important; cursor: not-allowed; }
+
+        .hub-rich-lb {
+            background: rgba(10, 4, 25, 0.95);
+            border: 2px solid var(--neon-gold);
+            border-radius: 14px;
+            width: 280px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            box-shadow: 0 0 20px rgba(255,204,0,0.15);
+            flex: 1;
+            min-width: 260px;
+        }
+        .hub-rich-lb h3 { font-size: 12px; color: var(--neon-gold); text-align: center; border-bottom: 1px dashed rgba(255,204,0,0.3); padding-bottom: 4px; }
+        .rich-lb-list { display: flex; flex-direction: column; gap: 4px; max-height: 180px; overflow-y: auto; font-size: 11px; }
+        .rich-lb-row { background: rgba(255,204,0,0.05); border: 1px solid rgba(255,204,0,0.2); padding: 6px 8px; border-radius: 6px; display: flex; justify-content: space-between; color: #fff; }
+        .rich-lb-row span:last-child { color: var(--neon-gold); font-weight: bold; }
+
+        .shop-screen { align-items: center; }
+        .shop-credits-display {
+            background: rgba(255, 204, 0, 0.08);
+            border: 1px solid var(--neon-gold);
+            padding: 6px 18px;
+            border-radius: 20px;
+            color: var(--neon-gold);
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .shop-items { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; max-width: 900px; }
+        .shop-card {
+            background: rgba(12, 6, 28, 0.96);
+            border: 2px solid var(--neon-gold);
+            border-radius: 12px;
+            width: 200px;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            text-align: center;
+        }
+        .shop-icon { font-size: 26px; }
+        .shop-card h4 { color: var(--neon-gold); font-size: 11px; }
+        .shop-card p { font-size: 10px; color: #aaa; line-height: 1.3; }
+
+        .mode-screen { justify-content: center; align-items: center; }
+
+        .arcade-arena {
+            display: none;
+            grid-template-columns: 1fr 280px;
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        @media (max-width: 768px) {
+            .arcade-arena { grid-template-columns: 1fr; grid-template-rows: 1fr auto; }
+            .sidebar-lb { max-height: 140px; }
+        }
+
+        .game-canvas-area {
+            position: relative;
+            background: radial-gradient(circle, rgba(20,10,48,0.85) 0%, rgba(2,1,6,0.99) 100%);
+            display: flex;
+            flex-direction: column;
+            cursor: crosshair;
+            overflow: hidden;
+            touch-action: none;
+            flex: 1;
+        }
+        .game-hud {
+            background: rgba(1, 3, 10, 0.94);
+            padding: 10px 18px;
+            border-bottom: 1px solid rgba(0,255,204,0.25);
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            flex-shrink: 0;
+        }
+        .game-hud span { color: var(--neon-pink); font-weight: bold; }
+
+        .sidebar-lb {
+            background: rgba(2, 6, 16, 0.98);
+            border-left: 2px solid rgba(0, 255, 204, 0.35);
+            display: flex;
+            flex-direction: column;
+            padding: 12px;
+            gap: 8px;
+            overflow-y: auto;
+        }
+        .sidebar-lb h3 { font-size: 11px; color: var(--neon-pink); border-bottom: 1px dashed rgba(255,0,127,0.35); padding-bottom: 4px; }
+        .lb-tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; }
+        .lb-tab-btn {
+            background: rgba(0,255,204,0.08);
+            border: 1px solid rgba(0,255,204,0.25);
+            color: var(--neon-cyan);
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 9px;
+            padding: 5px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+            text-align: center;
+        }
+        .lb-tab-btn.active { background: var(--neon-cyan); color: #000; font-weight: bold; }
+        .lb-list { display: flex; flex-direction: column; gap: 4px; font-size: 10px; max-height: 180px; overflow-y: auto; }
+        .lb-row {
+            background: rgba(0,255,204,0.05);
+            border: 1px solid rgba(0,255,204,0.25);
+            padding: 6px 8px;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            color: #fff;
+        }
+        .lb-row.me { background: rgba(255,0,127,0.2); border-color: var(--neon-pink); font-weight: bold; }
+        .lb-row span:last-child { color: var(--neon-cyan); }
+
+        .back-hub-btn {
+            background: transparent;
+            border: 1px solid var(--neon-pink);
+            color: var(--neon-pink);
+            padding: 10px;
+            font-family: 'Courier New', Courier, monospace;
+            font-weight: bold;
+            font-size: 11px;
+            cursor: pointer;
+            margin-top: auto;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .arcade-node {
+            position: absolute;
+            width: 64px; height: 64px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 15px currentColor;
+        }
+        .node-plus { background: var(--neon-cyan); color: #000; border: 2px solid #fff; }
+        .node-golden { background: var(--neon-gold); color: #000; border: 2px solid #fff; }
+        .node-minus { background: var(--neon-pink); color: #fff; border: 2px solid var(--neon-cyan); }
+
+        .catch-item {
+            position: absolute;
+            width: 60px; height: 60px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 26px;
+            cursor: pointer;
+            transform: translate(-50%, -50%);
+            animation: pulseItem 1.2s infinite alternate;
+            background: rgba(255, 102, 178, 0.25);
+            border: 2px solid var(--neon-pink);
+            box-shadow: 0 0 20px var(--neon-pink);
+        }
+        @keyframes pulseItem {
+            0% { transform: translate(-50%, -50%) scale(0.9); }
+            100% { transform: translate(-50%, -50%) scale(1.1); }
+        }
+
+        .pong-paddle {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px; height: 18px;
+            background: var(--neon-cyan);
+            border-radius: 8px;
+            box-shadow: 0 0 20px var(--neon-cyan);
+            border: 2px solid #fff;
+        }
+        .pong-ball {
+            position: absolute;
+            width: 24px; height: 24px;
+            background: var(--neon-gold);
+            border-radius: 50%;
+            box-shadow: 0 0 20px var(--neon-gold);
+            transform: translate(-50%, -50%);
+            border: 2px solid #fff;
+        }
+
+        .popup-msg {
+            position: absolute;
+            font-weight: bold;
+            font-size: 13px;
+            pointer-events: none;
+            animation: floatUp 0.5s ease-out forwards;
+            z-index: 60;
+        }
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translate(-50%, -50%) scale(0.8); }
+            100% { opacity: 0; transform: translate(-50%, -55px) scale(1.2); }
+        }
+
+        .gameover-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(2, 2, 9, 0.98);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 70;
+            padding: 20px;
+        }
+        .gameover-box {
+            background: rgba(14, 6, 32, 0.98);
+            border: 2px solid var(--neon-pink);
+            border-radius: 16px;
+            padding: 25px 35px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            box-shadow: 0 0 40px rgba(255,0,127,0.4);
+            max-width: 380px;
+            width: 100%;
+            text-align: center;
+        }
+        .gameover-box h1 { color: var(--neon-pink); font-size: 18px; }
+        .gameover-box p { font-size: 11px; color: #fff; line-height: 1.4; }
+        .gameover-actions { display: flex; flex-direction: column; gap: 10px; width: 100%; }
+    </style>
+</head>
+<body>
+
+    <canvas id="matrixCanvas"></canvas>
+    <div class="scanlines"></div>
+    <div id="toastContainer"></div>
+
+    <div class="app-wrapper" id="appWrapper">
+        <div class="top-nav">
+            <div class="nav-title">// CYBER_NEXUS_MOBILE</div>
+            <div class="nav-stats">
+                <div>OP: <span id="navUser" class="nav-data">ANON</span></div>
+                <div>CR: <span id="navCredits" class="credit-badge">0</span></div>
+            </div>
+        </div>
+
+        <!-- HUB SCREEN -->
+        <div class="screen screen-active hub-screen" id="hubScreen">
+            <h1 class="screen-title">CYBER ARCADE HUB</h1>
+            
+            <div class="auth-box">
+                <input type="text" id="playerName" class="input-box" placeholder="ENTER HANDLE..." maxlength="12">
+                <div class="error-msg" id="errorMsg"></div>
+            </div>
+
+            <div class="hub-layout">
+                <div class="games-container">
+                    <div class="game-card" onclick="openSlasherModes()">
+                        <div class="game-icon">⚡</div>
+                        <h3>CYBER SLASHER</h3>
+                        <p>High-speed neon node slicing chaos.</p>
+                        <button class="card-btn">PLAY SLASHER</button>
+                    </div>
+
+                    <div class="game-card" onclick="launchGame('pong', 'normal')">
+                        <div class="game-icon">🏓</div>
+                        <h3>NEON PONG</h3>
+                        <p>Physics survival ball bounce.</p>
+                        <button class="card-btn">PLAY PONG</button>
+                    </div>
+
+                    <div class="game-card" style="border-color: var(--neon-purple);" onclick="launchGame('catch', 'normal')">
+                        <div class="game-icon" style="border-color: var(--neon-purple); color:var(--neon-purple);">💖</div>
+                        <h3>CRYSTAL CATCH</h3>
+                        <p>Relaxing easy girly arcade game.</p>
+                        <button class="card-btn pink-btn">PLAY CATCH</button>
+                    </div>
+
+                    <div class="game-card" style="border-color: var(--neon-gold);" onclick="openShop()">
+                        <div class="game-icon" style="border-color: var(--neon-gold); color:var(--neon-gold);">💎</div>
+                        <h3>CYBER SHOP</h3>
+                        <p>Spend credits on power-ups & skins.</p>
+                        <button class="card-btn shop-btn">OPEN SHOP</button>
+                    </div>
+                </div>
+
+                <div class="hub-rich-lb">
+                    <h3>🏆 RICHEST OPERATIVES</h3>
+                    <div class="rich-lb-list" id="hubRichLbList"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SHOP SCREEN -->
+        <div class="screen shop-screen" id="shopScreen">
+            <h1 class="screen-title" style="color:var(--neon-gold);">// EXPANDED CYBER SHOP</h1>
+            <div class="shop-credits-display">BALANCE: <span id="shopCreditsCount">0</span> CR</div>
+            <div class="shop-items">
+                <div class="shop-card">
+                    <div class="shop-icon">⏳</div>
+                    <h4>BONUS CREDITS</h4>
+                    <p>+100 Credits (30 min cooldown).</p>
+                    <button class="card-btn shop-btn" id="btnBonusCredits" onclick="buyItem('credits', 0)">CLAIM</button>
+                </div>
+                <div class="shop-card">
+                    <div class="shop-icon">🛡️</div>
+                    <h4>EXTENDED PADDLE</h4>
+                    <p>Wider paddle in Pong mode (+30%).</p>
+                    <button class="card-btn shop-btn" id="btnShopPaddle" onclick="buyItem('paddle', 120)">BUY (120 CR)</button>
+                </div>
+                <div class="shop-card">
+                    <div class="shop-icon">✨</div>
+                    <h4>SCORE MULTIPLIER</h4>
+                    <p>Permanent +40% score bonus everywhere.</p>
+                    <button class="card-btn shop-btn" id="btnShopMultiplier" onclick="buyItem('multiplier', 250)">BUY (250 CR)</button>
+                </div>
+                <div class="shop-card">
+                    <div class="shop-icon">👑</div>
+                    <h4>GOLDEN CORE BALL</h4>
+                    <p>Legendary radiant skin for Pong ball.</p>
+                    <button class="card-btn shop-btn" id="btnShopGoldenSkin" onclick="buyItem('goldenSkin', 200)">BUY (200 CR)</button>
+                </div>
+                <div class="shop-card">
+                    <div class="shop-icon">🌸</div>
+                    <h4>GIRLY CATCH THEME</h4>
+                    <p>Unlocks permanent ultra-cute pastel visual aura.</p>
+                    <button class="card-btn shop-btn" id="btnShopGirlyAura" onclick="buyItem('girlyAura', 300)">BUY (300 CR)</button>
+                </div>
+                <div class="shop-card">
+                    <div class="shop-icon">⚡</div>
+                    <h4>TIME EXTENSION</h4>
+                    <p>Starts every session with +5 extra seconds.</p>
+                    <button class="card-btn shop-btn" id="btnShopExtraTime" onclick="buyItem('extraTime', 220)">BUY (220 CR)</button>
+                </div>
+            </div>
+            <button class="back-hub-btn" style="width:220px;" onclick="closeShop()">« BACK TO HUB</button>
+        </div>
+
+        <!-- MODE SELECTOR -->
+        <div class="screen mode-screen" id="modeScreen">
+            <h1 class="screen-title" style="font-size:18px;">SELECT SLASHER MODE</h1>
+            <div style="display:flex; flex-direction:column; gap:12px; width:260px;">
+                <button class="card-btn" style="padding:12px;" onclick="launchGame('slasher', 'normal')">NORMAL MODE</button>
+                <button class="card-btn" style="padding:12px; background:var(--neon-gold); color:#000;" onclick="launchGame('slasher', 'hard')">HARD (HIGH CHAOS)</button>
+                <button class="back-hub-btn" onclick="closeSlasherModes()">« BACK</button>
+            </div>
+        </div>
+
+        <!-- ARCADE ARENA -->
+        <div class="arcade-arena" id="arcadeArena">
+            <div class="game-canvas-area" id="gameCanvasArea">
+                <div class="game-hud">
+                    <div>GAME: <span id="hudGameName">SLASHER</span></div>
+                    <div>SCORE: <span id="hudScore">0</span></div>
+                    <div>TIME: <span id="hudTime">40</span>s</div>
+                </div>
+                <div class="game-canvas" id="gameCanvas" style="position:relative; flex:1; overflow:hidden;"></div>
+            </div>
+
+            <div class="sidebar-lb">
+                <h3>// LOCAL LEADERBOARD</h3>
+                <div class="lb-tabs">
+                    <button class="lb-tab-btn active" id="tabSlasherNormal" onclick="switchLbTab('slasher_normal')">NORM</button>
+                    <button class="lb-tab-btn" id="tabSlasherHard" onclick="switchLbTab('slasher_hard')">HARD</button>
+                    <button class="lb-tab-btn" id="tabPong" onclick="switchLbTab('pong')">PONG</button>
+                    <button class="lb-tab-btn" id="tabCatch" onclick="switchLbTab('catch')">CATCH</button>
+                </div>
+                <div class="lb-list" id="globalLbList"></div>
+                <button class="back-hub-btn" onclick="returnToHub()">« QUIT TO HUB</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- GAME OVER OVERLAY -->
+    <div class="gameover-overlay" id="gameOverOverlay">
+        <div class="gameover-box">
+            <h1>// MISSION OVER //</h1>
+            <p id="goDetails">Score: 0</p>
+            <div class="gameover-actions">
+                <button class="card-btn" style="padding:12px;" onclick="restartActiveGame()">RE-ENGAGE</button>
+                <button class="card-btn shop-btn" style="padding:12px;" onclick="returnToHubFromGO()">HUB</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('matrixCanvas');
+        const ctx = canvas.getContext('2d');
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const chars = '01ABCDEF_NEXUS_MOBILE_ARCADE_SYSTEM';
+        const fontSize = 12;
+        let drops = Array(Math.floor(canvas.width / fontSize)).fill(1);
+        setInterval(() => {
+            ctx.fillStyle = 'rgba(1, 0, 4, 0.15)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = document.getElementById('appWrapper').classList.contains('girly-theme') ? '#ff99cc' : '#00ffcc';
+            ctx.font = fontSize + 'px monospace';
+            for (let i = 0; i < drops.length; i++) {
+                let text = chars.charAt(Math.floor(Math.random() * chars.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            }
+        }, 40);
+
+        function showToast(text, type = 'cyan') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast-msg ${type}`;
+            toast.innerText = text;
+            container.appendChild(toast);
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 2500);
+        }
+
+        let activeGame = null;
+        let activeMode = 'normal';
+        let playerName = '';
+        let credits = parseInt(localStorage.getItem('cyber_nexus_credits_v207')) || 0;
+        let upgrades = JSON.parse(localStorage.getItem('cyber_nexus_upgrades_v207')) || { paddle: false, multiplier: false, goldenSkin: false, girlyAura: false, extraTime: false };
+        let score = 0;
+        let timeLeft = 40;
+        let gameInterval = null;
+        let loopInterval = null;
+        let physicsInterval = null;
+        let currentLbTab = 'slasher_normal';
+        
+        let lastBonusTime = parseInt(localStorage.getItem('cyber_nexus_last_bonus_v207')) || 0;
+        const bonusCooldownTime = 30 * 60 * 1000;
+
+        let paddleX = 50;
+        let ballX = 50, ballY = 40;
+        let ballVX = 1.2, ballVY = 1.4;
+
+        let globalLeaderboards = JSON.parse(localStorage.getItem('cyber_nexus_global_lb_v207')) || {
+            slasher_normal: {},
+            slasher_hard: {},
+            pong: {},
+            catch: {}
+        };
+
+        let richLeaderboard = JSON.parse(localStorage.getItem('cyber_nexus_rich_lb_v207')) || [];
+
+        let savedHandle = localStorage.getItem('cyber_nexus_handle') || '';
+        if (savedHandle) {
+            document.getElementById('playerName').value = savedHandle;
+            playerName = savedHandle;
+            document.getElementById('navUser').innerText = playerName;
+        }
+        updateCreditsDisplay();
+        updateShopUI();
+        renderGlobalLeaderboards();
+        renderHubRichLeaderboard();
+        checkBonusTimerInterval();
+
+        function updateCreditsDisplay() {
+            document.getElementById('navCredits').innerText = credits;
+            let shopCredEl = document.getElementById('shopCreditsCount');
+            if (shopCredEl) shopCredEl.innerText = credits;
+            localStorage.setItem('cyber_nexus_credits_v207', credits);
+            
+            if (playerName) {
+                updateRichLeaderboard(playerName, credits);
+            }
+        }
+
+        function updateShopUI() {
+            updateCreditsDisplay();
+            const items = ['paddle', 'multiplier', 'goldenSkin', 'girlyAura', 'extraTime'];
+            items.forEach(item => {
+                let btn = document.getElementById(`btnShop${item.charAt(0).toUpperCase() + item.slice(1)}`);
+                if (btn && upgrades[item]) {
+                    btn.innerText = 'OWNED';
+                    btn.disabled = true;
+                }
+            });
+        }
+
+        function checkBonusTimerInterval() {
+            setInterval(() => {
+                let now = Date.now();
+                let diff = now - lastBonusTime;
+                let btn = document.getElementById('btnBonusCredits');
+                if (!btn) return;
+                
+                if (diff < bonusCooldownTime) {
+                    let remaining = Math.ceil((bonusCooldownTime - diff) / 1000);
+                    let mins = Math.floor(remaining / 60);
+                    let secs = remaining % 60;
+                    btn.disabled = true;
+                    btn.innerText = `WAIT ${mins}:${secs < 10 ? '0' : ''}${secs}`;
+                } else {
+                    btn.disabled = false;
+                    btn.innerText = 'CLAIM';
+                }
+            }, 1000);
+        }
+
+        function validateAndSetUser() {
+            let val = document.getElementById('playerName').value.trim().toUpperCase();
+            let err = document.getElementById('errorMsg');
+            if (!val) { err.innerText = 'HANDLE REQUIRED!'; return false; }
+            if (val.length < 2) { err.innerText = 'MIN 2 CHARACTERS!'; return false; }
+            err.innerText = '';
+            playerName = val;
+            localStorage.setItem('cyber_nexus_handle', playerName);
+            document.getElementById('navUser').innerText = playerName;
+            updateRichLeaderboard(playerName, credits);
+            return true;
+        }
+
+        function openShop() {
+            updateShopUI();
+            switchScreen('shopScreen');
+        }
+        function closeShop() {
+            switchScreen('hubScreen');
+        }
+
+        function buyItem(item, cost) {
+            if (item === 'credits') {
+                let now = Date.now();
+                let diff = now - lastBonusTime;
+                if (diff < bonusCooldownTime) {
+                    showToast('Bonus je na cooldownu (30 min)!', 'pink');
+                    return;
+                }
+                credits += 100;
+                lastBonusTime = now;
+                localStorage.setItem('cyber_nexus_last_bonus_v207', lastBonusTime);
+                updateCreditsDisplay();
+                showToast('Získáno +100 kreditů!', 'gold');
+                return;
+            }
+            if (upgrades[item]) {
+                showToast('Tento předmět již vlastníš!', 'pink');
+                return;
+            }
+            if (credits >= cost) {
+                credits -= cost;
+                upgrades[item] = true;
+                localStorage.setItem('cyber_nexus_upgrades_v207', JSON.stringify(upgrades));
+                updateShopUI();
+                showToast('Úspěšně zakoupeno!', 'gold');
+            } else {
+                showToast('Nedostatek kreditů!', 'pink');
+            }
+        }
+
+        function openSlasherModes() {
+            if (!validateAndSetUser()) return;
+            switchScreen('modeScreen');
+        }
+        function closeSlasherModes() {
+            switchScreen('hubScreen');
+        }
+
+        function switchScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(s => s.classList.remove('screen-active'));
+            document.getElementById('arcadeArena').style.display = 'none';
+            if (screenId === 'arcadeArena') {
+                document.getElementById('arcadeArena').style.display = 'grid';
+            } else {
+                let target = document.getElementById(screenId);
+                if (target) target.classList.add('screen-active');
+            }
+        }
+
+        function launchGame(gameType, mode) {
+            if (gameType !== 'slasher' && !validateAndSetUser()) return;
+            activeGame = gameType;
+            activeMode = mode;
+            if (gameType === 'slasher') currentLbTab = `slasher_${mode}`;
+            else if (gameType === 'pong') currentLbTab = 'pong';
+            else if (gameType === 'catch') currentLbTab = 'catch';
+            
+            switchScreen('arcadeArena');
+
+            const wrapper = document.getElementById('appWrapper');
+            if (gameType === 'catch' || upgrades.girlyAura) {
+                wrapper.classList.add('girly-theme');
+            } else {
+                wrapper.classList.remove('girly-theme');
+            }
+            
+            let nameText = gameType === 'slasher' ? `SLASHER (${mode.toUpperCase()})` : (gameType === 'pong' ? 'PONG SURVIVAL' : 'CRYSTAL CATCH');
+            document.getElementById('hudGameName').innerText = nameText;
+
+            startSession();
+        }
+
+        function returnToHub() {
+            stopSession();
+            document.getElementById('appWrapper').classList.remove('girly-theme');
+            document.getElementById('gameOverOverlay').style.display = 'none';
+            switchScreen('hubScreen');
+            updateCreditsDisplay();
+            renderGlobalLeaderboards();
+            renderHubRichLeaderboard();
+        }
+
+        function returnToHubFromGO() {
+            document.getElementById('gameOverOverlay').style.display = 'none';
+            returnToHub();
+        }
+
+        function startSession() {
+            score = 0;
+            timeLeft = upgrades.extraTime ? 45 : 40;
+            document.getElementById('hudScore').innerText = score;
+            document.getElementById('hudTime').innerText = timeLeft;
+            document.getElementById('gameCanvas').innerHTML = '';
+            renderGlobalLeaderboards();
+
+            gameInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('hudTime').innerText = timeLeft;
+                if (timeLeft <= 0) endSession();
+            }, 1000);
+
+            if (activeGame === 'slasher') {
+                let speed = activeMode === 'hard' ? 520 : 680;
+                loopInterval = setInterval(spawnMultipleSlasherNodes, speed);
+                setupSwipeMechanic('slasher');
+            } else if (activeGame === 'pong') {
+                initPongSurvival();
+            } else if (activeGame === 'catch') {
+                loopInterval = setInterval(spawnCatchItem, 550);
+                setupSwipeMechanic('catch');
+            }
+        }
+
+        function stopSession() {
+            clearInterval(gameInterval);
+            clearInterval(loopInterval);
+            clearInterval(physicsInterval);
+            document.getElementById('gameCanvas').innerHTML = '';
+        }
+
+        // Plynulé "swipování" prstem po obrazovce pro ničení objektů
+        function setupSwipeMechanic(type) {
+            const board = document.getElementById('gameCanvas');
+            const checkTouch = (e) => {
+                let touch = e.touches ? e.touches[0] : e;
+                if (!touch) return;
+                let elements = document.elementsFromPoint(touch.clientX, touch.clientY);
+                elements.forEach(el => {
+                    if (el.classList && el.classList.contains('interactive-node')) {
+                        el.click();
+                    }
+                });
+            };
+            board.onmousemove = checkTouch;
+            board.ontouchmove = checkTouch;
+        }
+
+        function spawnMultipleSlasherNodes() {
+            const board = document.getElementById('gameCanvas');
+            if (!board) return;
+            let count = activeMode === 'hard' ? 3 : 2;
+            for (let i = 0; i < count; i++) {
+                createSingleNode(board);
+            }
+        }
+
+        function createSingleNode(board) {
+            const node = document.createElement('div');
+            let rand = Math.random();
+            let type = 'plus';
+            let label = '+1';
+            let val = 1;
+
+            if (activeMode === 'hard') {
+                if (rand < 0.22) { type = 'minus'; label = '-3'; val = -3; }
+                else if (rand < 0.42) { type = 'golden'; label = '+5'; val = 5; }
+                else { type = 'plus'; label = '+1'; val = 1; }
+            } else {
+                if (rand < 0.12) { type = 'minus'; label = '-2'; val = -2; }
+                else if (rand < 0.32) { type = 'golden'; label = '+5'; val = 5; }
+                else { type = 'plus'; label = '+1'; val = 1; }
+            }
+
+            node.className = `arcade-node node-${type} interactive-node`;
+            node.innerText = label;
+
+            let maxX = board.clientWidth - 70;
+            let maxY = board.clientHeight - 70;
+            let x = Math.floor(Math.random() * maxX) + 35;
+            let y = Math.floor(Math.random() * maxY) + 35;
+
+            node.style.left = x + 'px';
+            node.style.top = y + 'px';
+
+            const trigger = (e) => {
+                if (e) { e.preventDefault(); e.stopPropagation(); }
+                let clientX = e ? (e.clientX || (e.touches && e.touches[0].clientX)) : x;
+                let clientY = e ? (e.clientY || (e.touches && e.touches[0].clientY)) : y;
+
+                let finalVal = val;
+                if (upgrades.multiplier && val > 0) finalVal = Math.ceil(val * 1.4);
+
+                score += finalVal;
+                if (score < 0) score = 0;
+                showPopup(clientX || x, clientY || y, finalVal > 0 ? `+${finalVal}` : `${finalVal}`, finalVal > 0 ? '#00ffcc' : '#ff007f');
+
+                document.getElementById('hudScore').innerText = score;
+                node.remove();
+            };
+
+            node.addEventListener('touchstart', trigger, { passive: false });
+            node.addEventListener('mousedown', trigger);
+            board.appendChild(node);
+
+            let lifetime = activeMode === 'hard' ? 700 : 900;
+            setTimeout(() => { if (node.parentElement) node.remove(); }, lifetime);
+        }
+
+        function spawnCatchItem() {
+            const board = document.getElementById('gameCanvas');
+            if (!board) return;
+            const item = document.createElement('div');
+            item.className = 'catch-item interactive-node';
+            
+            let icons = ['💖', '💎', '⭐', '🌸', '✨', '🎀'];
+            item.innerText = icons[Math.floor(Math.random() * icons.length)];
+
+            let maxX = board.clientWidth - 60;
+            let maxY = board.clientHeight - 60;
+            let x = Math.floor(Math.random() * maxX) + 30;
+            let y = Math.floor(Math.random() * maxY) + 30;
+
+            item.style.left = x + 'px';
+            item.style.top = y + 'px';
+
+            const trigger = (e) => {
+                if (e) { e.preventDefault(); e.stopPropagation(); }
+                let clientX = e ? (e.clientX || (e.touches && e.touches[0].clientX)) : x;
+                let clientY = e ? (e.clientY || (e.touches && e.touches[0].clientY)) : y;
+
+                let addVal = upgrades.multiplier ? 3 : 2;
+                score += addVal;
+                showPopup(clientX || x, clientY || y, `+${addVal}`, '#ff3399');
+                document.getElementById('hudScore').innerText = score;
+                item.remove();
+            };
+
+            item.addEventListener('touchstart', trigger, { passive: false });
+            item.addEventListener('mousedown', trigger);
+            board.appendChild(item);
+
+            setTimeout(() => { if (item.parentElement) item.remove(); }, 1000);
+        }
+
+        function initPongSurvival() {
+            const board = document.getElementById('gameCanvas');
+            board.innerHTML = '';
+            paddleX = 50;
+            ballX = 50;
+            ballY = 30;
+            ballVX = (Math.random() > 0.5 ? 1 : -1) * 1.3;
+            ballVY = 1.5;
+
+            let paddle = document.createElement('div');
+            paddle.className = 'pong-paddle';
+            if (upgrades.paddle) paddle.style.width = '160px';
+            paddle.style.left = paddleX + '%';
+            board.appendChild(paddle);
+
+            let ball = document.createElement('div');
+            ball.className = 'pong-ball';
+            if (upgrades.goldenSkin) {
+                ball.style.background = 'var(--neon-gold)';
+                ball.style.boxShadow = '0 0 25px var(--neon-gold)';
+            }
+            board.appendChild(ball);
+
+            const handleMove = (e) => {
+                e.preventDefault();
+                let rect = board.getBoundingClientRect();
+                let clientX = e.clientX;
+                if (!clientX && e.touches && e.touches[0]) clientX = e.touches[0].clientX;
+                if (!clientX) return;
+                
+                let relX = clientX - rect.left;
+                paddleX = (relX / rect.width) * 100;
+                let limit = upgrades.paddle ? 18 : 14;
+                if (paddleX < limit) paddleX = limit;
+                if (paddleX > (100 - limit)) paddleX = (100 - limit);
+                paddle.style.left = paddleX + '%';
+            };
+
+            board.addEventListener('mousemove', handleMove);
+            board.addEventListener('touchmove', handleMove, { passive: false });
+
+            physicsInterval = setInterval(() => {
+                ballX += ballVX;
+                ballY += ballVY;
+
+                if (ballX < 3 || ballX > 97) ballVX *= -1;
+                if (ballY < 3) ballVY *= -1;
+
+                if (ballY >= 88 && ballY <= 95) {
+                    let paddleWidthPx = upgrades.paddle ? 160 : 120;
+                    let paddlePixLeft = (paddleX / 100) * board.clientWidth - (paddleWidthPx / 2);
+                    let paddlePixRight = paddlePixLeft + paddleWidthPx;
+                    let ballPixX = (ballX / 100) * board.clientWidth;
+
+                    if (ballPixX >= paddlePixLeft && ballPixX <= paddlePixRight) {
+                        ballVY *= -1;
+                        let addScore = upgrades.multiplier ? 7 : 5;
+                        score += addScore;
+                        document.getElementById('hudScore').innerText = score;
+                    }
+                }
+
+                if (ballY > 98) {
+                    score = Math.max(0, score - 5);
+                    document.getElementById('hudScore').innerText = score;
+                    ballY = 30;
+                    ballX = Math.random() * 60 + 20;
+                    ballVY = 1.5;
+                }
+
+                ball.style.left = ballX + '%';
+                ball.style.top = ballY + '%';
+            }, 25);
+        }
+
+        function showPopup(x, y, text, color) {
+            if (!x || !y) return;
+            let el = document.createElement('div');
+            el.className = 'popup-msg';
+            el.innerText = text;
+            el.style.color = color;
+            el.style.left = x + 'px';
+            el.style.top = y + 'px';
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 500);
+        }
+
+        function endSession() {
+            stopSession();
+            let lbKey = currentLbTab;
+            saveGlobalScore(lbKey, playerName, score);
+            
+            let earnedCredits = Math.floor(score / 2);
+            credits += earnedCredits;
+            updateCreditsDisplay();
+
+            renderGlobalLeaderboards();
+            renderHubRichLeaderboard();
+
+            document.getElementById('goDetails').innerText = `Operative: ${playerName}\nFinal Score: ${score}\nCredits Earned: +${earnedCredits}`;
+            document.getElementById('gameOverOverlay').style.display = 'flex';
+        }
+
+        function restartActiveGame() {
+            document.getElementById('gameOverOverlay').style.display = 'none';
+            startSession();
+        }
+
+        // Leaderboard pro každého uživatele zvlášť
+        function saveGlobalScore(key, name, finalScore) {
+            if (!globalLeaderboards[key]) globalLeaderboards[key] = {};
+            let userBest = globalLeaderboards[key][name] || 0;
+            if (finalScore > userBest) {
+                globalLeaderboards[key][name] = finalScore;
+            }
+            localStorage.setItem('cyber_nexus_global_lb_v207', JSON.stringify(globalLeaderboards));
+        }
+
+        function updateRichLeaderboard(name, totalCredits) {
+            if (!richLeaderboard.some(item => item.name === name)) {
+                richLeaderboard.push({ name, credits: totalCredits });
+            } else {
+                let entry = richLeaderboard.find(item => item.name === name);
+                if (entry) entry.credits = totalCredits;
+            }
+            richLeaderboard.sort((a, b) => b.credits - a.credits);
+            richLeaderboard = richLeaderboard.slice(0, 5);
+            localStorage.setItem('cyber_nexus_rich_lb_v207', JSON.stringify(richLeaderboard));
+        }
+
+        function switchLbTab(tabKey) {
+            currentLbTab = tabKey;
+            ['slasher_normal', 'slasher_hard', 'pong', 'catch'].forEach(k => {
+                let btnId = k.startsWith('slasher') ? `tabSlasher${k.split('_')[1].charAt(0).toUpperCase() + k.split('_')[1].slice(1)}` : `tab${k.charAt(0).toUpperCase() + k.slice(1)}`;
+                let el = document.getElementById(btnId);
+                if (el) el.className = `lb-tab-btn ${tabKey === k ? 'active' : ''}`;
+            });
+            renderGlobalLeaderboards();
+        }
+
+        function renderGlobalLeaderboards() {
+            const container = document.getElementById('globalLbList');
+            if (!container) return;
+            container.innerHTML = '';
+            
+            let dataObj = globalLeaderboards[currentLbTab] || {};
+            let sortable = [];
+            for (let user in dataObj) {
+                sortable.push({ name: user, score: dataObj[user] });
+            }
+            sortable.sort((a, b) => b.score - a.score);
+            let topList = sortable.slice(0, 5);
+
+            if (topList.length === 0) {
+                container.innerHTML = '<div style="color:#556; font-size:9px; padding:6px; text-align:center;">NO RECORDS YET</div>';
+                return;
+            }
+
+            topList.forEach((entry, idx) => {
+                let row = document.createElement('div');
+                let isMe = (entry.name === playerName);
+                row.className = `lb-row ${isMe ? 'me' : ''}`;
+                row.innerHTML = `<span>#${idx+1} ${entry.name}</span><span>${entry.score}</span>`;
+                container.appendChild(row);
+            });
+        }
+
+        function renderHubRichLeaderboard() {
+            const container = document.getElementById('hubRichLbList');
+            if (!container) return;
+            container.innerHTML = '';
+            let list = richLeaderboard;
+
+            if (list.length === 0) {
+                container.innerHTML = '<div style="color:#556; font-size:10px; padding:6px; text-align:center;">NO OPERATIVES YET</div>';
+                return;
+            }
+
+            list.forEach((entry, idx) => {
+                let row = document.createElement('div');
+                let isMe = (entry.name === playerName);
+                row.className = `rich-lb-row ${isMe ? 'me' : ''}`;
+                row.innerHTML = `<span>#${idx+1} ${entry.name}</span><span>${entry.credits} CR</span>`;
+                container.appendChild(row);
+            });
+        }
+    </script>
+</body>
+</html>
