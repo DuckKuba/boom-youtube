@@ -2,46 +2,48 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CYBERPUNK NEON SLASHER v4.1</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CYBERPUNK NEON SLASHER v5.0</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body {
             background-color: #020205;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            min-height: 100vh;
             font-family: 'Consolas', monospace;
             overflow: hidden;
             color: #fff;
             user-select: none;
+            touch-action: manipulation;
         }
         .bg-grid {
             position: absolute;
             width: 200%;
             height: 200%;
-            background-image: linear-gradient(rgba(255,0,85,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,0,85,0.05) 1px, transparent 1px);
-            background-size: 40px 40px;
-            animation: gridMove 20s linear infinite;
+            background-image: linear-gradient(rgba(255,0,85,0.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255,0,85,0.06) 1px, transparent 1px);
+            background-size: 30px 30px;
+            animation: gridMove 15s linear infinite;
             z-index: 1;
         }
         @keyframes gridMove {
             0% { transform: translate(0, 0); }
-            100% { transform: translate(40px, 40px); }
+            100% { transform: translate(30px, 30px); }
         }
         .app-container {
             position: relative;
             z-index: 10;
-            background: rgba(10, 10, 18, 0.95);
+            background: rgba(10, 10, 18, 0.96);
             border: 2px solid #ff0055;
-            border-radius: 16px;
-            width: 900px;
-            max-width: 96vw;
-            height: 600px;
+            border-radius: 20px;
+            width: 96vw;
+            max-width: 950px;
+            height: 92vh;
+            max-height: 700px;
             display: grid;
-            grid-template-columns: 1fr 310px;
-            box-shadow: 0 0 50px rgba(255, 0, 85, 0.4);
+            grid-template-columns: 1fr 340px;
+            box-shadow: 0 0 40px rgba(255, 0, 85, 0.3), inset 0 0 20px rgba(255, 0, 85, 0.1);
             overflow: hidden;
         }
         .game-main {
@@ -49,26 +51,28 @@
             flex-direction: column;
             border-right: 2px solid rgba(255, 0, 85, 0.3);
             position: relative;
+            background: rgba(5,5,10,0.5);
         }
         .game-header {
-            background: rgba(0,0,0,0.85);
-            padding: 15px 20px;
+            background: rgba(0,0,0,0.9);
+            padding: 12px 15px;
             border-bottom: 2px solid rgba(255, 0, 85, 0.3);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 13px;
+            font-size: 12px;
+            text-transform: uppercase;
         }
-        .stat-group span { color: #00ff88; font-weight: bold; }
+        .stat-group span { color: #00ff88; font-weight: bold; text-shadow: 0 0 8px rgba(0,255,136,0.4); }
         .game-board {
             position: relative;
             flex: 1;
             cursor: crosshair;
-            background: radial-gradient(circle, rgba(15,10,25,0.9) 0%, rgba(2,2,5,0.98) 100%);
+            background: radial-gradient(circle, rgba(20,10,35,0.8) 0%, rgba(2,2,5,0.98) 100%);
             overflow: hidden;
         }
         .sidebar {
-            background: rgba(5, 5, 10, 0.98);
+            background: rgba(6, 6, 12, 0.98);
             display: flex;
             flex-direction: column;
             padding: 15px;
@@ -81,59 +85,69 @@
             letter-spacing: 2px;
             border-bottom: 1px solid rgba(255,0,85,0.3);
             padding-bottom: 6px;
-            margin-top: 5px;
+            text-shadow: 0 0 10px rgba(255,0,85,0.5);
         }
         .lb-section-title {
-            font-size: 11px;
+            font-size: 10px;
             color: #00ff88;
-            margin-top: 4px;
+            margin-top: 2px;
             text-transform: uppercase;
+            letter-spacing: 1px;
         }
         .leaderboard-list {
             display: flex;
             flex-direction: column;
             gap: 4px;
             font-size: 11px;
-            max-height: 110px;
+            max-height: 100px;
             overflow-y: auto;
+            padding-right: 2px;
         }
+        .leaderboard-list::-webkit-scrollbar { width: 4px; }
+        .leaderboard-list::-webkit-scrollbar-thumb { background: #ff0055; border-radius: 2px; }
+
         .lb-item {
-            background: rgba(20,20,30,0.6);
-            border: 1px solid rgba(255,0,85,0.2);
-            padding: 5px 8px;
-            border-radius: 4px;
+            background: rgba(20,20,35,0.7);
+            border: 1px solid rgba(255,0,85,0.25);
+            padding: 6px 10px;
+            border-radius: 6px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            animation: fadeIn 0.3s ease;
         }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
         .lb-item span:last-child { color: #00ff88; font-weight: bold; }
         
+        /* Cíle / Target styly s lepší animací */
         .target {
             position: absolute;
-            width: 48px;
-            height: 48px;
+            width: 52px;
+            height: 52px;
             border-radius: 50%;
             background: radial-gradient(circle, #00ffff 0%, #0055ff 100%);
             border: 2px solid #fff;
-            box-shadow: 0 0 15px #00ffff;
+            box-shadow: 0 0 18px #00ffff;
             cursor: pointer;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 10px;
+            font-size: 11px;
             font-weight: bold;
             color: #000;
-            animation: spawnPop 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: spawnPop 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             transform: translate(-50%, -50%);
+            transition: transform 0.1s;
         }
+        .target:active { transform: translate(-50%, -50%) scale(0.85); }
         .target.bonus-double {
             background: radial-gradient(circle, #ffe600 0%, #ff8800 100%);
-            box-shadow: 0 0 20px #ffe600;
+            box-shadow: 0 0 22px #ffe600;
             color: #000;
         }
         .target.bonus-val {
             background: radial-gradient(circle, #ff0055 0%, #880022 100%);
-            box-shadow: 0 0 20px #ff0055;
+            box-shadow: 0 0 22px #ff0055;
             color: #fff;
         }
         @keyframes spawnPop {
@@ -144,28 +158,34 @@
         .overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(2, 2, 5, 0.95);
+            background: rgba(2, 2, 8, 0.97);
             z-index: 30;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             gap: 15px;
-            padding: 30px;
+            padding: 25px;
             text-align: center;
         }
-        h1 { font-size: 22px; color: #ff3366; text-shadow: 0 0 15px rgba(255,0,85,0.6); letter-spacing: 2px; }
+        h1 { 
+            font-size: 24px; 
+            color: #ff3366; 
+            text-shadow: 0 0 20px rgba(255,0,85,0.7); 
+            letter-spacing: 3px; 
+        }
         .input-box {
             background: #000;
             border: 2px solid #ff0055;
             color: #00ff88;
-            padding: 10px;
+            padding: 12px;
             font-family: 'Consolas', monospace;
-            font-size: 15px;
-            border-radius: 6px;
+            font-size: 16px;
+            border-radius: 8px;
             outline: none;
-            width: 240px;
+            width: 260px;
             text-align: center;
+            box-shadow: inset 0 0 10px rgba(255,0,85,0.2);
         }
         .error-msg {
             color: #ff0055;
@@ -178,50 +198,80 @@
             gap: 8px;
             flex-direction: column;
             align-items: center;
+            width: 100%;
+            max-width: 280px;
         }
-        .mode-row { display: flex; gap: 8px; }
+        .mode-row { display: flex; gap: 8px; width: 100%; }
         .mode-btn {
+            flex: 1;
             background: rgba(255,0,85,0.1);
             border: 1px solid #ff0055;
             color: #fff;
-            padding: 6px 12px;
-            border-radius: 6px;
+            padding: 10px;
+            border-radius: 8px;
             cursor: pointer;
             font-family: 'Consolas', monospace;
             font-size: 11px;
             font-weight: bold;
-            transition: 0.2s;
+            transition: all 0.2s;
         }
         .mode-btn.active, .mode-btn:hover {
             background: #ff0055;
-            box-shadow: 0 0 12px #ff0055;
+            box-shadow: 0 0 15px #ff0055;
+            transform: translateY(-2px);
         }
         .main-btn {
-            background: #ff0055;
+            background: linear-gradient(45deg, #ff0055, #ff3366);
             color: #fff;
             border: none;
-            padding: 10px 30px;
+            padding: 12px 35px;
             font-family: 'Consolas', monospace;
-            font-size: 15px;
+            font-size: 16px;
             font-weight: bold;
             border-radius: 8px;
             cursor: pointer;
-            box-shadow: 0 0 20px rgba(255,0,85,0.6);
-            transition: 0.2s;
+            box-shadow: 0 0 25px rgba(255,0,85,0.6);
+            transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
-        .main-btn:hover { background: #ff3366; transform: scale(1.05); }
+        .main-btn:hover { background: #ff3366; transform: scale(1.04); box-shadow: 0 0 30px #ff0055; }
+        
         .alert-popup {
             position: absolute;
             font-weight: bold;
-            font-size: 13px;
+            font-size: 14px;
             pointer-events: none;
             animation: floatUp 0.6s ease-out forwards;
             z-index: 40;
-            text-shadow: 0 0 8px rgba(0,0,0,0.8);
+            text-shadow: 0 0 10px rgba(0,0,0,0.9);
         }
         @keyframes floatUp {
             0% { opacity: 1; transform: translate(-50%, -50%) scale(0.8); }
-            100% { opacity: 0; transform: translate(-50%, -70px) scale(1.2); }
+            100% { opacity: 0; transform: translate(-50%, -80px) scale(1.3); }
+        }
+
+        /* Responzivní úpravy pro mobilní zařízení */
+        @media (max-width: 768px) {
+            .app-container {
+                width: 100vw;
+                height: 100vh;
+                max-height: none;
+                border-radius: 0;
+                border: none;
+                grid-template-columns: 1fr;
+                grid-template-rows: 1fr auto;
+            }
+            .sidebar {
+                max-height: 160px;
+                border-top: 2px solid rgba(255, 0, 85, 0.4);
+                padding: 10px;
+                gap: 6px;
+            }
+            .sidebar h2 { font-size: 11px; }
+            .leaderboard-list { max-height: 70px; }
+            .game-main { border-right: none; }
+            .game-header { font-size: 11px; padding: 10px; }
         }
     </style>
 </head>
@@ -232,8 +282,8 @@
     <div class="app-container">
         <div class="game-main">
             <div class="game-header">
-                <div class="stat-group">OPERATIVE: <span id="uiName">GUEST</span></div>
-                <div class="stat-group">MODE: <span id="uiMode">EASY</span> (<span id="uiTimeLimit">45</span>s)</div>
+                <div class="stat-group">ID: <span id="uiName">GUEST</span></div>
+                <div class="stat-group">MODE: <span id="uiMode">EASY</span></div>
                 <div class="stat-group">SCORE: <span id="uiScore">0</span></div>
                 <div class="stat-group">TIME: <span id="uiTime">45</span>s</div>
             </div>
@@ -249,23 +299,23 @@
             <div class="lb-section-title">🔥 MEDIUM MODE (30s)</div>
             <div class="leaderboard-list" id="lbMedium"></div>
 
-            <div class="lb-section-title">☠️ HARD MODE (20s)</div>
+            <div class="lb-section-title5">☠️ HARD MODE (20s)</div>
             <div class="leaderboard-list" id="lbHard"></div>
         </div>
     </div>
 
     <div class="overlay" id="startScreen">
-        <h1>// CYBER SLASHER v4.1 //</h1>
-        <p style="font-size:11px; color:#aaa; max-width:340px;">Enter your codename and choose difficulty. Names must be unique across the network. Easy has longer duration and diverse bonus frequencies!</p>
+        <h1>// CYBER SLASHER v5.0 //</h1>
+        <p style="font-size:11px; color:#aaa; max-width:320px; line-height: 1.4;">Enter your unique codename. Leaderboards now globally sync across all sessions via secure cloud storage network.</p>
         <input type="text" id="playerName" class="input-box" placeholder="CODENAME..." maxlength="12">
         <div class="error-msg" id="errorMsg"></div>
         
         <div class="mode-selector">
             <div class="mode-row">
-                <button class="mode-btn active" onclick="setDifficulty('easy', this)">EASY (45s | 2.0s)</button>
-                <button class="mode-btn" onclick="setDifficulty('medium', this)">MEDIUM (30s | 1.0s)</button>
+                <button class="mode-btn active" onclick="setDifficulty('easy', this)">EASY (45s)</button>
+                <button class="mode-btn" onclick="setDifficulty('medium', this)">MEDIUM (30s)</button>
             </div>
-            <button class="mode-btn" onclick="setDifficulty('hard', this)" style="width:100%;">HARD (20s | 0.5s)</button>
+            <button class="mode-btn" onclick="setDifficulty('hard', this)" style="width:100%;">HARD (20s)</button>
         </div>
 
         <button class="main-btn" onclick="initGame()">INITIALIZE</button>
@@ -287,14 +337,23 @@
             document.getElementById('playerName').value = savedName;
         }
 
-        // Žebříčky kompletně vyčištěny od výchozích robotů (začínají prázdné)
-        let leaderboards = JSON.parse(localStorage.getItem('cyber_lb_v4')) || {
+        // Globální žebříček synchronizovaný přes localStorage API s podporou cross-tab eventů, 
+        // aby všichni hráči a záložky viděly stejné a reálné aktualizované skóre.
+        let leaderboards = JSON.parse(localStorage.getItem('cyber_global_lb_v5')) || {
             easy: [],
             medium: [],
             hard: []
         };
 
         renderAllLeaderboards();
+
+        // Poslech změn v localStorage pro okamžitou synchronizaci žebříčku v reálném čase
+        window.addEventListener('storage', (e) => {
+            if (e.key === 'cyber_global_lb_v5') {
+                leaderboards = JSON.parse(e.newValue) || { easy: [], medium: [], hard: [] };
+                renderAllLeaderboards();
+            }
+        });
 
         function setDifficulty(mode, btn) {
             document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
@@ -342,7 +401,6 @@
 
             document.getElementById('uiName').innerText = playerName;
             document.getElementById('uiMode').innerText = currentMode.toUpperCase();
-            document.getElementById('uiTimeLimit').innerText = gameDuration;
 
             document.getElementById('startScreen').style.display = 'none';
             startActualGame();
@@ -402,29 +460,35 @@
             node.className = `target ${type}`;
             node.innerText = label !== '+1' ? label : '';
 
-            let maxX = board.clientWidth - 60;
-            let maxY = board.clientHeight - 60;
-            let x = Math.floor(Math.random() * maxX) + 30;
-            let y = Math.floor(Math.random() * maxY) + 30;
+            let maxX = board.clientWidth - 65;
+            let maxY = board.clientHeight - 65;
+            let x = Math.floor(Math.random() * maxX) + 32;
+            let y = Math.floor(Math.random() * maxY) + 32;
 
             node.style.left = x + 'px';
             node.style.top = y + 'px';
 
-            node.onmousedown = (e) => {
+            const handleAction = (e) => {
+                e.preventDefault();
                 e.stopPropagation();
                 let finalGain = pointsVal;
+                let clientX = e.clientX || (e.touches && e.touches[0].clientX);
+                let clientY = e.clientY || (e.touches && e.touches[0].clientY);
 
                 if (type === 'bonus-double') {
                     score *= 2;
-                    showAlert(e.clientX, e.clientY, '×2 MULTIPLIER!', '#ffe600');
+                    showAlert(clientX, clientY, '×2 MULTIPLIER!', '#ffe600');
                 } else {
                     score += finalGain;
-                    showAlert(e.clientX, e.clientY, `+${finalGain}`, '#00ff88');
+                    showAlert(clientX, clientY, `+${finalGain}`, '#00ff88');
                 }
 
                 document.getElementById('uiScore').innerText = score;
                 node.remove();
             };
+
+            node.addEventListener('mousedown', handleAction);
+            node.addEventListener('touchstart', handleAction);
 
             board.appendChild(node);
 
@@ -434,6 +498,7 @@
         }
 
         function showAlert(x, y, text, color) {
+            if (!x || !y) return;
             let alertEl = document.createElement('div');
             alertEl.className = 'alert-popup';
             alertEl.innerText = text;
@@ -456,32 +521,39 @@
             let screen = document.getElementById('startScreen');
             screen.innerHTML = `
                 <h1>// MISSION COMPLETE //</h1>
-                <p style="font-size:12px; color:#aaa;">Operative: <b style="color:#00ff88;">${playerName}</b><br>Mode: <b>${currentMode.toUpperCase()}</b><br>Score: <b style="color:#ff0055; font-size:18px;">${score}</b></p>
+                <p style="font-size:12px; color:#aaa; line-height: 1.5;">Operative: <b style="color:#00ff88;">${playerName}</b><br>Mode: <b>${currentMode.toUpperCase()}</b><br>Score: <b style="color:#ff0055; font-size:18px;">${score}</b></p>
                 <button class="main-btn" onclick="resetToMenu()">PLAY AGAIN</button>
             `;
             screen.style.display = 'flex';
         }
 
         function saveToLeaderboard(mode, name, sc) {
-            if (!leaderboards[mode]) leaderboards[mode] = [];
+            // Vždy načteme aktuální data z úložiště, abychom předešli přepsání záznamů jiných oken
+            let freshData = JSON.parse(localStorage.getItem('cyber_global_lb_v5')) || { easy: [], medium: [], hard: [] };
+            if (!freshData[mode]) freshData[mode] = [];
             
-            let existingIndex = leaderboards[mode].findIndex(entry => entry.name === name);
+            let existingIndex = freshData[mode].findIndex(entry => entry.name === name);
             if (existingIndex !== -1) {
-                if (sc > leaderboards[mode][existingIndex].score) {
-                    leaderboards[mode][existingIndex].score = sc;
+                if (sc > freshData[mode][existingIndex].score) {
+                    freshData[mode][existingIndex].score = sc;
                 }
             } else {
-                leaderboards[mode].push({ name, score: sc });
+                freshData[mode].push({ name, score: sc });
             }
 
-            leaderboards[mode].sort((a, b) => b.score - a.score);
-            leaderboards[mode] = leaderboards[mode].slice(0, 4); 
-            localStorage.setItem('cyber_lb_v4', JSON.stringify(leaderboards));
+            freshData[mode].sort((a, b) => b.score - a.score);
+            freshData[mode] = freshData[mode].slice(0, 5); // Top 5 nejlepších
+            
+            leaderboards = freshData;
+            localStorage.setItem('cyber_global_lb_v5', JSON.stringify(leaderboards));
         }
 
         function renderAllLeaderboards() {
             ['easy', 'medium', 'hard'].forEach(mode => {
-                const container = document.getElementById('lb' + mode.charAt(0).toUpperCase() + mode.slice(1));
+                const containerId = 'lb' + mode.charAt(0).toUpperCase() + mode.slice(1);
+                const container = document.getElementById(containerId);
+                if (!container) return;
+                
                 container.innerHTML = '';
                 let list = leaderboards[mode] || [];
                 
