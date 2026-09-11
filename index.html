@@ -268,7 +268,7 @@
         }
         .modal-box {
             background: #0c0c14; border: 2px solid #ff0055; border-radius: 12px;
-            padding: 20px; width: 380px; text-align: center; box-shadow: 0 0 30px rgba(255,0,85,0.5);
+            padding: 20px; width: 400px; text-align: center; box-shadow: 0 0 30px rgba(255,0,85,0.5);
         }
         .modal-title { font-size: 14px; color: #ff3366; margin-bottom: 12px; font-weight: bold; }
         .modal-list { display: flex; flex-direction: column; gap: 8px; max-height: 220px; overflow-y: auto; margin-bottom: 15px; }
@@ -278,7 +278,7 @@
         }
         .modal-script-actions { display: flex; gap: 6px; margin-top: 4px; }
         .modal-action-btn {
-            background: #ff0055; border: none; color: #fff; font-size: 10px; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-weight: bold;
+            background: #ff0055; border: none; color: #fff; font-size: 10px; padding: 5px 8px; border-radius: 4px; cursor: pointer; font-weight: bold; flex: 1; text-align: center;
         }
         .modal-action-btn.page { background: #00cc66; }
         .modal-cancel { background: #333; border: none; color: #aaa; padding: 6px 12px; border-radius: 6px; cursor: pointer; }
@@ -341,7 +341,6 @@
 
         if (isMuted) currentVol = 0;
 
-        // Základní taby YouTube a Google jsou povinné a pevné (index 0 a 1)
         let tabs = JSON.parse(localStorage.getItem('boom_tabs')) || [
             { name: 'YouTube', url: 'https://www.youtube.com', fixed: true },
             { name: 'Google', url: 'https://www.google.com', fixed: true }
@@ -371,7 +370,6 @@
                 nameSpan.onclick = () => switchTab(index);
                 btn.appendChild(nameSpan);
 
-                // Křížek pro smazání – pevné taby (YouTube a Google) jej mít nebudou
                 if (!tab.fixed) {
                     let closeBtn = document.createElement('span');
                     closeBtn.className = 'tab-close';
@@ -502,7 +500,6 @@
 
         function saveUrl() {
             let input = document.getElementById('targetInput').value.trim();
-            // SAVE upravuje odkaz v aktuálním tlačítku (aktivním tabu)
             tabs[activeTabIdx].url = input || 'https://www.youtube.com';
             localStorage.setItem('boom_tabs', JSON.stringify(tabs));
             document.getElementById('targetInput').value = tabs[activeTabIdx].url;
@@ -531,11 +528,9 @@
 
             let currentUrl = tabs[activeTabIdx].url;
 
-            // Pokud je spuštěn skript, nabídneme výběr skriptů z launcherových tabů
             if (currentUrl.startsWith('javascript:')) {
                 openScriptSelectorModal();
             } else {
-                // Běžná URL se otevře standardně
                 if (window.opener && !window.opener.closed) {
                     window.opener.location.href = currentUrl;
                 } else {
@@ -550,11 +545,8 @@
             let list = document.getElementById('modalScriptList');
             list.innerHTML = '';
 
-            // Vyfiltrujeme pouze ty taby, které obsahují javascript: skripty
             let scriptTabs = tabs.filter(t => t.url.startsWith('javascript:'));
-
             if (scriptTabs.length === 0) {
-                // Pokud uživatel nemá žádný jiný skript, nabídneme aktuální
                 scriptTabs = [tabs[activeTabIdx]];
             }
 
@@ -565,8 +557,8 @@
                     <div>📁 <b>${tab.name}</b></div>
                     <div style="font-size:9px; color:#aaa; word-break:break-all;">${tab.url.substring(0, 40)}...</div>
                     <div class="modal-script-actions">
-                        <button class="modal-action-btn page" onclick="executeScript('${encodeURIComponent(tab.url)}', 'page')">Open as Page</button>
-                        <button class="modal-action-btn" onclick="executeScript('${encodeURIComponent(tab.url)}', 'bookmark')">Open as Bookmark</button>
+                        <button class="modal-action-btn page" onclick="executeWithCustomUI('${tab.url.replace(/'/g, "\\'")}', 'page')">Open Page + UI</button>
+                        <button class="modal-action-btn" onclick="executeWithCustomUI('${tab.url.replace(/'/g, "\\'")}', 'bookmark')">Custom UI Bookmarklet</button>
                     </div>
                 `;
                 list.appendChild(item);
@@ -582,27 +574,42 @@
             document.getElementById('parachuteBadge').classList.remove('parachute-drop');
         }
 
-        function executeScript(encodedUrl, mode) {
-            let jsUrl = decodeURIComponent(encodedUrl);
-            let jsCode = decodeURIComponent(jsUrl.replace(/^javascript:/i, ''));
+        function executeWithCustomUI(jsUrl, mode) {
+            let cleanJs = jsUrl.replace(/^javascript:/i, '');
+            
+            // Script that injects a custom cyber-styled floating panel into the target page
+            let wrappedScript = `(function(){
+                if(document.getElementById('boom-custom-ui')) return;
+                let div = document.createElement('div');
+                div.id = 'boom-custom-ui';
+                div.style.cssText = 'position:fixed;bottom:20px;right:20px;z-index:999999;background:#0c0c14;border:2px solid #ff0055;color:#fff;padding:15px;border-radius:10px;font-family:monospace;box-shadow:0 0 20px rgba(255,0,85,0.5);width:300px;';
+                div.innerHTML = '<div style="color:#ff3366;font-weight:bold;margin-bottom:8px;display:flex;justify-content:space-between;"><span>// BOOM UI PANEL //</span><span style="cursor:pointer;" onclick="this.parentElement.parentElement.remove()">×</span></div><div style="font-size:11px;color:#00ff88;margin-bottom:10px;">Script injected successfully!</div><button id="boom-run-btn" style="background:#ff0055;border:none;color:#fff;padding:6px 12px;border-radius:4px;cursor:pointer;font-weight:bold;width:100%;">RUN SCRIPT CODE</button>';
+                document.body.appendChild(div);
+                document.getElementById('boom-run-btn').onclick = function(){
+                    try {
+                        ${cleanJs}
+                        this.innerText = 'EXECUTED!';
+                        this.style.background = '#00cc66';
+                    } catch(e) {
+                        alert('Error: ' + e.message);
+                    }
+                };
+            })();`;
 
             if (mode === 'page') {
-                // Otevře jako novou stránku (about:blank) a sputí v ní kód
-                let newWindow = window.open('about:blank', '_blank');
-                if (newWindow) {
+                let win = window.open('about:blank', '_blank');
+                if (win) {
                     setTimeout(() => {
                         try {
-                            newWindow.eval(jsCode);
-                        } catch(e) {
-                            alert("Execution blocked by browser security.");
-                        }
+                            win.eval(wrappedScript);
+                        } catch(e) {}
                     }, 500);
                 }
             } else {
-                // Otevře jako bookmarklet (přímá injektáž)
-                let newWindow = window.open(jsUrl, '_blank');
+                navigator.clipboard.writeText("javascript:" + wrappedScript).then(() => {
+                    alert("Custom UI Bookmarklet code copied to clipboard! Paste it into a new bookmark.");
+                });
             }
-
             window.close();
         }
     </script>
