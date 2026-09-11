@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>CYBER_NEXUS_ARCADE // v100.0 PRO EDITION</title>
+    <title>CYBER_NEXUS_ARCADE // v201.0 ULTIMATE</title>
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         :root {
             --neon-cyan: #00ffcc;
             --neon-pink: #ff007f;
             --neon-gold: #ffcc00;
-            --neon-purple: #9d00ff;
-            --bg-dark: #020005;
-            --panel-bg: rgba(4, 2, 14, 0.98);
+            --bg-dark: #010003;
+            --panel-bg: rgba(3, 2, 12, 0.99);
         }
 
         body {
@@ -32,14 +31,14 @@
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             z-index: 1;
-            opacity: 0.15;
+            opacity: 0.16;
             pointer-events: none;
         }
 
         .scanlines {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.4) 50%), linear-gradient(90deg, rgba(255, 0, 128, 0.02), rgba(0, 255, 204, 0.01), rgba(0, 100, 255, 0.02));
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.45) 50%), linear-gradient(90deg, rgba(255, 0, 128, 0.02), rgba(0, 255, 204, 0.01), rgba(0, 100, 255, 0.02));
             background-size: 100% 4px, 4px 100%;
             z-index: 2;
             pointer-events: none;
@@ -50,21 +49,21 @@
             z-index: 10;
             background: var(--panel-bg);
             border: 2px solid var(--neon-cyan);
-            border-radius: 20px;
+            border-radius: 22px;
             width: 98vw;
-            max-width: 1250px;
+            max-width: 1280px;
             height: 96vh;
-            max-height: 850px;
+            max-height: 860px;
             display: grid;
             grid-template-rows: auto 1fr;
-            box-shadow: 0 0 80px rgba(0, 255, 204, 0.35), inset 0 0 30px rgba(0, 255, 204, 0.06);
+            box-shadow: 0 0 90px rgba(0, 255, 204, 0.4);
             overflow: hidden;
         }
 
         .top-nav {
-            background: rgba(0, 5, 15, 0.98);
-            padding: 14px 24px;
-            border-bottom: 2px solid rgba(0, 255, 204, 0.4);
+            background: rgba(0, 4, 14, 0.99);
+            padding: 14px 26px;
+            border-bottom: 2px solid rgba(0, 255, 204, 0.45);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -72,9 +71,9 @@
             letter-spacing: 2px;
         }
         .nav-title { color: var(--neon-pink); font-weight: bold; text-shadow: 0 0 12px var(--neon-pink); }
-        .nav-stats { display: flex; gap: 20px; }
+        .nav-stats { display: flex; gap: 22px; align-items: center; }
         .nav-stats span { color: #fff; text-shadow: 0 0 8px var(--neon-cyan); }
-        .credit-badge { color: var(--neon-gold) !important; text-shadow: 0 0 10px var(--neon-gold) !important; }
+        .credit-badge { color: var(--neon-gold) !important; text-shadow: 0 0 12px var(--neon-gold) !important; }
 
         /* HUB SCREEN */
         .hub-screen {
@@ -86,19 +85,14 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            gap: 22px;
+            gap: 24px;
             padding: 25px;
             text-align: center;
             overflow-y: auto;
         }
-        .hub-title { font-size: 28px; color: var(--neon-cyan); text-shadow: 0 0 25px rgba(0,255,204,0.7); letter-spacing: 3px; }
+        .hub-title { font-size: 30px; color: var(--neon-cyan); text-shadow: 0 0 25px rgba(0,255,204,0.8); letter-spacing: 4px; }
         
-        .auth-box {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            align-items: center;
-        }
+        .auth-box { display: flex; flex-direction: column; gap: 6px; align-items: center; }
         .input-box {
             background: #000;
             border: 2px solid var(--neon-cyan);
@@ -107,47 +101,37 @@
             font-family: 'Courier New', Courier, monospace;
             font-size: 15px;
             outline: none;
-            width: 280px;
+            width: 290px;
             text-align: center;
             border-radius: 8px;
             box-shadow: inset 0 0 12px rgba(0,255,204,0.2);
         }
         .error-msg { color: var(--neon-pink); font-size: 11px; height: 14px; font-weight: bold; }
 
-        .game-grid {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            flex-wrap: wrap;
-        }
+        .game-grid { display: flex; gap: 22px; justify-content: center; flex-wrap: wrap; }
         .game-card {
-            background: linear-gradient(135deg, rgba(16, 10, 38, 0.95) 0%, rgba(4, 2, 12, 0.98) 100%);
+            background: linear-gradient(135deg, rgba(16, 10, 38, 0.95) 0%, rgba(4, 2, 12, 0.99) 100%);
             border: 2px solid rgba(0, 255, 204, 0.4);
             border-radius: 16px;
-            width: 270px;
-            padding: 22px;
+            width: 260px;
+            padding: 24px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 14px;
+            gap: 15px;
             cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transition: all 0.3s;
         }
-        .game-card:hover {
-            border-color: var(--neon-pink);
-            box-shadow: 0 0 35px rgba(255, 0, 127, 0.4);
-            transform: translateY(-6px);
-        }
+        .game-card:hover { border-color: var(--neon-pink); box-shadow: 0 0 40px rgba(255, 0, 127, 0.5); transform: translateY(-6px); }
         .game-icon {
-            font-size: 38px;
+            font-size: 40px;
             background: rgba(0,255,204,0.1);
-            width: 70px; height: 70px;
+            width: 75px; height: 75px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             border: 1px dashed var(--neon-cyan);
-            box-shadow: 0 0 12px rgba(0,255,204,0.3);
         }
         .game-card h3 { font-size: 15px; color: #fff; letter-spacing: 1.5px; }
         .game-card p { font-size: 11px; color: #88aacc; line-height: 1.4; }
@@ -156,7 +140,7 @@
             background: var(--neon-cyan);
             color: #000;
             border: none;
-            padding: 11px;
+            padding: 12px;
             font-family: 'Courier New', Courier, monospace;
             font-weight: bold;
             font-size: 12px;
@@ -167,13 +151,14 @@
         }
         .card-btn:hover { background: var(--neon-pink); color: #fff; box-shadow: 0 0 15px var(--neon-pink); }
         .shop-btn { background: var(--neon-gold); color: #000; }
-        .shop-btn:hover { background: var(--neon-cyan); color: #000; box-shadow: 0 0 15px var(--neon-cyan); }
+        .shop-btn:hover { background: var(--neon-cyan); color: #000; }
+        .card-btn:disabled { background: #333 !important; color: #777 !important; cursor: not-allowed; box-shadow: none !important; }
 
         /* SHOP SCREEN */
         .shop-screen {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(2, 2, 8, 0.98);
+            background: rgba(2, 2, 8, 0.99);
             z-index: 55;
             display: none;
             flex-direction: column;
@@ -181,33 +166,30 @@
             align-items: center;
             gap: 20px;
             padding: 20px;
+            overflow-y: auto;
         }
-        .shop-items {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
+        .shop-items { display: flex; gap: 18px; flex-wrap: wrap; justify-content: center; max-width: 900px; }
         .shop-card {
-            background: rgba(10, 5, 25, 0.95);
+            background: rgba(10, 5, 25, 0.96);
             border: 2px solid var(--neon-gold);
-            border-radius: 12px;
-            width: 240px;
-            padding: 18px;
+            border-radius: 14px;
+            width: 260px;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 12px;
             text-align: center;
+            box-shadow: 0 0 20px rgba(255,204,0,0.15);
         }
-        .shop-card h4 { color: var(--neon-gold); font-size: 13px; }
-        .shop-card p { font-size: 10px; color: #aaa; }
+        .shop-card h4 { color: var(--neon-gold); font-size: 13px; letter-spacing: 1px; }
+        .shop-card p { font-size: 11px; color: #aaa; line-height: 1.4; }
 
         /* MODE SELECTOR */
         .mode-screen {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(2, 2, 8, 0.98);
+            background: rgba(2, 2, 8, 0.99);
             z-index: 60;
             display: none;
             flex-direction: column;
@@ -245,7 +227,7 @@
 
         /* SIDEBAR LEADERBOARD */
         .sidebar-lb {
-            background: rgba(2, 5, 14, 0.98);
+            background: rgba(2, 5, 14, 0.99);
             border-left: 2px solid rgba(0, 255, 204, 0.4);
             display: flex;
             flex-direction: column;
@@ -258,12 +240,8 @@
             color: var(--neon-pink);
             border-bottom: 1px dashed rgba(255,0,127,0.4);
             padding-bottom: 6px;
-            letter-spacing: 1px;
         }
-        .lb-tabs {
-            display: flex;
-            gap: 6px;
-        }
+        .lb-tabs { display: flex; gap: 6px; }
         .lb-tab-btn {
             flex: 1;
             background: rgba(0,255,204,0.1);
@@ -271,23 +249,13 @@
             color: var(--neon-cyan);
             font-family: 'Courier New', Courier, monospace;
             font-size: 10px;
-            padding: 6px;
+            padding: 6px 4px;
             cursor: pointer;
             border-radius: 4px;
+            text-align: center;
         }
-        .lb-tab-btn.active {
-            background: var(--neon-cyan);
-            color: #000;
-            font-weight: bold;
-        }
-        .lb-list {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-            font-size: 11px;
-            max-height: 280px;
-            overflow-y: auto;
-        }
+        .lb-tab-btn.active { background: var(--neon-cyan); color: #000; font-weight: bold; }
+        .lb-list { display: flex; flex-direction: column; gap: 6px; font-size: 11px; max-height: 300px; overflow-y: auto; }
         .lb-row {
             background: rgba(0,255,204,0.06);
             border: 1px solid rgba(0,255,204,0.3);
@@ -311,14 +279,14 @@
             cursor: pointer;
             margin-top: auto;
             border-radius: 8px;
-            transition: 0.2s;
+            text-align: center;
         }
-        .back-hub-btn:hover { background: var(--neon-pink); color: #fff; box-shadow: 0 0 15px var(--neon-pink); }
+        .back-hub-btn:hover { background: var(--neon-pink); color: #fff; }
 
         /* GAME ELEMENTS */
         .arcade-node {
             position: absolute;
-            width: 54px; height: 54px;
+            width: 56px; height: 56px;
             border-radius: 50%;
             display: flex;
             justify-content: center;
@@ -326,13 +294,9 @@
             font-size: 11px;
             font-weight: bold;
             cursor: pointer;
-            animation: popIn 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             transform: translate(-50%, -50%);
             box-shadow: 0 0 18px currentColor;
-            touch-action: manipulation;
         }
-        @keyframes popIn { 0% { transform: translate(-50%, -50%) scale(0); } 100% { transform: translate(-50%, -50%) scale(1); } }
-
         .node-plus { background: var(--neon-cyan); color: #000; border: 2px solid #fff; }
         .node-golden { background: var(--neon-gold); color: #000; border: 2px solid #fff; }
         .node-minus { background: var(--neon-pink); color: #fff; border: 2px solid var(--neon-cyan); }
@@ -345,16 +309,15 @@
             width: 110px; height: 16px;
             background: var(--neon-cyan);
             border-radius: 8px;
-            box-shadow: 0 0 20px var(--neon-cyan);
+            box-shadow: 0 0 22px var(--neon-cyan);
             border: 2px solid #fff;
-            cursor: ew-resize;
         }
         .pong-ball {
             position: absolute;
             width: 22px; height: 22px;
             background: var(--neon-gold);
             border-radius: 50%;
-            box-shadow: 0 0 20px var(--neon-gold);
+            box-shadow: 0 0 22px var(--neon-gold);
             transform: translate(-50%, -50%);
             border: 2px solid #fff;
         }
@@ -366,14 +329,12 @@
             pointer-events: none;
             animation: floatUp 0.5s ease-out forwards;
             z-index: 60;
-            text-shadow: 0 0 8px #000;
         }
         @keyframes floatUp {
             0% { opacity: 1; transform: translate(-50%, -50%) scale(0.8); }
             100% { opacity: 0; transform: translate(-50%, -65px) scale(1.3); }
         }
 
-        /* PERFEKTNĚ VYSLADĚNÝ GAME OVER OVERLAY (Sjednocená tlačítka pod sebou) */
         .gameover-overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -382,32 +343,26 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            gap: 16px;
             z-index: 70;
-            text-align: center;
             padding: 20px;
         }
         .gameover-box {
-            background: rgba(10, 5, 25, 0.95);
+            background: rgba(10, 5, 25, 0.98);
             border: 2px solid var(--neon-pink);
-            border-radius: 16px;
-            padding: 30px 40px;
+            border-radius: 18px;
+            padding: 35px 45px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 16px;
-            box-shadow: 0 0 40px rgba(255,0,127,0.3);
-            max-width: 400px;
+            gap: 20px;
+            box-shadow: 0 0 50px rgba(255,0,127,0.35);
+            max-width: 420px;
             width: 100%;
+            text-align: center;
         }
-        .gameover-box h1 { color: var(--neon-pink); font-size: 22px; letter-spacing: 2px; }
-        .gameover-box p { font-size: 12px; color: #fff; }
-        .gameover-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            width: 100%;
-        }
+        .gameover-box h1 { color: var(--neon-pink); font-size: 24px; letter-spacing: 2px; }
+        .gameover-box p { font-size: 13px; color: #fff; line-height: 1.5; }
+        .gameover-actions { display: flex; flex-direction: column; gap: 12px; width: 100%; }
 
         @media (max-width: 768px) {
             .arcade-arena { grid-template-columns: 1fr; grid-template-rows: 1fr auto; }
@@ -424,10 +379,10 @@
 
     <div class="app-wrapper">
         <div class="top-nav">
-            <div class="nav-title">// CYBER_NEXUS_PRO</div>
+            <div class="nav-title">// CYBER_NEXUS_ULTRA</div>
             <div class="nav-stats">
                 <div>OPERATIVE: <span id="navUser">ANON</span></div>
-                <div>CREDITS: <span id="navCredits" class="credit-badge">100</span></div>
+                <div>CREDITS: <span id="navCredits" class="credit-badge">200</span></div>
             </div>
         </div>
 
@@ -441,15 +396,13 @@
             </div>
 
             <div class="game-grid">
-                <!-- Game 1: Cyber Slasher -->
                 <div class="game-card" onclick="openSlasherModes()">
                     <div class="game-icon">⚡</div>
                     <h3>CYBER SLASHER</h3>
-                    <p>High-speed neon node slicing with multi-spawning mechanics and adjustable difficulty.</p>
+                    <p>High-speed neon node slicing with multi-spawning chaos and dynamic scoring nodes.</p>
                     <button class="card-btn">SELECT SLASHER</button>
                 </div>
 
-                <!-- Game 2: Neon Pong Survival -->
                 <div class="game-card" onclick="launchGame('pong', 'normal')">
                     <div class="game-icon">🏓</div>
                     <h3>NEON PONG SURVIVAL</h3>
@@ -457,11 +410,10 @@
                     <button class="card-btn">PLAY PONG</button>
                 </div>
 
-                <!-- Shop Card -->
                 <div class="game-card" style="border-color: var(--neon-gold);" onclick="openShop()">
                     <div class="game-icon" style="border-color: var(--neon-gold); color:var(--neon-gold);">💎</div>
                     <h3>CYBER SHOP</h3>
-                    <p>Spend your hard-earned credits on power-ups, bonuses, and special core upgrades.</p>
+                    <p>Spend earned credits on upgrades, power-ups, and special neon ball skins.</p>
                     <button class="card-btn shop-btn">OPEN SHOP</button>
                 </div>
             </div>
@@ -469,26 +421,31 @@
 
         <!-- SHOP SCREEN -->
         <div class="shop-screen" id="shopScreen">
-            <h1 class="hub-title" style="font-size:24px; color:var(--neon-gold);">// CYBER CORE SHOP</h1>
-            <p style="font-size:12px; color:#aaa;">Enhance your arcade capabilities with earned credits.</p>
+            <h1 class="hub-title" style="font-size:26px; color:var(--neon-gold);">// CYBER CORE SHOP</h1>
+            <p style="font-size:12px; color:#aaa;">Invest operational credits into powerful permanent arcade augmentations.</p>
             <div class="shop-items">
                 <div class="shop-card">
-                    <h4>+50 BONUS CREDITS</h4>
-                    <p>Instant injection of operational funds.</p>
-                    <button class="card-btn shop-btn" onclick="buyItem('credits', 50, 0)">CLAIM FREE</button>
+                    <h4>+100 BONUS CREDITS</h4>
+                    <p>Instant injection of emergency funds into your account.</p>
+                    <button class="card-btn shop-btn" onclick="buyItem('credits', 0)">CLAIM FREE</button>
                 </div>
                 <div class="shop-card">
-                    <h4>PADDLE BOOST</h4>
-                    <p>Wider paddle size in Pong mode (+20% width).</p>
-                    <button class="card-btn shop-btn" onclick="buyItem('paddle', 150)">BUY (150 CR)</button>
+                    <h4>EXTENDED PADDLE</h4>
+                    <p>Wider paddle size in Pong survival mode (+25% width).</p>
+                    <button class="card-btn shop-btn" id="btnShopPaddle" onclick="buyItem('paddle', 150)">BUY (150 CR)</button>
                 </div>
                 <div class="shop-card">
                     <h4>SCORE MULTIPLIER</h4>
-                    <p>Permanent +20% score multiplier in all games.</p>
-                    <button class="card-btn shop-btn" onclick="buyItem('multiplier', 300)">BUY (300 CR)</button>
+                    <p>Permanent +30% score bonus multiplier across all games.</p>
+                    <button class="card-btn shop-btn" id="btnShopMultiplier" onclick="buyItem('multiplier', 300)">BUY (300 CR)</button>
+                </div>
+                <div class="shop-card">
+                    <h4>GOLDEN BALL SKIN</h4>
+                    <p>Equips a legendary pulsing golden core schema to your data ball.</p>
+                    <button class="card-btn shop-btn" id="btnShopGoldenSkin" onclick="buyItem('goldenSkin', 250)">BUY (250 CR)</button>
                 </div>
             </div>
-            <button class="back-hub-btn" style="width:260px;" onclick="closeShop()">« BACK TO HUB</button>
+            <button class="back-hub-btn" style="width:280px;" onclick="closeShop()">« BACK TO HUB</button>
         </div>
 
         <!-- MODE SELECTOR -->
@@ -515,8 +472,8 @@
             <div class="sidebar-lb">
                 <h3>// GLOBAL LEADERBOARDS</h3>
                 <div class="lb-tabs">
-                    <button class="lb-tab-btn active" id="tabSlasherNormal" onclick="switchLbTab('slasher_normal')">S-NORM</button>
-                    <button class="lb-tab-btn" id="tabSlasherHard" onclick="switchLbTab('slasher_hard')">S-HARD</button>
+                    <button class="lb-tab-btn active" id="tabSlasherNormal" onclick="switchLbTab('slasher_normal')">NORM</button>
+                    <button class="lb-tab-btn" id="tabSlasherHard" onclick="switchLbTab('slasher_hard')">HARD</button>
                     <button class="lb-tab-btn" id="tabPong" onclick="switchLbTab('pong')">PONG</button>
                 </div>
                 <div class="lb-list" id="globalLbList"></div>
@@ -525,31 +482,30 @@
         </div>
     </div>
 
-    <!-- GAME OVER OVERLAY (Perfektně uspořádaná tlačítka pod sebou) -->
+    <!-- GAME OVER OVERLAY -->
     <div class="gameover-overlay" id="gameOverOverlay">
         <div class="gameover-box">
             <h1>// MISSION OVER //</h1>
             <p id="goDetails">Score: 0</p>
             <div class="gameover-actions">
-                <button class="card-btn" style="padding:13px;" onclick="restartActiveGame()">RE-ENGAGE</button>
-                <button class="card-btn shop-btn" style="padding:13px;" onclick="returnToHubFromGO()">RETURN TO HUB</button>
+                <button class="card-btn" style="padding:14px;" onclick="restartActiveGame()">RE-ENGAGE PROTOCOL</button>
+                <button class="card-btn shop-btn" style="padding:14px;" onclick="returnToHubFromGO()">RETURN TO HUB</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Matrix Canvas Engine
         const canvas = document.getElementById('matrixCanvas');
         const ctx = canvas.getContext('2d');
         function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
         window.addEventListener('resize', resizeCanvas);
         resizeCanvas();
 
-        const chars = '01ABCDEF_NEXUS_SYSTEM_SECURE_CYBER_PRO';
+        const chars = '01ABCDEF_NEXUS_SYSTEM_SECURE_CYBER_ULTRA';
         const fontSize = 12;
         let drops = Array(Math.floor(canvas.width / fontSize)).fill(1);
         setInterval(() => {
-            ctx.fillStyle = 'rgba(2, 0, 5, 0.15)';
+            ctx.fillStyle = 'rgba(1, 0, 3, 0.15)';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.fillStyle = '#00ffcc';
             ctx.font = fontSize + 'px monospace';
@@ -561,12 +517,11 @@
             }
         }, 40);
 
-        // Core App State & Upgrades
         let activeGame = null;
         let activeMode = 'normal';
         let playerName = '';
-        let credits = parseInt(localStorage.getItem('cyber_nexus_credits')) || 150;
-        let upgrades = JSON.parse(localStorage.getItem('cyber_nexus_upgrades')) || { paddle: false, multiplier: false };
+        let credits = parseInt(localStorage.getItem('cyber_nexus_credits_v200')) || 200;
+        let upgrades = JSON.parse(localStorage.getItem('cyber_nexus_upgrades_v200')) || { paddle: false, multiplier: false, goldenSkin: false };
         let score = 0;
         let timeLeft = 40;
         let gameInterval = null;
@@ -574,26 +529,15 @@
         let physicsInterval = null;
         let currentLbTab = 'slasher_normal';
 
-        // Pong State
         let paddleX = 50;
         let ballX = 50, ballY = 40;
-        let ballVX = 2.5, ballVY = 3.0;
+        let ballVX = 2.8, ballVY = 3.2;
 
-        // Robust Local Leaderboard Storage Fix
-        let globalLeaderboards = JSON.parse(localStorage.getItem('cyber_nexus_global_lb_v100')) || {
-            slasher_normal: [
-                { name: 'NEXUS_X', score: 42 },
-                { name: 'CYBER_QUEEN', score: 35 },
-                { name: 'GLITCH', score: 28 }
-            ],
-            slasher_hard: [
-                { name: 'ZERO', score: 55 },
-                { name: 'SYNTH', score: 40 }
-            ],
-            pong: [
-                { name: 'PONG_GOD', score: 75 },
-                { name: 'NEON_BALL', score: 50 }
-            ]
+        // Leaderboard bez botů (zcela čisté úložiště)
+        let globalLeaderboards = JSON.parse(localStorage.getItem('cyber_nexus_global_lb_v201')) || {
+            slasher_normal: [],
+            slasher_hard: [],
+            pong: []
         };
 
         let savedHandle = localStorage.getItem('cyber_nexus_handle') || '';
@@ -603,10 +547,30 @@
             document.getElementById('navUser').innerText = playerName;
         }
         updateCreditsDisplay();
+        updateShopUI();
 
         function updateCreditsDisplay() {
             document.getElementById('navCredits').innerText = credits;
-            localStorage.setItem('cyber_nexus_credits', credits);
+            localStorage.setItem('cyber_nexus_credits_v200', credits);
+        }
+
+        function updateShopUI() {
+            const btnPaddle = document.getElementById('btnShopPaddle');
+            const btnMultiplier = document.getElementById('btnShopMultiplier');
+            const btnGolden = document.getElementById('btnShopGoldenSkin');
+
+            if (upgrades.paddle) {
+                btnPaddle.innerText = 'INSTALLED // OWNED';
+                btnPaddle.disabled = true;
+            }
+            if (upgrades.multiplier) {
+                btnMultiplier.innerText = 'INSTALLED // OWNED';
+                btnMultiplier.disabled = true;
+            }
+            if (upgrades.goldenSkin) {
+                btnGolden.innerText = 'INSTALLED // OWNED';
+                btnGolden.disabled = true;
+            }
         }
 
         function validateAndSetUser() {
@@ -622,6 +586,7 @@
         }
 
         function openShop() {
+            updateShopUI();
             document.getElementById('shopScreen').style.display = 'flex';
         }
         function closeShop() {
@@ -630,19 +595,24 @@
 
         function buyItem(item, cost) {
             if (item === 'credits') {
-                credits += 50;
+                credits += 100;
                 updateCreditsDisplay();
-                alert('Claimed +50 Free Credits!');
+                alert('Claimed +100 Bonus Credits successfully!');
+                return;
+            }
+            if (upgrades[item]) {
+                alert('You already own this cyber upgrade!');
                 return;
             }
             if (credits >= cost) {
                 credits -= cost;
                 upgrades[item] = true;
-                localStorage.setItem('cyber_nexus_upgrades', JSON.stringify(upgrades));
+                localStorage.setItem('cyber_nexus_upgrades_v200', JSON.stringify(upgrades));
                 updateCreditsDisplay();
-                alert('Upgrade successfully acquired and activated!');
+                updateShopUI();
+                alert('Upgrade successfully acquired, installed and activated!');
             } else {
-                alert('Insufficient credits, operative!');
+                alert('Insufficient operational credits, operative!');
             }
         }
 
@@ -700,7 +670,7 @@
             }, 1000);
 
             if (activeGame === 'slasher') {
-                let speed = activeMode === 'hard' ? 600 : 750;
+                let speed = activeMode === 'hard' ? 580 : 720;
                 loopInterval = setInterval(spawnMultipleSlasherNodes, speed);
             } else {
                 initPongSurvival();
@@ -714,7 +684,6 @@
             document.getElementById('gameCanvas').innerHTML = '';
         }
 
-        // --- GAME 1: CYBER SLASHER ---
         function spawnMultipleSlasherNodes() {
             const board = document.getElementById('gameCanvas');
             if (!board) return;
@@ -759,7 +728,7 @@
                 let clientY = e.clientY || (e.touches && e.touches[0].clientY);
 
                 let finalVal = val;
-                if (upgrades.multiplier && val > 0) finalVal = Math.ceil(val * 1.2);
+                if (upgrades.multiplier && val > 0) finalVal = Math.ceil(val * 1.3);
 
                 score += finalVal;
                 if (score < 0) score = 0;
@@ -773,28 +742,31 @@
             node.addEventListener('touchstart', trigger);
             board.appendChild(node);
 
-            let lifetime = activeMode === 'hard' ? 800 : 1050;
+            let lifetime = activeMode === 'hard' ? 780 : 1000;
             setTimeout(() => { if (node.parentElement) node.remove(); }, lifetime);
         }
 
-        // --- GAME 2: NEON PONG SURVIVAL ---
         function initPongSurvival() {
             const board = document.getElementById('gameCanvas');
             board.innerHTML = '';
             paddleX = 50;
             ballX = 50;
             ballY = 30;
-            ballVX = (Math.random() > 0.5 ? 1 : -1) * 3.0;
-            ballVY = 3.4;
+            ballVX = (Math.random() > 0.5 ? 1 : -1) * 3.2;
+            ballVY = 3.5;
 
             let paddle = document.createElement('div');
             paddle.className = 'pong-paddle';
-            if (upgrades.paddle) paddle.style.width = '135px'; // Širší pádlo z obchodu
+            if (upgrades.paddle) paddle.style.width = '140px';
             paddle.style.left = paddleX + '%';
             board.appendChild(paddle);
 
             let ball = document.createElement('div');
             ball.className = 'pong-ball';
+            if (upgrades.goldenSkin) {
+                ball.style.background = 'var(--neon-gold)';
+                ball.style.boxShadow = '0 0 25px var(--neon-gold)';
+            }
             board.appendChild(ball);
 
             const handleMove = (e) => {
@@ -803,7 +775,7 @@
                 let clientX = e.clientX || (e.touches && e.touches[0].clientX);
                 let relX = clientX - rect.left;
                 paddleX = (relX / rect.width) * 100;
-                let limit = upgrades.paddle ? 15 : 12;
+                let limit = upgrades.paddle ? 16 : 12;
                 if (paddleX < limit) paddleX = limit;
                 if (paddleX > (100 - limit)) paddleX = (100 - limit);
                 paddle.style.left = paddleX + '%';
@@ -821,17 +793,17 @@
                 if (ballY < 3) ballVY *= -1;
 
                 if (ballY >= 88 && ballY <= 94) {
-                    let paddleWidthPx = upgrades.paddle ? 135 : 110;
+                    let paddleWidthPx = upgrades.paddle ? 140 : 110;
                     let paddlePixLeft = (paddleX / 100) * board.clientWidth - (paddleWidthPx / 2);
                     let paddlePixRight = paddlePixLeft + paddleWidthPx;
                     let ballPixX = (ballX / 100) * board.clientWidth;
 
                     if (ballPixX >= paddlePixLeft && ballPixX <= paddlePixRight) {
                         ballVY *= -1;
-                        let addScore = upgrades.multiplier ? 6 : 5;
+                        let addScore = upgrades.multiplier ? 7 : 5;
                         score += addScore;
                         document.getElementById('hudScore').innerText = score;
-                        ballVX += (Math.random() - 0.5) * 0.9;
+                        ballVX += (Math.random() - 0.5) * 0.95;
                     }
                 }
 
@@ -840,12 +812,12 @@
                     document.getElementById('hudScore').innerText = score;
                     ballY = 30;
                     ballX = Math.random() * 60 + 20;
-                    ballVY = 3.4;
+                    ballVY = 3.5;
                 }
 
                 ball.style.left = ballX + '%';
                 ball.style.top = ballY + '%';
-            }, 22);
+            }, 20);
         }
 
         function showPopup(x, y, text, color) {
@@ -865,14 +837,13 @@
             let lbKey = currentLbTab;
             saveGlobalScore(lbKey, playerName, score);
             
-            // Přičtení kreditu
             let earnedCredits = Math.floor(score / 2);
             credits += earnedCredits;
             updateCreditsDisplay();
 
             renderGlobalLeaderboards();
 
-            document.getElementById('goDetails').innerText = `Operative: ${playerName} | Final Score: ${score} (+${earnedCredits} Credits)`;
+            document.getElementById('goDetails').innerText = `Operative: ${playerName}\nFinal Score: ${score}\nCredits Earned: +${earnedCredits}`;
             document.getElementById('gameOverOverlay').style.display = 'flex';
         }
 
@@ -892,7 +863,7 @@
             }
             list.sort((a, b) => b.score - a.score);
             globalLeaderboards[key] = list.slice(0, 6);
-            localStorage.setItem('cyber_nexus_global_lb_v100', JSON.stringify(globalLeaderboards));
+            localStorage.setItem('cyber_nexus_global_lb_v201', JSON.stringify(globalLeaderboards));
         }
 
         function switchLbTab(tabKey) {
@@ -909,7 +880,7 @@
             let list = globalLeaderboards[currentLbTab] || [];
 
             if (list.length === 0) {
-                container.innerHTML = '<div style="color:#556; font-size:10px; padding:6px;">No global records found.</div>';
+                container.innerHTML = '<div style="color:#556; font-size:10px; padding:6px; text-align:center;">NO RECORDS YET</div>';
                 return;
             }
 
